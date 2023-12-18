@@ -16,7 +16,7 @@ export function Hero(): JSX.Element {
       </div>
       <div className="flex justify-center">
         <img
-          src={"/images/hero.png"}
+          src={"/images/hero.webp"}
           alt="hero"
           width={500}
           height={500}

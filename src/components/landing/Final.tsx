@@ -19,7 +19,7 @@ export function Final(): JSX.Element {
       </div>
       <div className="flex justify-center order-2 md:order-1">
         <img
-          src={"/images/help.png"}
+          src={"/images/help.webp"}
           alt="hero"
           width={500}
           height={500}
