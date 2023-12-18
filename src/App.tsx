@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./routes/Home";
 
 function App(): JSX.Element {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<></>}>
+          <Route path="/" element={<Home />}>
             <Route path=":profileId" element={<></>} />
           </Route>
           <Route path="/create" element={<></>} />
