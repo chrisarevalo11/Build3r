@@ -19,7 +19,7 @@ export function Contribute(): JSX.Element {
       </div>
       <div className="flex justify-center">
         <img
-          src={"/images/contribute.png"}
+          src={"/images/contribute.webp"}
           alt="hero"
           width={500}
           height={500}

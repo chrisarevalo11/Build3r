@@ -8,7 +8,7 @@ export function Create(): JSX.Element {
     >
       <div className="flex justify-center order-2 md:order-1">
         <img
-          src={"/images/create.png"}
+          src={"/images/create.webp"}
           alt="hero"
           width={500}
           height={500}
