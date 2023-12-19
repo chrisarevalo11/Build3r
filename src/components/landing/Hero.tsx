@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 export function Hero(): JSX.Element {
   return (
     <section className="w-full grid grid-cols-1 md:grid-cols-2 min-h-[80vh] items-center justify-items-center">
@@ -10,9 +8,9 @@ export function Hero(): JSX.Element {
           helps reducing{" "}
           <span className="text-primary font-bold">Greenwashing</span>
         </h1>
-        <Link className="btn btn-primary my-4" to={"#create"}>
+        <a className="btn btn-primary my-4" href={"#create"}>
           See more
-        </Link>
+        </a>
       </div>
       <div className="flex justify-center">
         <img
