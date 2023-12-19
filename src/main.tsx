@@ -1,5 +1,5 @@
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygon, polygonMumbai } from "wagmi/chains";
+import { arbitrum, arbitrumGoerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import {
   darkTheme,
@@ -13,14 +13,14 @@ import App from "./App.tsx";
 import "./index.css";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [polygon, polygonMumbai],
+  [arbitrum, arbitrumGoerli],
   [publicProvider()]
 );
 
-const projectId = "637e8d06cacf44268d4517b83311a73a";
+const projectId: string = import.meta.env.VITE_WC_KEY || "0";
 
 const { connectors } = getDefaultWallets({
-  appName: "NatureLink dApp",
+  appName: "NatureLink",
   projectId,
   chains,
 });
