@@ -37,4 +37,11 @@ h4 {
   font-size: 2rem;
 }
 
+.navbar-end button {
+  @apply bg-primary rounded-full !important;
+}
+ 
+.ju367v8t {
+  @apply bg-transparent border-0 !important;
+}
 
