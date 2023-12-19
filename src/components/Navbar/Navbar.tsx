@@ -1,5 +1,6 @@
-import Logo from "./NavbarLogo";
 import NavLinks, { NavLinksResponsive } from "./NavLinks";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Logo from "./NavbarLogo";
 import { useState } from "react";
 
 export default function Navbar(): JSX.Element {
@@ -34,19 +35,11 @@ export default function Navbar(): JSX.Element {
       </div>
 
       <div className="navbar-end flex items-center gap-2">
-        {/* <ConnectWallet
-					theme={'dark'}
-					modalSize={'compact'}
-					btnTitle={'Connect Wallet'}
-					modalTitleIconUrl={''}
-					style={{
-						borderRadius: '100px',
-						backgroundColor: '#1EB854',
-						color: 'white',
-						fontWeight: 'bold',
-						padding: '8px 16px'
-					}}
-				/> */}
+        <ConnectButton
+          showBalance={false}
+          accountStatus={"full"}
+          chainStatus={"icon"}
+        />
       </div>
     </nav>
   );
