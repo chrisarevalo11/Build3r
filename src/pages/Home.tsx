@@ -5,7 +5,7 @@ import {
   Final,
   Hero,
 } from "@/components/landing";
-import Container from "@/components/ui/Container";
+import { Container } from "@/components/ui";
 
 export default function Home(): JSX.Element {
   return (
