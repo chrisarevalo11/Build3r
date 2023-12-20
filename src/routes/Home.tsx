@@ -4,7 +4,7 @@ import {
   Evaluate,
   Final,
   Hero,
-} from "../components/landing";
+} from "@/components/landing";
 import Container from "@/components/ui/Container";
 
 export default function Home(): JSX.Element {
