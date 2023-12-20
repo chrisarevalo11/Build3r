@@ -6,7 +6,7 @@ type TContainer = DetailedHTMLProps<
   HTMLDivElement
 > & {};
 
-export default function Container(props: TContainer): JSX.Element {
+export function Container(props: TContainer): JSX.Element {
   const { className, children, ...rest } = props;
 
   return (
