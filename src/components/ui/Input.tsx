@@ -10,6 +10,9 @@ export function Input(props: TInput): JSX.Element {
   const { className, ...rest } = props;
 
   return (
-    <input className={cn("input input-bordered w-full", className)} {...rest} />
+    <input
+      className={cn("input input-bordered w-full bg-gray-600", className)}
+      {...rest}
+    />
   );
 }

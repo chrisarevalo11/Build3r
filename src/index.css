@@ -41,3 +41,36 @@ h4 {
   @apply rounded-full !important;
 }
  
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hover-enabled {
+    bottom: 0 !important;
+  }
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+label span {
+  @apply ml-3 mb-2
+}

@@ -1,5 +1,5 @@
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { arbitrum, arbitrumGoerli } from "wagmi/chains";
+import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import {
   darkTheme,
@@ -13,7 +13,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [arbitrum, arbitrumGoerli],
+  [arbitrumSepolia, arbitrum],
   [publicProvider()]
 );
 
