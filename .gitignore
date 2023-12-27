@@ -19,6 +19,7 @@ yarn-error.log*
 # Build and Production
 # ==============================================
 /build/
+/dist/
 /out/
 /src/assets/contracts
 
