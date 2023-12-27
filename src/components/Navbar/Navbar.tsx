@@ -18,11 +18,11 @@ export default function Navbar(): JSX.Element {
 
 	useEffect(() => {
 		if (isConnected) {
-			navigate('/projects')
+			navigate('/explore')
 		} else {
 			navigate('/')
 		}
-	}, [isConnected, isSidebarOpen, navigate])
+	}, [isConnected])
 
 	return (
 		<nav className='navbar bg-gray-900 lg:min-w-fit lg:w-[60%] lg:max-w-[850px] lg:px-3 lg:rounded-full mx-auto flex justify-around lg:mt-5'>
