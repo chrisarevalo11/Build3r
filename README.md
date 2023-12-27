@@ -8,7 +8,7 @@ xxx
 
 ### NatureLink - contracts:
 
-https://github.com/salviega/naturelink-allo-hackathon-contracts,
+https://github.com/salviega/naturelink-allo-hackathon-contracts
 
 ## Quick start 🏄
 
