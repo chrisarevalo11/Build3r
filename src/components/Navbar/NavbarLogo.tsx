@@ -7,15 +7,10 @@ export default function NavbarLogo(): JSX.Element {
 				<img
 					src={'/images/logo.webp'}
 					alt='logo'
-					width={40}
-					height={40}
+					width={100}
+					height={100}
 					className='motion-safe:animate-spin-slow'
 				/>
-				<h4
-					className={`hidden text-primary md:block font-medium font-sans text-2xl`}
-				>
-					NatureLink
-				</h4>
 			</Link>
 		</div>
 	)
