@@ -1,16 +1,23 @@
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
-import { configureStore } from '@reduxjs/toolkit'
-// import { propousalSlice } from './slices/propousalSlice';
-// import { natureLinkSlice } from './slices/natureLinkSlice';
-// import { projectSlice } from './slices/projectSlice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+
+import { profileSlice } from './slides/profileSlice'
+import { uiSlice } from './slides/uiSlice'
+
+const rootReducer = combineReducers({
+	profileSlice: profileSlice.reducer,
+	uiSlice: uiSlice.reducer
+})
 
 export const store = configureStore({
-	reducer: {
-		// natureLink: natureLinkSlice.reducer,
-		// project: projectSlice.reducer,
-		// propousal: propousalSlice.reducer,
-	}
+	reducer: rootReducer,
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredPaths: ['profile.profile.metadata.protocol']
+			}
+		})
 })
 
 export type RootState = ReturnType<typeof store.getState>

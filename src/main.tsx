@@ -22,7 +22,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[publicProvider()]
 )
 
-const projectId: string = import.meta.env.VITE_WC_KEY || '0'
+const projectId: string = import.meta.env.VITE_WALLET_CONNECT_KEY || '0'
 
 const { connectors } = getDefaultWallets({
 	appName: 'Build3r',
