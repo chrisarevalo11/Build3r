@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import Navbar from '@/components/Navbar/Navbar'
 
 import Create from './pages/Create'
+import Explorer from './pages/Explorer'
 import Home from './pages/Home'
 
 function App(): JSX.Element {
@@ -13,7 +14,7 @@ function App(): JSX.Element {
 				<Route path='/' element={<Home />} />
 				<Route path='/profile/:profileId' element={<></>} />
 				<Route path='/create' element={<Create />} />
-				<Route path='/explore' element={<></>}>
+				<Route path='/explore' element={<Explorer />}>
 					<Route path='projects/:projectId' element={<></>} />
 					<Route path='hypercerts/:hypercertId' element={<></>} />
 				</Route>
