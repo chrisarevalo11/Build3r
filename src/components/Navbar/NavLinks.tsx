@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+import { link } from '@/types'
+
 function NavLink({ text, href }: link): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
@@ -86,11 +88,6 @@ export default function NavLinks(): JSX.Element {
 	)
 }
 
-type link = {
-	text: string
-	href: string
-}
-
 const links: link[] = [
 	{
 		text: 'Create',
@@ -102,6 +99,6 @@ const links: link[] = [
 	},
 	{
 		text: 'Profile',
-		href: '/profile'
+		href: '/profile/1'
 	}
 ]
