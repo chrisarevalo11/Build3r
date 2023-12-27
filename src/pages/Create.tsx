@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import Hypercert from '@/components/create/Hypercert'
 import ProjectForm from '@/components/create/ProjectForm'
-import { Container } from '@/components/ui'
+import { Container } from '@/components/ui/container'
 import { FormValuesTypes } from '@/types'
 
 export default function Create(): JSX.Element {

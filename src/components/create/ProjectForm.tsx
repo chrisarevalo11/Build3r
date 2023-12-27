@@ -2,14 +2,22 @@ import { ChangeEvent, Dispatch, useState } from 'react'
 import { useFormik } from 'formik'
 import { Oval } from 'react-loader-spinner'
 import { useNavigate } from 'react-router-dom'
-import { toast, ToastContainer } from 'react-toastify'
 
-import { Input, Label, Textarea } from '@/components/ui'
+import { Button } from '@/components/ui/button'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { FormValuesTypes } from '@/types'
 // import { natureLinkContractWriteFunctions } from '@/constants/contract-functions'
-import { toDecimal } from '@/utils'
-
-import 'react-toastify/dist/ReactToastify.css'
+// import { toDecimal } from '@/utils'
 
 type Props = {
 	formValues: FormValuesTypes
@@ -51,9 +59,6 @@ export default function ProjectForm(props: Props): JSX.Element {
 			// const { receipt } = await createProjectTx
 
 			setIsLoading(false)
-			toast.success('Project created!', {
-				autoClose: 2000
-			})
 
 			setTimeout(() => {
 				navigate('/explore')
@@ -62,10 +67,14 @@ export default function ProjectForm(props: Props): JSX.Element {
 	})
 
 	return (
-		<div className='card w-[95%] md:w-[90%] lg:w-1/2 bg-gray-900 shadow-xl m-2'>
-			<form onSubmit={formik.handleSubmit}>
-				<div className='card-body space-y-4'>
-					<Label>
+		<Card className='card w-[95%] md:w-[90%] lg:w-1/2 shadow-xl m-2'>
+			<CardHeader>
+				<CardTitle>Create project</CardTitle>
+				<CardDescription>Deploy your new project in one-click.</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<form onSubmit={formik.handleSubmit} className='flex flex-col gap-4'>
+					<Label className='space-y-2'>
 						<span>Project Name</span>
 						<Input
 							name='projectName'
@@ -76,7 +85,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						/>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Background Image</span>
 						<Input
 							name='bannerImage'
@@ -87,7 +96,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						/>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Logo Image</span>
 						<Input
 							name='logo'
@@ -98,7 +107,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						/>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Description</span>
 						<Textarea
 							name='description'
@@ -108,7 +117,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						></Textarea>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Link (website, blog, etc.)</span>
 						<Input
 							name='link'
@@ -119,26 +128,19 @@ export default function ProjectForm(props: Props): JSX.Element {
 						/>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Amount</span>
-						<div className={'join'}>
-							<Input
-								className='join-item'
-								name='amount'
-								step={'any'}
-								type='number'
-								placeholder='Amount required'
-								required
-								onChange={handleChange}
-							/>
-							<span className='join-item rounded-r-full px-5 bg-gray-800 flex items-center'>
-								MATIC
-							</span>
-						</div>
+						<Input
+							name='amount'
+							type='number'
+							placeholder='Amount required'
+							required
+							onChange={handleChange}
+						/>
 					</Label>
 
-					<div className='flex flex-col md:flex-row md:justify-center w-full md:my-6 gap-2'>
-						<Label>
+					<div className='flex flex-col md:flex-row w-full gap-2'>
+						<Label className='space-y-2 grow'>
 							<span>Start date</span>
 							<Input
 								name='startDate'
@@ -148,7 +150,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 							/>
 						</Label>
 
-						<Label>
+						<Label className='space-y-2 grow'>
 							<span>End date</span>
 							<Input
 								name='endDate'
@@ -159,7 +161,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						</Label>
 					</div>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Scope Tags</span>
 						<Textarea
 							name='scopeTags'
@@ -169,7 +171,7 @@ export default function ProjectForm(props: Props): JSX.Element {
 						></Textarea>
 					</Label>
 
-					<Label>
+					<Label className='space-y-2'>
 						<span>Contributors</span>
 						<Textarea
 							name='contributors'
@@ -178,68 +180,64 @@ export default function ProjectForm(props: Props): JSX.Element {
 							onChange={handleChange}
 						></Textarea>
 					</Label>
-				</div>
 
-				<div className='card-actions justify-center'>
-					<button
-						type='submit'
-						className='btn btn-primary btn-wide border-none mb-5'
-					>
-						{isLoading ? (
-							<Oval
-								height={30}
-								width={30}
-								color='#fff'
-								wrapperStyle={{}}
-								wrapperClass=''
-								visible={true}
-								ariaLabel='oval-loading'
-								secondaryColor='#fff'
-								strokeWidth={2}
-								strokeWidthSecondary={2}
-							/>
-						) : (
-							'Create'
-						)}
-					</button>
-				</div>
-			</form>
-			<ToastContainer />
-		</div>
+					<CardFooter className='flex justify-center'>
+						<Button type='submit'>
+							{isLoading ? (
+								<Oval
+									height={30}
+									width={30}
+									color='#fff'
+									wrapperStyle={{}}
+									wrapperClass=''
+									visible={true}
+									ariaLabel='oval-loading'
+									secondaryColor='#fff'
+									strokeWidth={2}
+									strokeWidthSecondary={2}
+								/>
+							) : (
+								'Create'
+							)}
+						</Button>
+					</CardFooter>
+				</form>
+			</CardContent>
+		</Card>
 	)
 }
 
-function createProjectArgsDtoToCreateProjectArgs(
-	formValues: FormValuesTypes
-): any[] {
-	const {
-		projectName,
-		bannerImage,
-		logo,
-		description,
-		link,
-		amount,
-		startDate,
-		endDate,
-		scopeTags,
-		contributors
-	} = formValues
+// function createProjectArgsDtoToCreateProjectArgs(
+// 	formValues: FormValuesTypes
+// ): any[] {
+// 	const {
+// 		projectName,
+// 		bannerImage,
+// 		logo,
+// 		description,
+// 		link,
+// 		amount,
+// 		startDate,
+// 		endDate,
+// 		scopeTags,
+// 		contributors
+// 	} = formValues
 
-	const amountBN: bigint = toDecimal(amount)
-	const projectStartTime: number = new Date(startDate).getTime() / 1000
-	const projectEndTime: number = new Date(endDate).getTime() / 1000
-	const projectTime: number[] = [projectStartTime, projectEndTime]
-	// TODO: Change this to the real evaluation time
-	const evaluationTime: number = new Date('2024-01-01').getTime() / 1000
-	const info: string = `${projectName},${bannerImage},${logo},${description},${link},${scopeTags},${contributors}`
+// 	const amountBN: bigint = toDecimal(amount)
+// 	const projectStartTime: number = new Date(startDate).getTime() / 1000
+// 	const projectEndTime: number = new Date(endDate).getTime() / 1000
+// 	const projectTime: number[] = [projectStartTime, projectEndTime]
+// 	// TODO: Change this to the real evaluation time
+// 	const evaluationTime: number = new Date('2024-01-01').getTime() / 1000
+// 	const info: string = `${projectName},${bannerImage},${logo},${description},${link},${scopeTags},${contributors}`
 
-	const args: any[] = [
-		amountBN, // _amount
-		projectStartTime, // _planning
-		projectTime, // _projectTime
-		evaluationTime, // _evaluationTime
-		info // _info
-	]
+// 	const args: any[] = [
+// 		amountBN, // _amount
+// 		projectStartTime, // _planning
+// 		projectTime, // _projectTime
+// 		evaluationTime, // _evaluationTime
+// 		info // _info
+// 	]
 
-	return args
-}
+// 	return args
+// }

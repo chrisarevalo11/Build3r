@@ -25,7 +25,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 const projectId: string = import.meta.env.VITE_WC_KEY || '0'
 
 const { connectors } = getDefaultWallets({
-	appName: 'NatureLink',
+	appName: 'Build3r',
 	projectId,
 	chains
 })
@@ -44,7 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 				<RainbowKitProvider
 					chains={chains}
 					theme={darkTheme({
-						accentColor: '#1EB854',
+						accentColor: '#f85858',
 						accentColorForeground: 'white',
 						borderRadius: 'large',
 						fontStack: 'system',
