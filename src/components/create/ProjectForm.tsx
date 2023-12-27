@@ -1,11 +1,10 @@
 import { ChangeEvent, Dispatch, useState } from 'react'
-import { BigNumber } from 'ethers'
 import { useFormik } from 'formik'
 import { Oval } from 'react-loader-spinner'
 import { useNavigate } from 'react-router-dom'
-import { toast,ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 
-import { Input, Label,Textarea } from '@/components/ui'
+import { Input, Label, Textarea } from '@/components/ui'
 import { FormValuesTypes } from '@/types'
 // import { natureLinkContractWriteFunctions } from '@/constants/contract-functions'
 import { toDecimal } from '@/utils'
@@ -226,7 +225,7 @@ function createProjectArgsDtoToCreateProjectArgs(
 		contributors
 	} = formValues
 
-	const amountBN: BigNumber = toDecimal(amount)
+	const amountBN: bigint = toDecimal(amount)
 	const projectStartTime: number = new Date(startDate).getTime() / 1000
 	const projectEndTime: number = new Date(endDate).getTime() / 1000
 	const projectTime: number[] = [projectStartTime, projectEndTime]

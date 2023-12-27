@@ -1,13 +1,13 @@
-import { ClassValue,clsx } from 'clsx'
-import { BigNumber, ethers } from 'ethers'
+import { ClassValue, clsx } from 'clsx'
+import { ethers } from 'ethers'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
 
-export function toDecimal(amount: number): BigNumber {
-	return ethers.utils.parseEther(amount.toString())
+export function toDecimal(amount: number): bigint {
+	return ethers.parseEther(amount.toString())
 }
 
 export function formatAddress(address: string): string {
