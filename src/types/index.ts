@@ -10,3 +10,8 @@ export type FormValuesTypes = {
 	scopeTags: string
 	contributors: string
 }
+
+export type link = {
+	text: string
+	href: string
+}
