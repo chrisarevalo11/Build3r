@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import { Oval } from 'react-loader-spinner'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import {
 	Card,
 	CardContent,

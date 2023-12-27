@@ -18,7 +18,7 @@ function App(): JSX.Element {
 					<Route path='projects/:projectId' element={<></>} />
 					<Route path='hypercerts/:hypercertId' element={<></>} />
 				</Route>
-				<Route path='*' element={<h1>404</h1>} />
+				<Route path='*' element={<h1>404</h1>} />T
 			</Routes>
 		</HashRouter>
 	)
