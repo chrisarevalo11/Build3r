@@ -1,5 +1,5 @@
-export { Contribute } from "./Contribute";
-export { Evaluate } from "./Evaluate";
-export { Hero } from "./Hero";
-export { Create } from "./Create";
-export { Final } from "./Final";
+export { Contribute } from './Contribute'
+export { Create } from './Create'
+export { Evaluate } from './Evaluate'
+export { Final } from './Final'
+export { Hero } from './Hero'

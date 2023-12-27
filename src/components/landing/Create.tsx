@@ -1,31 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 export function Create(): JSX.Element {
-  return (
-    <section
-      id="create"
-      className="w-full grid grid-cols-1 md:grid-cols-2 min-h-[80vh] items-center justify-items-center"
-    >
-      <div className="flex justify-center order-2 md:order-1">
-        <img
-          src={"/images/create.webp"}
-          alt="hero"
-          width={500}
-          height={500}
-          className="w-[70%]"
-        />
-      </div>
-      <div className="flex flex-col items-center gap-5 order-1 md:order-2">
-        <h1 className="text-3xl md:text-5xl text-center">
-          <span className="text-primary font-bold scale-105">Create</span>{" "}
-          innovative projects that{" "}
-          <span className="text-primary font-bold">help the planet</span> and
-          get rewarded for it
-        </h1>
-        <Link className="btn btn-primary my-4" to={"/create"}>
-          Create
-        </Link>
-      </div>
-    </section>
-  );
+	return (
+		<section
+			id='create'
+			className='w-full grid grid-cols-1 md:grid-cols-2 min-h-[80vh] items-center justify-items-center'
+		>
+			<div className='flex justify-center order-2 md:order-1'>
+				<img
+					src={'/images/create.webp'}
+					alt='hero'
+					width={500}
+					height={500}
+					className='w-[70%]'
+				/>
+			</div>
+			<div className='flex flex-col items-center gap-5 order-1 md:order-2'>
+				<h1 className='text-3xl md:text-5xl text-center'>
+					<span className='text-primary font-bold scale-105'>Create</span>{' '}
+					innovative projects that{' '}
+					<span className='text-primary font-bold'>help the planet</span> and
+					get rewarded for it
+				</h1>
+				<Link className='btn btn-primary my-4' to={'/create'}>
+					Create
+				</Link>
+			</div>
+		</section>
+	)
 }

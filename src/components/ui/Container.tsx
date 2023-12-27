@@ -1,20 +1,21 @@
-import { cn } from "@/utils";
-import { DetailedHTMLProps } from "react";
+import { DetailedHTMLProps } from 'react'
+
+import { cn } from '@/utils'
 
 type TContainer = DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> & {};
+	React.InputHTMLAttributes<HTMLDivElement>,
+	HTMLDivElement
+> & {}
 
 export function Container(props: TContainer): JSX.Element {
-  const { className, children, ...rest } = props;
+	const { className, children, ...rest } = props
 
-  return (
-    <div
-      className={cn("w-full p-2 max-w-[1200px] mx-auto", className)}
-      {...rest}
-    >
-      {children}
-    </div>
-  );
+	return (
+		<div
+			className={cn('w-full p-2 max-w-[1200px] mx-auto', className)}
+			{...rest}
+		>
+			{children}
+		</div>
+	)
 }
