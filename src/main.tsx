@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { arbitrum, arbitrumSepolia } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
@@ -10,6 +11,7 @@ import {
 	RainbowKitProvider
 } from '@rainbow-me/rainbowkit'
 
+import { store } from './store/index.ts'
 import App from './App.tsx'
 
 import '@rainbow-me/rainbowkit/styles.css'
@@ -37,20 +39,22 @@ const wagmiConfig = createConfig({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<WagmiConfig config={wagmiConfig}>
-			<RainbowKitProvider
-				chains={chains}
-				theme={darkTheme({
-					accentColor: '#1EB854',
-					accentColorForeground: 'white',
-					borderRadius: 'large',
-					fontStack: 'system',
-					overlayBlur: 'small'
-				})}
-				modalSize='compact'
-			>
-				<App />
-			</RainbowKitProvider>
-		</WagmiConfig>
+		<Provider store={store}>
+			<WagmiConfig config={wagmiConfig}>
+				<RainbowKitProvider
+					chains={chains}
+					theme={darkTheme({
+						accentColor: '#1EB854',
+						accentColorForeground: 'white',
+						borderRadius: 'large',
+						fontStack: 'system',
+						overlayBlur: 'small'
+					})}
+					modalSize='compact'
+				>
+					<App />
+				</RainbowKitProvider>
+			</WagmiConfig>
+		</Provider>
 	</React.StrictMode>
 )
