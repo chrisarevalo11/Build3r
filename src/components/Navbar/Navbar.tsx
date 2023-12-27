@@ -25,7 +25,7 @@ export default function Navbar(): JSX.Element {
 	}, [isConnected])
 
 	return (
-		<nav className='navbar bg-gray-900 lg:min-w-fit lg:w-[60%] lg:max-w-[850px] lg:px-3 lg:rounded-full mx-auto flex justify-around lg:mt-5'>
+		<nav className='navbar lg:min-w-fit lg:w-[60%] lg:max-w-[850px] lg:px-3 lg:rounded-full mx-auto flex justify-around lg:mt-5'>
 			<div className='navbar-start'>
 				{isConnected && (
 					<div className='lg:hidden'>

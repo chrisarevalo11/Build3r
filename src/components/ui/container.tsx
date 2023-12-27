@@ -5,7 +5,8 @@ import { cn } from '@/utils'
 type TContainer = DetailedHTMLProps<
 	React.InputHTMLAttributes<HTMLDivElement>,
 	HTMLDivElement
-> & {}
+> &
+	object
 
 export function Container(props: TContainer): JSX.Element {
 	const { className, children, ...rest } = props

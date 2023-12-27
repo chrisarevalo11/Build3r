@@ -1,5 +1,5 @@
 import { Contribute, Create, Evaluate, Final, Hero } from '@/components/landing'
-import { Container } from '@/components/ui'
+import { Container } from '@/components/ui/container'
 
 export default function Home(): JSX.Element {
 	return (
