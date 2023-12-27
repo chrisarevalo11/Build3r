@@ -1,6 +1,6 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
-import Navbar from './components/navbar/Navbar'
+import Navbar from './components/menu/Navbar'
 import Create from './pages/Create'
 import Explorer from './pages/Explorer'
 import Home from './pages/Home'
