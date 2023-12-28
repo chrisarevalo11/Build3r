@@ -30,7 +30,6 @@ export default function Profile(): JSX.Element {
 	}, [address, fetched, dispatch, navigate])
 
 	return (
-		// TODO: Add  Disclaimer component
 		<Container className='flex flex-col gap-10 md:gap-4'>
 			{loading ? (
 				'loading...'

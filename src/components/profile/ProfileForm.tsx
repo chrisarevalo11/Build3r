@@ -1,5 +1,7 @@
+import { useRef } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
@@ -18,6 +20,10 @@ import {
 	ARBITRUM_SEPOLIA_RPC_URL,
 	ETHEREUM_ADDRESSES_REGEX
 } from '@/constants/constans'
+import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos'
+import { FProfileSubmition, FProfileSubmitionDto } from '@/models/profile.model'
+import { AppDispatch } from '@/store'
+import { createProfile } from '@/store/thunks/profile.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
@@ -44,7 +50,7 @@ const formSchema = z.object({
 		.min(2, {
 			message: 'Description is required'
 		})
-		.max(200, {
+		.max(283, {
 			message: 'Description must be less than 200 characters'
 		}),
 	members: z.string().refine(value => ETHEREUM_ADDRESSES_REGEX.test(value), {
@@ -53,6 +59,10 @@ const formSchema = z.object({
 })
 
 export default function ProfileForm(): JSX.Element {
+	const imageRef = useRef<HTMLInputElement>(null)
+	const bannerRef = useRef<HTMLInputElement>(null)
+	const dispatch = useDispatch<AppDispatch>()
+
 	const { address } = useAccount()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -71,17 +81,39 @@ export default function ProfileForm(): JSX.Element {
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
+			if (!imageRef.current?.files?.[0] || !bannerRef.current?.files?.[0]) {
+				throw new Error('Logo or banner is not defined')
+			}
+
 			const nonce: number = await ethers
 				.getDefaultProvider(ARBITRUM_SEPOLIA_RPC_URL)
 				.getTransactionCount(address as string)
 
-			console.log('nonce:', nonce)
+			const membersArray: string[] = data.members
+				.split(',')
+				.map((member: string) => member.trim())
 
-			// Perform any necessary actions with the form data
-			console.log('Form data:', data)
+			const fProfileSubmitionDto: FProfileSubmitionDto = {
+				owner: address as string,
+				nonce,
+				name: data.name,
+				banner: imageRef.current.files[0],
+				logo: bannerRef.current.files[0],
+				slogan: data.slogan,
+				website: data.website,
+				twitter: data.twitter,
+				description: data.description,
+				members: membersArray
+			}
+
+			const fProfileSubmition: FProfileSubmition =
+				await fProfileSubmitionDtoToFProfileSubmition(fProfileSubmitionDto)
+
+			dispatch(createProfile(fProfileSubmition))
+			alert('Profile created!')
 		} catch (error) {
-			// Handle submission errors
-			console.error('Submission error:', error)
+			console.error('❌ ', error)
+			alert('Error: look at the console')
 		}
 	}
 	return (
@@ -108,7 +140,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Banner</FormLabel>
 								<FormControl>
-									<Input id='banner' type='file' {...field} />
+									<Input id='banner' type='file' {...field} ref={bannerRef} />
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.banner?.message}
@@ -123,7 +155,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input id='logo' type='file' {...field} />
+									<Input id='logo' type='file' {...field} ref={imageRef} />
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>

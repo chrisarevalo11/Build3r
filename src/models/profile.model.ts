@@ -12,6 +12,19 @@ export interface FProfile {
 	anchor: string
 }
 
+export interface FProfileSubmitionDto {
+	owner: string
+	nonce: number
+	name: string
+	banner: File
+	logo: File
+	slogan: string
+	website: string
+	twitter: string
+	description: string
+	members: string[]
+}
+
 export interface FProfileSubmition {
 	nonce: number
 	name: string

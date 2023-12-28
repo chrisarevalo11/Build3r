@@ -1,6 +1,6 @@
 import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
-import { dtoToProfile, profileSubmitionToDto } from '@/functions/dtos'
+import { dtoToProfile, fProfileSubmitionToDto } from '@/functions/dtos'
 import { FProfile, FProfileSubmition } from '@/models/profile.model'
 import { getSubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
@@ -19,14 +19,15 @@ const { getProfileIdByOwner, getPaginatedProfiles } = getSubGraphData()
 
 export const createProfile = createAsyncThunk(
 	'profile/createProfile',
-	async (profileSubmition: FProfileSubmition, { dispatch }) => {
+	async (fProfileSubmition: FProfileSubmition, { dispatch }) => {
 		dispatch(setLoading(true))
 
-		const profileSubmitionDto = profileSubmitionToDto(profileSubmition)
+		const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
 		const transactionData = registry.createProfile(profileSubmitionDto)
 
 		console.log('transactionData: ', transactionData)
 
+		dispatch(setProfileFetched(false))
 		dispatch(setLoading(false))
 	}
 )
