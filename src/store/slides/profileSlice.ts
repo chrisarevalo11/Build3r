@@ -1,8 +1,9 @@
-import { FProfile } from '@/models/profile.model'
+import { FProfile, FProfileDto } from '@/models/profile.model'
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
 
 interface InitialState {
 	profile: FProfile
+	profileDto: FProfileDto
 	profileFetched: boolean
 	profiles: FProfile[]
 	profilesFetched: boolean
@@ -14,6 +15,22 @@ const initialState: InitialState = {
 		nonce: -1,
 		name: '',
 		metadata: { protocol: -1, pointer: '' },
+		owner: '',
+		anchor: ''
+	},
+	profileDto: {
+		id: '',
+		name: '',
+		nonce: -1,
+		metadata: {
+			banner: '',
+			logo: '',
+			slogan: '',
+			website: '',
+			twitter: '',
+			description: '',
+			members: []
+		},
 		owner: '',
 		anchor: ''
 	},
@@ -29,6 +46,9 @@ export const profileSlice: Slice<InitialState> = createSlice({
 		setProfile: (state, action: PayloadAction<FProfile>) => {
 			state.profile = action.payload
 		},
+		setProfileDto: (state, action: PayloadAction<FProfileDto>) => {
+			state.profileDto = action.payload
+		},
 		setProfileFetched: (state, action: PayloadAction<boolean>) => {
 			state.profileFetched = action.payload
 		},
@@ -43,6 +63,7 @@ export const profileSlice: Slice<InitialState> = createSlice({
 
 export const {
 	setProfile,
+	setProfileDto,
 	setProfileFetched,
 	setProfiles,
 	setProfilesFetched

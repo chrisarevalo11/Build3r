@@ -3,14 +3,23 @@ import { ethers } from 'ethers'
 import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
 import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
-import { dtoToProfile, fProfileSubmitionToDto } from '@/functions/dtos'
-import { FProfile, FProfileSubmition } from '@/models/profile.model'
+import {
+	dtoToProfile,
+	fProfileSubmitionToDto,
+	fProfileToFprofileDto
+} from '@/functions/dtos'
+import {
+	FProfile,
+	FProfileDto,
+	FProfileSubmition
+} from '@/models/profile.model'
 import { getSubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import {
 	setProfile,
+	setProfileDto,
 	setProfileFetched,
 	setProfiles,
 	setProfilesFetched
@@ -67,8 +76,10 @@ export const getProfile = createAsyncThunk(
 
 		const profileDto: Profile = await registry.getProfileById(profileId)
 		const profile: FProfile = dtoToProfile(profileDto)
+		const fprofileDto: FProfileDto = await fProfileToFprofileDto(profile)
 
 		dispatch(setProfile(profile))
+		dispatch(setProfileDto(fprofileDto))
 		dispatch(setProfileFetched(true))
 		dispatch(setLoading(false))
 	}

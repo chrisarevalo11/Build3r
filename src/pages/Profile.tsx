@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 
 import CreateProfile from '@/components/profile/CreateProfile'
 import { Container } from '@/components/ui/container'
-import { FProfile } from '@/models/profile.model'
+import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfile } from '@/store/thunks/profile.thunk'
 
@@ -13,7 +13,9 @@ export default function Profile(): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const profile: FProfile = useAppSelector(state => state.profileSlice.profile)
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
+	)
 	const fetched: boolean = useAppSelector(
 		state => state.profileSlice.profileFetched
 	)
@@ -33,19 +35,26 @@ export default function Profile(): JSX.Element {
 		<Container className='flex flex-col gap-10 md:gap-4'>
 			{loading ? (
 				'loading...'
-			) : profile.id === '' ? (
+			) : profileDto.id === '' ? (
 				<>
 					<CreateProfile />
 				</>
 			) : (
 				<>
-					<p>{profile.id}</p>
-					<p>{profile.name}</p>
-					<p>{profile.anchor}</p>
-					<p>{profile.metadata.protocol}</p>
-					<p>{profile.metadata.pointer}</p>
-					<p>{profile.nonce}</p>
-					<p>{profile.owner}</p>
+					<p>{profileDto.anchor}</p>
+					<p>{profileDto.id}</p>
+					<img src={profileDto.metadata.banner} />
+					<p>{profileDto.metadata.description}</p>
+					<img src={profileDto.metadata.logo} />
+					{profileDto?.metadata?.members?.map(
+						(member: string, index: number) => <p key={index}>{member}</p>
+					)}
+					<p>{profileDto.metadata.slogan}</p>
+					<p>{profileDto.metadata.website}</p>
+					<p>{profileDto.metadata.twitter}</p>
+					<p>{profileDto.name}</p>
+					<p>{profileDto.nonce}</p>
+					<p>{profileDto.owner}</p>
 				</>
 			)}
 		</Container>

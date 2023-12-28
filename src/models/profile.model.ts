@@ -3,11 +3,29 @@ export interface FMetadata {
 	pointer: string
 }
 
+export interface FMetadataDto {
+	banner: string
+	logo: string
+	slogan: string
+	website: string
+	twitter: string
+	description: string
+	members: string[]
+}
 export interface FProfile {
 	id: string
 	nonce: number
 	name: string
 	metadata: FMetadata
+	owner: string
+	anchor: string
+}
+
+export interface FProfileDto {
+	id: string
+	nonce: number
+	name: string
+	metadata: FMetadataDto
 	owner: string
 	anchor: string
 }

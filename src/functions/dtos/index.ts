@@ -1,6 +1,8 @@
 import { IPFS_PROTOCOL } from '@/constants/constans'
 import {
+	FMetadataDto,
 	FProfile,
+	FProfileDto,
 	FProfileSubmition,
 	FProfileSubmitionDto,
 	SubGraphProfile
@@ -26,6 +28,21 @@ export function dtoToProfile(dto: Profile): FProfile {
 		},
 		owner: dto.owner,
 		anchor: dto.anchor
+	}
+}
+
+export async function fProfileToFprofileDto(
+	fProfile: FProfile
+): Promise<FProfileDto> {
+	const metadata: Response = await fetch(fProfile.metadata.pointer)
+	const metadataDto: FMetadataDto = await metadata.json()
+	return {
+		id: fProfile.id,
+		nonce: fProfile.nonce,
+		name: fProfile.name,
+		metadata: metadataDto,
+		owner: fProfile.owner,
+		anchor: fProfile.anchor
 	}
 }
 
