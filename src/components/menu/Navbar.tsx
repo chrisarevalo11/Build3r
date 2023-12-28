@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useAccount } from 'wagmi'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
@@ -10,19 +9,10 @@ import NavLinks, { NavLinksResponsive } from './NavLinks'
 export default function Navbar(): JSX.Element {
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
 	const { isConnected } = useAccount()
-	const navigate = useNavigate()
 
 	const toggleSidebar = () => {
 		setIsSidebarOpen(!isSidebarOpen)
 	}
-
-	useEffect(() => {
-		if (isConnected) {
-			navigate('/explore')
-		} else {
-			navigate('/')
-		}
-	}, [isConnected])
 
 	return (
 		<nav className='navbar lg:min-w-fit lg:w-[60%] lg:max-w-[850px] lg:px-3 lg:rounded-full mx-auto flex justify-around lg:mt-5'>
