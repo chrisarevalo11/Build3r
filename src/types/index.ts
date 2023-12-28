@@ -1,3 +1,5 @@
+import { Dispatch } from 'react'
+
 export type FormValuesTypes = {
 	projectName: string
 	bannerImage: string
@@ -14,4 +16,8 @@ export type FormValuesTypes = {
 export type link = {
 	text: string
 	href: string
+}
+
+export type createPoolProps = {
+	setFormValues: Dispatch<React.SetStateAction<FormValuesTypes>>
 }
