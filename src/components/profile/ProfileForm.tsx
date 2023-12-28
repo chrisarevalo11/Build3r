@@ -86,7 +86,7 @@ export default function ProfileForm(): JSX.Element {
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3'>
+			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2 mx-5'>
 				<FormField
 					control={form.control}
 					name='name'
