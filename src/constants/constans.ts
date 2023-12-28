@@ -15,3 +15,10 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 	   ============================================== */
 
 export const PROFILE_NOT_FOUND: string = 'Profile not found'
+export const PROFILES_NOT_FOUND: string = 'Profiles not found'
+
+/* ==============================================
+	    Decentralized storage protocols
+	   ============================================== */
+
+export const IPFS_PROTOCOL: number = 1

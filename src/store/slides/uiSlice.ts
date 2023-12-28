@@ -5,7 +5,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-	loading: false
+	loading: true
 }
 
 export const uiSlice: Slice<InitialState> = createSlice({

@@ -1,26 +1,45 @@
-import { PROFILE_NOT_FOUND } from '@/constants/constans'
+import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
-import { dtoToProfile } from '@/functions/dtos'
-import { FProfile } from '@/models/profile.model'
+import { dtoToProfile, profileSubmitionToDto } from '@/functions/dtos'
+import { FProfile, FProfileSubmition } from '@/models/profile.model'
 import { getSubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-import { setFetched, setProfile } from '../slides/profileSlice'
+import {
+	setProfile,
+	setProfileFetched,
+	setProfiles,
+	setProfilesFetched
+} from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
+
+const { registry } = getAlloContracts()
+const { getProfileIdByOwner, getPaginatedProfiles } = getSubGraphData()
+
+export const createProfile = createAsyncThunk(
+	'profile/createProfile',
+	async (profileSubmition: FProfileSubmition, { dispatch }) => {
+		dispatch(setLoading(true))
+
+		const profileSubmitionDto = profileSubmitionToDto(profileSubmition)
+		const transactionData = registry.createProfile(profileSubmitionDto)
+
+		console.log('transactionData: ', transactionData)
+
+		dispatch(setLoading(false))
+	}
+)
 
 export const getProfile = createAsyncThunk(
 	'profile/getProfile',
 	async (address: string, { dispatch }) => {
-		const { registry } = getAlloContracts()
-		const { getProfileIdByOwner } = getSubGraphData()
-
 		dispatch(setLoading(true))
 
 		const profileId: string = await getProfileIdByOwner(address)
 
 		if (profileId === PROFILE_NOT_FOUND) {
-			dispatch(setFetched(true))
+			dispatch(setProfileFetched(true))
 			dispatch(setLoading(false))
 			return
 		}
@@ -29,7 +48,26 @@ export const getProfile = createAsyncThunk(
 		const profile: FProfile = dtoToProfile(profileDto)
 
 		dispatch(setProfile(profile))
-		dispatch(setFetched(true))
+		dispatch(setProfileFetched(true))
+		dispatch(setLoading(false))
+	}
+)
+
+export const getProfiles = createAsyncThunk(
+	'profile/getPaginatedProfiles',
+	async ({ first, skip }: { first: number; skip: number }, { dispatch }) => {
+		dispatch(setLoading(true))
+
+		const profiles = await getPaginatedProfiles(first, skip)
+
+		if (profiles === PROFILES_NOT_FOUND) {
+			dispatch(setProfilesFetched(true))
+			dispatch(setLoading(false))
+			return
+		}
+
+		dispatch(setProfiles(profiles))
+		dispatch(setProfilesFetched(true))
 		dispatch(setLoading(false))
 	}
 )
