@@ -6,7 +6,7 @@ import { getSubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-import { setProfile } from '../slides/profileSlice'
+import { setFetched, setProfile } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
 
 export const getProfile = createAsyncThunk(
@@ -20,6 +20,7 @@ export const getProfile = createAsyncThunk(
 		const profileId: string = await getProfileIdByOwner(address)
 
 		if (profileId === PROFILE_NOT_FOUND) {
+			dispatch(setFetched(true))
 			dispatch(setLoading(false))
 			return
 		}
@@ -28,6 +29,7 @@ export const getProfile = createAsyncThunk(
 		const profile: FProfile = dtoToProfile(profileDto)
 
 		dispatch(setProfile(profile))
+		dispatch(setFetched(true))
 		dispatch(setLoading(false))
 	}
 )

@@ -10,13 +10,14 @@ export default function Explorer(): JSX.Element {
 	const { address } = useAccount()
 	const dispatch = useDispatch<AppDispatch>()
 	const profile: FProfile = useAppSelector(state => state.profileSlice.profile)
-	const loading = useAppSelector(state => state.uiSlice.loading)
+	const fetched: boolean = useAppSelector(state => state.profileSlice.fetched)
+	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 
 	useEffect(() => {
-		if (address) {
-			dispatch(getProfile(address))
+		if (!fetched) {
+			dispatch(getProfile(address as string))
 		}
-	}, [address, dispatch])
+	}, [address, fetched, dispatch])
 
 	return <p>Explorer: {loading ? 'loading...' : profile.nonce}</p>
 }
