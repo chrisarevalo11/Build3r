@@ -23,6 +23,7 @@ import {
 import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos'
 import { FProfileSubmition, FProfileSubmitionDto } from '@/models/profile.model'
 import { AppDispatch } from '@/store'
+import { setLoading } from '@/store/slides/uiSlice'
 import { createProfile } from '@/store/thunks/profile.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -84,6 +85,8 @@ export default function ProfileForm(): JSX.Element {
 			if (!imageRef.current?.files?.[0] || !bannerRef.current?.files?.[0]) {
 				throw new Error('Logo or banner is not defined')
 			}
+
+			dispatch(setLoading(true))
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const ethereum = (window as any).ethereum
