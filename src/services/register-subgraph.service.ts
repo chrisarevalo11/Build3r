@@ -1,8 +1,14 @@
 import {
 	ARBITRUM_REGISTER_SUBGRAPH_URL,
-	PROFILE_NOT_FOUND
+	PROFILE_NOT_FOUND,
+	PROFILES_NOT_FOUND
 } from '@/constants/constans'
-import { queryProfilesWhereOwner } from '@/queries/register'
+import { subgraphProfileToFProfile } from '@/functions/dtos'
+import { FProfile, SubGraphProfile } from '@/models/profile.model'
+import {
+	queryPaginatedProfiles,
+	queryProfilesWhereOwner
+} from '@/queries/register'
 import {
 	ApolloClient,
 	gql,
@@ -36,7 +42,30 @@ export function getSubGraphData() {
 		return PROFILE_NOT_FOUND
 	}
 
+	const getPaginatedProfiles = async (
+		first: number,
+		skip: number
+	): Promise<FProfile[] | string> => {
+		try {
+			const response = await client.query({
+				query: gql(queryPaginatedProfiles),
+				variables: { first, skip }
+			})
+
+			const profiles: FProfile[] = response.data.profiles.map(
+				(subgraphProfile: SubGraphProfile) =>
+					subgraphProfileToFProfile(subgraphProfile)
+			)
+
+			return profiles
+		} catch (error) {
+			console.log('error: ', error)
+			return PROFILES_NOT_FOUND
+		}
+	}
+
 	return {
-		getProfileIdByOwner
+		getProfileIdByOwner,
+		getPaginatedProfiles
 	}
 }
