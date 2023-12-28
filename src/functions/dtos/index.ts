@@ -18,7 +18,7 @@ import {
 export function dtoToProfile(dto: Profile): FProfile {
 	return {
 		id: dto.id,
-		nonce: dto.nonce,
+		nonce: Number(dto.nonce),
 		name: dto.name,
 		metadata: {
 			protocol: Number(dto.metadata.protocol),

@@ -1,5 +1,8 @@
+import { ethers } from 'ethers'
+
 import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
+import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
 import { dtoToProfile, fProfileSubmitionToDto } from '@/functions/dtos'
 import { FProfile, FProfileSubmition } from '@/models/profile.model'
 import { getSubGraphData } from '@/services/register-subgraph.service'
@@ -14,27 +17,44 @@ import {
 } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
 
-const { registry } = getAlloContracts()
 const { getProfileIdByOwner, getPaginatedProfiles } = getSubGraphData()
 
 export const createProfile = createAsyncThunk(
 	'profile/createProfile',
-	async (fProfileSubmition: FProfileSubmition, { dispatch }) => {
+	async (
+		{
+			fProfileSubmition,
+			providerOrSigner
+		}: {
+			fProfileSubmition: FProfileSubmition
+			providerOrSigner: ethers.BrowserProvider | ethers.JsonRpcSigner
+		},
+		{ dispatch }
+	) => {
+		const { registry } = getAlloInstanceContracts(providerOrSigner)
+
 		dispatch(setLoading(true))
-
 		const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
-		const transactionData = registry.createProfile(profileSubmitionDto)
+		const createProfileTx = await registry.createProfile(
+			profileSubmitionDto.nonce,
+			profileSubmitionDto.name,
+			profileSubmitionDto.metadata,
+			profileSubmitionDto.owner,
+			profileSubmitionDto.members
+		)
 
-		console.log('transactionData: ', transactionData)
+		await createProfileTx.wait(1)
 
 		dispatch(setProfileFetched(false))
-		dispatch(setLoading(false))
+		// dispatch(setLoading(false))
 	}
 )
 
 export const getProfile = createAsyncThunk(
 	'profile/getProfile',
 	async (address: string, { dispatch }) => {
+		const { registry } = getAlloContracts()
+
 		dispatch(setLoading(true))
 
 		const profileId: string = await getProfileIdByOwner(address)

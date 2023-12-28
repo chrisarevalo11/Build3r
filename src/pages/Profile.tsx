@@ -38,7 +38,15 @@ export default function Profile(): JSX.Element {
 					<CreateProfile />
 				</>
 			) : (
-				<></>
+				<>
+					<p>{profile.id}</p>
+					<p>{profile.name}</p>
+					<p>{profile.anchor}</p>
+					<p>{profile.metadata.protocol}</p>
+					<p>{profile.metadata.pointer}</p>
+					<p>{profile.nonce}</p>
+					<p>{profile.owner}</p>
+				</>
 			)}
 		</Container>
 	)

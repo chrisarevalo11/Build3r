@@ -85,6 +85,15 @@ export default function ProfileForm(): JSX.Element {
 				throw new Error('Logo or banner is not defined')
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const ethereum = (window as any).ethereum
+
+			const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+				ethereum
+			)
+			await web3Provider.send('eth_requestAccounts', [])
+			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
 			const nonce: number = await ethers
 				.getDefaultProvider(ARBITRUM_SEPOLIA_RPC_URL)
 				.getTransactionCount(address as string)
@@ -109,8 +118,9 @@ export default function ProfileForm(): JSX.Element {
 			const fProfileSubmition: FProfileSubmition =
 				await fProfileSubmitionDtoToFProfileSubmition(fProfileSubmitionDto)
 
-			dispatch(createProfile(fProfileSubmition))
-			alert('Profile created!')
+			dispatch(
+				createProfile({ fProfileSubmition, providerOrSigner: web3Signer })
+			)
 		} catch (error) {
 			console.error('❌ ', error)
 			alert('Error: look at the console')
