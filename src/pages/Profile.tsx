@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
-import ProfileForm from '@/components/profile/ProfileForm'
-import { Button } from '@/components/ui/Button'
+import CreateProfile from '@/components/profile/CreateProfile'
 import { Container } from '@/components/ui/container'
 import { FProfile } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
@@ -37,16 +36,10 @@ export default function Profile(): JSX.Element {
 				'loading...'
 			) : profile.id === '' ? (
 				<>
-					<p>
-						DISCLAIMER: You must create a profile organization to use this app.
-					</p>
-					<Link to={'/Create'}>
-						<Button>Create profile</Button>
-					</Link>
-					<ProfileForm />
+					<CreateProfile />
 				</>
 			) : (
-				<ProfileForm />
+				<></>
 			)}
 		</Container>
 	)

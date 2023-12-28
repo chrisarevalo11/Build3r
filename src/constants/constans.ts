@@ -22,3 +22,6 @@ export const PROFILES_NOT_FOUND: string = 'Profiles not found'
 	   ============================================== */
 
 export const IPFS_PROTOCOL: number = 1
+
+export const ETHEREUM_ADDRESSES_REGEX =
+	/^(0x[a-fA-F0-9]{40})(, ?0x[a-fA-F0-9]{40})*$/
