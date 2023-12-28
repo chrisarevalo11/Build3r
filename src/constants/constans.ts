@@ -15,3 +15,6 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 	   ============================================== */
 
 export const PROFILE_NOT_FOUND: string = 'Profile not found'
+
+export const ETHEREUM_ADDRESSES_REGEX =
+	/^(0x[a-fA-F0-9]{40})(, ?0x[a-fA-F0-9]{40})*$/
