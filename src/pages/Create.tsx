@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAccount } from 'wagmi'
 
 import Hypercert from '@/components/create/Hypercert'
 import ProjectForm from '@/components/create/ProjectForm'
@@ -6,6 +8,9 @@ import { Container } from '@/components/ui/container'
 import { FormValuesTypes } from '@/types'
 
 export default function Create(): JSX.Element {
+	const { address } = useAccount()
+	const navigate = useNavigate()
+
 	const initialValue: FormValuesTypes = {
 		projectName: '',
 		bannerImage: '',
@@ -19,6 +24,12 @@ export default function Create(): JSX.Element {
 		contributors: ''
 	}
 	const [formValues, setFormValues] = useState<FormValuesTypes>(initialValue)
+
+	useEffect(() => {
+		if (!address) {
+			navigate('/')
+		}
+	}, [address, navigate])
 
 	return (
 		<Container className='flex flex-col justify-evenly items-center my-3 w-full gap-4 md:gap-8'>

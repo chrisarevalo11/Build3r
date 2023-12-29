@@ -43,6 +43,13 @@ export const profileSlice: Slice<InitialState> = createSlice({
 	name: 'profile',
 	initialState,
 	reducers: {
+		destroyProfile: state => {
+			state.profile = initialState.profile
+			state.profileDto = initialState.profileDto
+			state.profileFetched = initialState.profileFetched
+			state.profiles = initialState.profiles
+			state.profilesFetched = initialState.profilesFetched
+		},
 		setProfile: (state, action: PayloadAction<FProfile>) => {
 			state.profile = action.payload
 		},
@@ -62,6 +69,7 @@ export const profileSlice: Slice<InitialState> = createSlice({
 })
 
 export const {
+	destroyProfile,
 	setProfile,
 	setProfileDto,
 	setProfileFetched,
