@@ -1,10 +1,11 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
-import Navbar from './components/menu/Navbar'
-import Create from './pages/Create'
-import Explorer from './pages/Explorer'
-import Home from './pages/Home'
-import Profile from './pages/Profile'
+import Navbar from '@/components/menu/Navbar'
+import NotFound from '@/components/NotFound'
+import Create from '@/pages/Create'
+import Explorer from '@/pages/Explorer'
+import Home from '@/pages/Home'
+import Profile from '@/pages/Profile'
 
 function App(): JSX.Element {
 	return (
@@ -18,7 +19,7 @@ function App(): JSX.Element {
 					<Route path='projects/:projectId' element={<></>} />
 					<Route path='hypercerts/:hypercertId' element={<></>} />
 				</Route>
-				<Route path='*' element={<h1>404</h1>} />T
+				<Route path='*' element={<NotFound />} />T
 			</Routes>
 		</HashRouter>
 	)
