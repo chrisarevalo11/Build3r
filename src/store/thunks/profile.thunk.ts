@@ -40,9 +40,9 @@ export const createProfile = createAsyncThunk(
 		},
 		{ dispatch }
 	) => {
+		dispatch(setLoading(true))
 		const { registry } = getAlloInstanceContracts(providerOrSigner)
 
-		dispatch(setLoading(true))
 		const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
 		const createProfileTx = await registry.createProfile(
 			profileSubmitionDto.nonce,
@@ -53,18 +53,16 @@ export const createProfile = createAsyncThunk(
 		)
 
 		await createProfileTx.wait(1)
-
 		dispatch(setProfileFetched(false))
-		// dispatch(setLoading(false))
+		dispatch(setProfilesFetched(false))
 	}
 )
 
 export const getProfile = createAsyncThunk(
 	'profile/getProfile',
 	async (address: string, { dispatch }) => {
-		const { registry } = getAlloContracts()
-
 		dispatch(setLoading(true))
+		const { registry } = getAlloContracts()
 
 		const profileId: string = await getProfileIdByOwner(address)
 

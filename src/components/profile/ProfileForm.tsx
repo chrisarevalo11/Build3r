@@ -60,8 +60,8 @@ const formSchema = z.object({
 })
 
 export default function ProfileForm(): JSX.Element {
-	const imageRef = useRef<HTMLInputElement>(null)
 	const bannerRef = useRef<HTMLInputElement>(null)
+	const logoRef = useRef<HTMLInputElement>(null)
 	const dispatch = useDispatch<AppDispatch>()
 
 	const { address } = useAccount()
@@ -82,11 +82,15 @@ export default function ProfileForm(): JSX.Element {
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
-			if (!imageRef.current?.files?.[0] || !bannerRef.current?.files?.[0]) {
-				throw new Error('Logo or banner is not defined')
-			}
-
 			dispatch(setLoading(true))
+
+			const bannerFile = bannerRef.current?.files?.[0]
+			const logoFile = logoRef.current?.files?.[0]
+
+			if (!bannerFile || !logoFile) {
+				console.error('Archivo de banner o logo no seleccionado')
+				return
+			}
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const ethereum = (window as any).ethereum
@@ -109,8 +113,8 @@ export default function ProfileForm(): JSX.Element {
 				owner: address as string,
 				nonce,
 				name: data.name,
-				banner: imageRef.current.files[0],
-				logo: bannerRef.current.files[0],
+				banner: bannerFile,
+				logo: logoFile,
 				slogan: data.slogan,
 				website: data.website,
 				twitter: data.twitter,
@@ -168,7 +172,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input id='logo' type='file' {...field} ref={imageRef} />
+									<Input id='logo' type='file' {...field} ref={logoRef} />
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>
