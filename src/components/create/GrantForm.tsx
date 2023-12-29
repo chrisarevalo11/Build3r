@@ -25,7 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
-		message: 'Grant name must be at least 2 characters.'
+		message: 'Name must be at least 2 characters.'
 	}),
 	amount: z.string().min(0, {
 		message: 'Amount is required'
@@ -36,15 +36,14 @@ const formSchema = z.object({
 	tags: z.string().refine(
 		value => {
 			const regex = /^(\w+(,\s*\w+)*)?$/
-			return regex.test(value)
+			const tagsArray = value.split(',').map(tag => tag.trim())
+			return regex.test(value) && tagsArray.length <= 5
 		},
 		{
-			message: 'Tags must be word(s) separated by commas'
+			message: 'Tags must be word(s) separated by commas and max. 5 tags'
 		}
 	),
-	organizer: z.string().min(2, {
-		message: 'Organizer is required'
-	}),
+	organizer: z.string(),
 	description: z
 		.string()
 		.min(2, {
@@ -55,7 +54,7 @@ const formSchema = z.object({
 		})
 })
 
-export default function ProjectForm({
+export default function GrantForm({
 	setFormValues
 }: createPoolProps): JSX.Element {
 	// const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -89,7 +88,7 @@ export default function ProjectForm({
 	}
 
 	return (
-		<Card className='card w-[95%] md:w-[90%] lg:w-1/2 shadow-xl m-2'>
+		<Card>
 			<CardHeader>
 				<CardTitle>Create a grant</CardTitle>
 				<CardDescription>Specify every detail of your grant</CardDescription>
@@ -153,6 +152,7 @@ export default function ProjectForm({
 											className='cursor-pointer'
 											type='file'
 											{...field}
+											accept='image/*'
 											onChange={e => {
 												field.onChange(e)
 												const file = e.target.files?.length
@@ -188,7 +188,7 @@ export default function ProjectForm({
 							name='description'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Brief description</FormLabel>
+									<FormLabel>Description</FormLabel>
 									<FormControl>
 										<Textarea
 											placeholder='This is a grant oriented to...'
