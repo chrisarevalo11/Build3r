@@ -1,5 +1,7 @@
+import { useRef } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
@@ -18,6 +20,11 @@ import {
 	ARBITRUM_SEPOLIA_RPC_URL,
 	ETHEREUM_ADDRESSES_REGEX
 } from '@/constants/constans'
+import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos'
+import { FProfileSubmition, FProfileSubmitionDto } from '@/models/profile.model'
+import { AppDispatch } from '@/store'
+import { setLoading } from '@/store/slides/uiSlice'
+import { createProfile } from '@/store/thunks/profile.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
@@ -44,7 +51,7 @@ const formSchema = z.object({
 		.min(2, {
 			message: 'Description is required'
 		})
-		.max(200, {
+		.max(283, {
 			message: 'Description must be less than 200 characters'
 		}),
 	members: z.string().refine(value => ETHEREUM_ADDRESSES_REGEX.test(value), {
@@ -53,6 +60,10 @@ const formSchema = z.object({
 })
 
 export default function ProfileForm(): JSX.Element {
+	const bannerRef = useRef<HTMLInputElement>(null)
+	const logoRef = useRef<HTMLInputElement>(null)
+	const dispatch = useDispatch<AppDispatch>()
+
 	const { address } = useAccount()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -71,17 +82,55 @@ export default function ProfileForm(): JSX.Element {
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
+			dispatch(setLoading(true))
+
+			const bannerFile = bannerRef.current?.files?.[0]
+			const logoFile = logoRef.current?.files?.[0]
+
+			if (!bannerFile || !logoFile) {
+				console.error('Archivo de banner o logo no seleccionado')
+				return
+			}
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const ethereum = (window as any).ethereum
+
+			const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+				ethereum
+			)
+			await web3Provider.send('eth_requestAccounts', [])
+			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
 			const nonce: number = await ethers
 				.getDefaultProvider(ARBITRUM_SEPOLIA_RPC_URL)
 				.getTransactionCount(address as string)
 
-			console.log('nonce:', nonce)
+			const membersArray: string[] = data.members
+				.split(',')
+				.map((member: string) => member.trim())
 
-			// Perform any necessary actions with the form data
-			console.log('Form data:', data)
+			const fProfileSubmitionDto: FProfileSubmitionDto = {
+				owner: address as string,
+				nonce,
+				name: data.name,
+				banner: bannerFile,
+				logo: logoFile,
+				slogan: data.slogan,
+				website: data.website,
+				twitter: data.twitter,
+				description: data.description,
+				members: membersArray
+			}
+
+			const fProfileSubmition: FProfileSubmition =
+				await fProfileSubmitionDtoToFProfileSubmition(fProfileSubmitionDto)
+
+			dispatch(
+				createProfile({ fProfileSubmition, providerOrSigner: web3Signer })
+			)
 		} catch (error) {
-			// Handle submission errors
-			console.error('Submission error:', error)
+			console.error('❌ ', error)
+			alert('Error: look at the console')
 		}
 	}
 	return (

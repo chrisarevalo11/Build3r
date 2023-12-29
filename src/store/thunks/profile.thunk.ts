@@ -1,33 +1,60 @@
+import { ethers } from 'ethers'
+
 import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
-import { dtoToProfile, profileSubmitionToDto } from '@/functions/dtos'
-import { FProfile, FProfileSubmition } from '@/models/profile.model'
+import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
+import {
+	dtoToProfile,
+	fProfileSubmitionToDto,
+	fProfileToFprofileDto
+} from '@/functions/dtos'
+import {
+	FProfile,
+	FProfileDto,
+	FProfileSubmition
+} from '@/models/profile.model'
 import { getSubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import {
 	setProfile,
+	setProfileDto,
 	setProfileFetched,
 	setProfiles,
 	setProfilesFetched
 } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
 
-const { registry } = getAlloContracts()
 const { getProfileIdByOwner, getPaginatedProfiles } = getSubGraphData()
 
 export const createProfile = createAsyncThunk(
 	'profile/createProfile',
-	async (profileSubmition: FProfileSubmition, { dispatch }) => {
+	async (
+		{
+			fProfileSubmition,
+			providerOrSigner
+		}: {
+			fProfileSubmition: FProfileSubmition
+			providerOrSigner: ethers.BrowserProvider | ethers.JsonRpcSigner
+		},
+		{ dispatch }
+	) => {
 		dispatch(setLoading(true))
+		const { registry } = getAlloInstanceContracts(providerOrSigner)
 
-		const profileSubmitionDto = profileSubmitionToDto(profileSubmition)
-		const transactionData = registry.createProfile(profileSubmitionDto)
+		const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
+		const createProfileTx = await registry.createProfile(
+			profileSubmitionDto.nonce,
+			profileSubmitionDto.name,
+			profileSubmitionDto.metadata,
+			profileSubmitionDto.owner,
+			profileSubmitionDto.members
+		)
 
-		console.log('transactionData: ', transactionData)
-
-		dispatch(setLoading(false))
+		await createProfileTx.wait(1)
+		dispatch(setProfileFetched(false))
+		dispatch(setProfilesFetched(false))
 	}
 )
 
@@ -35,6 +62,7 @@ export const getProfile = createAsyncThunk(
 	'profile/getProfile',
 	async (address: string, { dispatch }) => {
 		dispatch(setLoading(true))
+		const { registry } = getAlloContracts()
 
 		const profileId: string = await getProfileIdByOwner(address)
 
@@ -46,8 +74,10 @@ export const getProfile = createAsyncThunk(
 
 		const profileDto: Profile = await registry.getProfileById(profileId)
 		const profile: FProfile = dtoToProfile(profileDto)
+		const fprofileDto: FProfileDto = await fProfileToFprofileDto(profile)
 
 		dispatch(setProfile(profile))
+		dispatch(setProfileDto(fprofileDto))
 		dispatch(setProfileFetched(true))
 		dispatch(setLoading(false))
 	}

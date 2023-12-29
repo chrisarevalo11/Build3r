@@ -37,6 +37,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"viem": "^1.21.1",
 		"wagmi": "^1.4.12",
+		"web3.storage": "^4.5.5",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {

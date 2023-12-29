@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAccount } from 'wagmi'
 
 import CreateHero from '@/components/create/CreateHero'
 import GrantCard from '@/components/create/GrantCard'
@@ -7,6 +9,9 @@ import { Container } from '@/components/ui/container'
 import { grantFormValuesTypes } from '@/types'
 
 export default function Create(): JSX.Element {
+  const { address } = useAccount()
+	const navigate = useNavigate()
+  
 	const initialValue: grantFormValuesTypes = {
 		name: '',
 		amount: '',
@@ -15,10 +20,17 @@ export default function Create(): JSX.Element {
 		organizer: '',
 		description: ''
 	}
+  
 	const [formValues, setFormValues] =
 		useState<grantFormValuesTypes>(initialValue)
 
 	console.log(formValues)
+
+	useEffect(() => {
+		if (!address) {
+			navigate('/')
+		}
+	}, [address, navigate])
 
 	return (
 		<>
