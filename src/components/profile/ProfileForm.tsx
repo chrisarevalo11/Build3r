@@ -135,7 +135,7 @@ export default function ProfileForm(): JSX.Element {
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3'>
+			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2 mx-5'>
 				<FormField
 					control={form.control}
 					name='name'
@@ -157,7 +157,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Banner</FormLabel>
 								<FormControl>
-									<Input id='banner' type='file' {...field} ref={bannerRef} />
+									<Input className='cursor-pointer' type='file' {...field} />
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.banner?.message}
@@ -172,7 +172,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input id='logo' type='file' {...field} ref={logoRef} />
+									<Input className='cursor-pointer' type='file' {...field} />
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>
@@ -199,11 +199,7 @@ export default function ProfileForm(): JSX.Element {
 						<FormItem>
 							<FormLabel>Website/linktree</FormLabel>
 							<FormControl>
-								<Input
-									type='url'
-									placeholder='https://www.mywebsite.org'
-									{...field}
-								/>
+								<Input placeholder='https://www.mywebsite.org' {...field} />
 							</FormControl>
 							<FormMessage>
 								{form.formState.errors.website?.message}

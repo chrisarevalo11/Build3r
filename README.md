@@ -4,7 +4,7 @@ Support program
 
 ### Fleek deploy
 
-https://super-mountain-7114.on.fleek.co
+https://build3r.on.fleek.co/
 
 ### NatureLink - contracts:
 

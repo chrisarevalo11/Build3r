@@ -1,17 +1,19 @@
-export type FormValuesTypes = {
-	projectName: string
-	bannerImage: string
-	logo: string
+import { Dispatch } from 'react'
+
+export type grantFormValuesTypes = {
+	name: string
+	amount: string
+	image: string
+	tags: string | string[]
+	organizer: string
 	description: string
-	link: string
-	amount: number
-	startDate: string
-	endDate: string
-	scopeTags: string
-	contributors: string
 }
 
 export type link = {
 	text: string
 	href: string
+}
+
+export type createPoolProps = {
+	setFormValues: Dispatch<React.SetStateAction<grantFormValuesTypes>>
 }
