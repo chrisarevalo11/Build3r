@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -28,20 +27,23 @@ const formSchema = z.object({
 	name: z.string().min(2, {
 		message: 'Grant name must be at least 2 characters.'
 	}),
-	banner: z.string().min(1, {
-		message: 'Banner is required'
+	amount: z.string().min(0, {
+		message: 'Amount is required'
 	}),
-	logo: z.string().min(1, {
+	image: z.string().min(1, {
 		message: 'Logo is required'
 	}),
-	slogan: z.string().min(2, {
-		message: 'Slogan is required'
-	}),
-	website: z.string().url({
-		message: 'Invalid URL format for the website.'
-	}),
-	twitter: z.string().min(2, {
-		message: 'Twitter handle is required'
+	tags: z.string().refine(
+		value => {
+			const regex = /^(\w+(,\s*\w+)*)?$/
+			return regex.test(value)
+		},
+		{
+			message: 'Tags must be word(s) separated by commas'
+		}
+	),
+	organizer: z.string().min(2, {
+		message: 'Organizer is required'
 	}),
 	description: z
 		.string()
@@ -62,21 +64,16 @@ export default function ProjectForm({
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
 			name: '',
-			banner: '',
-			logo: '',
-			slogan: '',
-			website: '',
-			twitter: '',
+			amount: '',
+			image: '',
+			tags: '',
+			organizer: '',
 			description: ''
 		},
 		resolver: zodResolver(formSchema)
 	})
 
-	const handleChange = (
-		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
-	) => {
-		const { name, value }: { name: string; value: string } = event.target
-
+	const handleChange = (name: string, value: string) => {
 		setFormValues(prev => ({
 			...prev,
 			[name]: value
@@ -94,8 +91,8 @@ export default function ProjectForm({
 	return (
 		<Card className='card w-[95%] md:w-[90%] lg:w-1/2 shadow-xl m-2'>
 			<CardHeader>
-				<CardTitle>Create project</CardTitle>
-				<CardDescription>Deploy your new project in one-click.</CardDescription>
+				<CardTitle>Create a grant</CardTitle>
+				<CardDescription>Specify every detail of your grant</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<Form {...form}>
@@ -105,12 +102,15 @@ export default function ProjectForm({
 							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Grant name</FormLabel>
+									<FormLabel>Name</FormLabel>
 									<FormControl>
 										<Input
-											onChange={handleChange}
-											placeholder='My organization'
+											placeholder='My grant'
 											{...field}
+											onChange={e => {
+												field.onChange(e)
+												handleChange(e.target.name, e.target.value)
+											}}
 										/>
 									</FormControl>
 									<FormMessage>
@@ -119,83 +119,66 @@ export default function ProjectForm({
 								</FormItem>
 							)}
 						/>
-						<div className='flex flex-col md:flex-row md:gap-3'>
-							<FormField
-								control={form.control}
-								name='banner'
-								render={({ field }) => (
-									<FormItem className='grow'>
-										<FormLabel>Banner</FormLabel>
-										<FormControl>
-											<Input id='banner' type='file' {...field} />
-										</FormControl>
-										<FormMessage>
-											{form.formState.errors.banner?.message}
-										</FormMessage>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name='logo'
-								render={({ field }) => (
-									<FormItem className='grow'>
-										<FormLabel>Logo</FormLabel>
-										<FormControl>
-											<Input id='logo' type='file' {...field} />
-										</FormControl>
-										<FormMessage>
-											{form.formState.errors.logo?.message}
-										</FormMessage>
-									</FormItem>
-								)}
-							/>
-						</div>
 						<FormField
 							control={form.control}
-							name='slogan'
+							name='amount'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Slogan</FormLabel>
-									<FormControl>
-										<Input placeholder='Think Different' {...field} />
-									</FormControl>
-									<FormMessage>
-										{form.formState.errors.slogan?.message}
-									</FormMessage>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='website'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Website/linktree</FormLabel>
+									<FormLabel>Amount (ETH)</FormLabel>
 									<FormControl>
 										<Input
-											type='url'
-											placeholder='https://www.mywebsite.org'
+											type='number'
+											placeholder='20'
 											{...field}
+											onChange={e => {
+												field.onChange(e)
+												handleChange(e.target.name, e.target.value)
+											}}
 										/>
 									</FormControl>
 									<FormMessage>
-										{form.formState.errors.website?.message}
+										{form.formState.errors.amount?.message}
 									</FormMessage>
 								</FormItem>
 							)}
 						/>
 						<FormField
 							control={form.control}
-							name='twitter'
+							name='image'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Twitter handle</FormLabel>
+									<FormLabel>Image</FormLabel>
 									<FormControl>
-										<Input placeholder='johndoe123' {...field} />
+										<Input
+											className='cursor-pointer'
+											type='file'
+											{...field}
+											onChange={e => {
+												field.onChange(e)
+												const file = e.target.files?.length
+													? URL.createObjectURL(e.target.files[0])
+													: ''
+												handleChange(e.target.name, file)
+											}}
+										/>
 									</FormControl>
 									<FormMessage>
-										{form.formState.errors.twitter?.message}
+										{form.formState.errors.image?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='organizer'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Organizer</FormLabel>
+									<FormControl>
+										<Input {...field} value={'ReFi Bogota'} disabled />
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.organizer?.message}
 									</FormMessage>
 								</FormItem>
 							)}
@@ -205,15 +188,41 @@ export default function ProjectForm({
 							name='description'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Description</FormLabel>
+									<FormLabel>Brief description</FormLabel>
 									<FormControl>
 										<Textarea
-											placeholder='My organization is focused on...'
+											placeholder='This is a grant oriented to...'
 											{...field}
+											onChange={e => {
+												field.onChange(e)
+												handleChange(e.target.name, e.target.value)
+											}}
 										/>
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.description?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='tags'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tags</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder='ReFi, Evironment, etc...'
+											{...field}
+											onChange={e => {
+												field.onChange(e)
+												handleChange(e.target.name, e.target.value)
+											}}
+										/>
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.tags?.message}
 									</FormMessage>
 								</FormItem>
 							)}
