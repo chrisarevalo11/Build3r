@@ -26,5 +26,11 @@ export function getAlloContracts(
 		providerOrSigner
 	)
 
-	return { registry, allo }
+	const alloAny = new ethers.Contract(
+		alloContractJson.address,
+		alloContractJson.abi,
+		providerOrSigner
+	)
+
+	return { registry, allo, alloAny }
 }

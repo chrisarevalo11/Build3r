@@ -88,7 +88,8 @@ export default function ProfileForm(): JSX.Element {
 			const logoFile = logoRef.current?.files?.[0]
 
 			if (!bannerFile || !logoFile) {
-				console.error('Archivo de banner o logo no seleccionado')
+				alert('Error: banner and logo are required')
+				dispatch(setLoading(false))
 				return
 			}
 
@@ -156,9 +157,13 @@ export default function ProfileForm(): JSX.Element {
 						render={({ field }) => (
 							<FormItem className='grow'>
 								<FormLabel>Banner</FormLabel>
-									<Input className='cursor-pointer' type='file' {...field} ref={bannerRef} />
-								<FormControl>
-								</FormControl>
+								<Input
+									className='cursor-pointer'
+									type='file'
+									{...field}
+									ref={bannerRef}
+								/>
+								<FormControl></FormControl>
 								<FormMessage>
 									{form.formState.errors.banner?.message}
 								</FormMessage>
@@ -172,7 +177,12 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input className='cursor-pointer' type='file' {...field}  ref={logoRef}/>
+									<Input
+										className='cursor-pointer'
+										type='file'
+										{...field}
+										ref={logoRef}
+									/>
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>

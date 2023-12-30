@@ -37,8 +37,10 @@ export const createPool = createAsyncThunk(
 		)
 
 		await createPoolTx.wait(1)
+
 		// dispatch(setPoolFetched(false))
 		// dispatch(setPoolsFetched(false))
+		alert('Pool created successfully')
 		dispatch(setLoading(false))
 	}
 )

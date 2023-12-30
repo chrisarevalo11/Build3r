@@ -1,5 +1,7 @@
-import { InitializeData } from '@/models/initialize-data'
 import { BytesLike, ethers } from 'ethers'
+
+import { InitializeData } from '@/models/initialize-data.model'
+
 import { initializeDataStructTypes } from './structs-types'
 
 /* ==============================================
@@ -20,7 +22,7 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 	'https://sepolia-rollup.arbitrum.io/rpc'
 
 export const ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY: string =
-	'0xf18d5fd5809996abd2da2e7a3829318f1517cc1a19db12416c7d7bf186b5c045'
+	'0x7c061ba5c01e941faeba9fe3a10e2c6e1272fdf4'
 
 const ARBITRUM_POOL_INIT_STRATEGY_DATE_OBJECT: InitializeData = {
 	registryGating: true,

@@ -53,8 +53,10 @@ export const createProfile = createAsyncThunk(
 		)
 
 		await createProfileTx.wait(1)
+
 		dispatch(setProfileFetched(false))
 		dispatch(setProfilesFetched(false))
+		alert('Profile created successfully')
 	}
 )
 

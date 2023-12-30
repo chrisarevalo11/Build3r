@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { BytesLike, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import * as z from 'zod'
@@ -56,9 +56,6 @@ const formSchema = z.object({
 			message: 'Tags must be word(s) separated by commas'
 		}
 	),
-	organizer: z.string().min(2, {
-		message: 'Organizer is required'
-	}),
 	description: z
 		.string()
 		.min(2, {
@@ -75,11 +72,11 @@ export default function ProjectForm({
 	const imageRef: React.RefObject<HTMLInputElement> =
 		useRef<HTMLInputElement>(null)
 
+	const dispatch = useDispatch<AppDispatch>()
+
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.profileDto
 	)
-
-	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
@@ -87,7 +84,6 @@ export default function ProjectForm({
 			amount: '',
 			image: '',
 			tags: '',
-			organizer: '',
 			description: ''
 		},
 		resolver: zodResolver(formSchema)
@@ -107,7 +103,8 @@ export default function ProjectForm({
 			const imageFile = imageRef.current?.files?.[0]
 
 			if (!imageFile) {
-				console.error('Archivo de image')
+				alert('Error: banner and logo are required')
+				dispatch(setLoading(false))
 				return
 			}
 
@@ -120,21 +117,16 @@ export default function ProjectForm({
 			await web3Provider.send('eth_requestAccounts', [])
 			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
 
-			const profileId: string = profileDto.id
-			const strategy: string = ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY
-			const initStrategyData: BytesLike = ARBITRUM_INIT_STRATEGY_BYTES
-			const native: string = ARBITRUM_NATIVE
 			const amount: number = Number(data.amount)
-			const managers: string[] = profileDto.metadata.members
 			const tags: string[] = data.tags
 				.split(',')
 				.map((tag: string) => tag.trim())
 
 			const fPoolSubmitionDto: FPoolSubmitionDto = {
-				profileId,
-				strategy,
-				initStrategyData,
-				native,
+				profileId: profileDto.id,
+				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+				initStrategyData: ARBITRUM_INIT_STRATEGY_BYTES,
+				native: ARBITRUM_NATIVE,
 				amount,
 				metadata: {
 					description: data.description,
@@ -142,7 +134,7 @@ export default function ProjectForm({
 					name: data.name,
 					tags
 				},
-				managers
+				managers: profileDto.metadata.members
 			}
 
 			const fPoolSubmition: FPoolSubmition =
@@ -157,6 +149,7 @@ export default function ProjectForm({
 
 	return (
 		<Card className='card w-[95%] md:w-[90%] lg:w-1/2 shadow-xl m-2'>
+			{profileDto.id}
 			<CardHeader>
 				<CardTitle>Create a grant</CardTitle>
 				<CardDescription>Specify every detail of your grant</CardDescription>
@@ -232,21 +225,6 @@ export default function ProjectForm({
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.image?.message}
-									</FormMessage>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='organizer'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Organizer</FormLabel>
-									<FormControl>
-										<Input {...field} value={profileDto?.name} />
-									</FormControl>
-									<FormMessage>
-										{form.formState.errors.organizer?.message}
 									</FormMessage>
 								</FormItem>
 							)}
