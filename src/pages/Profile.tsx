@@ -45,6 +45,7 @@ export default function Profile(): JSX.Element {
 			) : (
 				<>
 					<p>{profileDto.name}</p>
+					<p>{profileDto.metadata.handle}</p>
 					<p>{poolsDto.map(pool => pool.metadata.name).join(', ')}</p>
 				</>
 			)}

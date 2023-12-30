@@ -1,3 +1,11 @@
+export const queryProfilesWhereOwner = `
+    query Profiles($owner: String) {
+      profiles(where: {owner: $owner}) {
+        id  
+      }
+    }
+  `
+
 export const queryPaginatedProfiles = `
     query Profiles($first: Int!, $skip: Int!) {
       profiles(orderBy: createdAt, orderDirection: desc, first: $first, skip: $skip) {
@@ -12,13 +20,7 @@ export const queryPaginatedProfiles = `
           id
         }
         anchor
+        createdAt
       }
     }
   `
-export const queryProfilesWhereOwner = `
-  query Profiles($owner: String) {
-    profiles(where: {owner: $owner}) {
-      id  
-    }
-  }
-`

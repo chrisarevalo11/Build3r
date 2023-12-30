@@ -9,6 +9,7 @@ export const queryPoolsWhereOwner = `
           }
           strategy
           token
+          createdAt
       }
   }
 

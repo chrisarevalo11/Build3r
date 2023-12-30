@@ -36,6 +36,7 @@ export async function fProfileToFprofileDto(
 ): Promise<FProfileDto> {
 	const metadata: Response = await fetch(fProfile.metadata.pointer)
 	const metadataDto: FMetadataDto = await metadata.json()
+
 	return {
 		id: fProfile.id,
 		nonce: fProfile.nonce,

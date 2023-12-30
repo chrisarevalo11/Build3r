@@ -14,6 +14,10 @@ import {
 } from '../web3storage/metadata-store-data.functions'
 
 export function subgraphPoolToFPool(subgraphPool: SubGraphPool): FPool {
+	const date: string = new Date(subgraphPool.createdAt * 1000)
+		.toISOString()
+		.split('T')[0]
+
 	return {
 		id: subgraphPool.id,
 		amount: subgraphPool.amount,
@@ -22,7 +26,8 @@ export function subgraphPoolToFPool(subgraphPool: SubGraphPool): FPool {
 			pointer: subgraphPool.metadata.pointer
 		},
 		strategy: subgraphPool.strategy,
-		token: subgraphPool.token
+		token: subgraphPool.token,
+		createdAt: date
 	}
 }
 
@@ -35,7 +40,8 @@ export async function fPoolToFpoolDto(fPool: FPool): Promise<FPoolDto> {
 		amount: fPool.amount,
 		metadata: metadataDto,
 		strategy: fPool.strategy,
-		token: fPool.token
+		token: fPool.token,
+		createdAt: fPool.createdAt
 	}
 }
 

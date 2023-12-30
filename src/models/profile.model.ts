@@ -8,7 +8,7 @@ export interface FMetadataDto {
 	logo: string
 	slogan: string
 	website: string
-	twitter: string
+	handle: string
 	description: string
 	members: string[]
 }
@@ -29,6 +29,7 @@ export interface FProfileDto {
 	metadata: FMetadataDto
 	owner: string
 	anchor: string
+	createdAt?: string
 }
 
 export interface FProfileSubmition {
@@ -71,4 +72,5 @@ export interface SubGraphProfile {
 	name: string
 	owner: SubGraphAccount
 	anchor: string
+	createdAt: number
 }

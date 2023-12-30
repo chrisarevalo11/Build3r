@@ -15,6 +15,7 @@ export interface FPool {
 	metadata: FMetadata
 	strategy: string
 	token: string
+	createdAt: string
 }
 
 export interface FPoolDto {
@@ -23,6 +24,7 @@ export interface FPoolDto {
 	metadata: FMetadataDto
 	strategy: string
 	token: string
+	createdAt: string
 }
 
 export interface FPoolSubmition {
@@ -61,4 +63,5 @@ export interface SubGraphPool {
 	metadata: SubGraphMetadata
 	strategy: string
 	token: string
+	createdAt: number
 }
