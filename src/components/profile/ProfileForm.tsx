@@ -1,6 +1,7 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
@@ -22,7 +23,7 @@ import {
 } from '@/constants/constans'
 import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos'
 import { FProfileSubmition, FProfileSubmitionDto } from '@/models/profile.model'
-import { AppDispatch } from '@/store'
+import { AppDispatch, useAppSelector } from '@/store'
 import { setLoading } from '@/store/slides/uiSlice'
 import { createProfile } from '@/store/thunks/profile.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -51,18 +52,26 @@ const formSchema = z.object({
 		.min(2, {
 			message: 'Description is required'
 		})
-		.max(283, {
-			message: 'Description must be less than 200 characters'
+		.max(500, {
+			message: 'Description must be less than 500 characters'
 		}),
 	members: z.string().refine(value => ETHEREUM_ADDRESSES_REGEX.test(value), {
 		message: 'Must be a valid Ethereum wallet or wallets separated by commas.'
 	})
 })
 
+type ProfileFiles = {
+	banner: File | null
+	logo: File | null
+}
+
 export default function ProfileForm(): JSX.Element {
-	const bannerRef = useRef<HTMLInputElement>(null)
-	const logoRef = useRef<HTMLInputElement>(null)
-	const dispatch = useDispatch<AppDispatch>()
+	const [files, setFiles] = useState<ProfileFiles>({
+		banner: null,
+		logo: null
+	})
+	const dispatch: AppDispatch = useDispatch<AppDispatch>()
+	const loading = useAppSelector(state => state.uiSlice.loading)
 
 	const { address } = useAccount()
 
@@ -83,14 +92,6 @@ export default function ProfileForm(): JSX.Element {
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
 			dispatch(setLoading(true))
-
-			const bannerFile = bannerRef.current?.files?.[0]
-			const logoFile = logoRef.current?.files?.[0]
-
-			if (!bannerFile || !logoFile) {
-				console.error('Archivo de banner o logo no seleccionado')
-				return
-			}
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const ethereum = (window as any).ethereum
@@ -113,8 +114,8 @@ export default function ProfileForm(): JSX.Element {
 				owner: address as string,
 				nonce,
 				name: data.name,
-				banner: bannerFile,
-				logo: logoFile,
+				banner: files.banner as File,
+				logo: files.logo as File,
 				slogan: data.slogan,
 				website: data.website,
 				twitter: data.twitter,
@@ -129,10 +130,12 @@ export default function ProfileForm(): JSX.Element {
 				createProfile({ fProfileSubmition, providerOrSigner: web3Signer })
 			)
 		} catch (error) {
+			dispatch(setLoading(false))
 			console.error('❌ ', error)
 			alert('Error: look at the console')
 		}
 	}
+
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2 mx-5'>
@@ -157,7 +160,21 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Banner</FormLabel>
 								<FormControl>
-									<Input className='cursor-pointer' type='file' {...field} />
+									<Input
+										className='cursor-pointer'
+										type='file'
+										accept='image/*'
+										{...field}
+										onChange={e => {
+											field.onChange(e)
+											if (e.target.files && e.target.files.length > 0) {
+												setFiles(prev => ({
+													...prev,
+													banner: e.target.files![0]
+												}))
+											}
+										}}
+									/>
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.banner?.message}
@@ -172,7 +189,21 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input className='cursor-pointer' type='file' {...field} />
+									<Input
+										className='cursor-pointer'
+										type='file'
+										accept='image/*'
+										{...field}
+										onChange={e => {
+											field.onChange(e)
+											if (e.target.files && e.target.files.length > 0) {
+												setFiles(prev => ({
+													...prev,
+													logo: e.target.files![0]
+												}))
+											}
+										}}
+									/>
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>
@@ -256,8 +287,20 @@ export default function ProfileForm(): JSX.Element {
 					)}
 				/>
 				<div className='flex justify-center'>
-					<Button className='m-2' type='submit'>
-						Submit
+					<Button
+						className={`m-2 ${loading && 'pointer-events-none'}`}
+						type='submit'
+					>
+						{loading ? (
+							<Oval
+								width={20}
+								height={20}
+								color='#fff'
+								secondaryColor='#ededed'
+							/>
+						) : (
+							'Create'
+						)}
 					</Button>
 				</div>
 			</form>
