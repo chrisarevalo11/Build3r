@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -22,6 +23,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { createPoolProps } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
+
+type ImageFile = {
+	image: File | null
+}
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -57,9 +62,7 @@ const formSchema = z.object({
 export default function GrantForm({
 	setFormValues
 }: createPoolProps): JSX.Element {
-	// const [isLoading, setIsLoading] = useState<boolean>(false)
-	// const navigate = useNavigate()
-
+	const [file, setFile] = useState<ImageFile>({ image: null })
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
 			name: '',
@@ -79,8 +82,18 @@ export default function GrantForm({
 		}))
 	}
 
+	const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length > 0) {
+			const file = URL.createObjectURL(e.target.files[0])
+			handleChange(e.target.name, file)
+			setFile({ image: e.target.files[0] })
+		}
+	}
+
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
+			// TODO: uncomment this to submit image
+			// const image: File = file.image as File
 			console.log('Form data:', data)
 		} catch (error) {
 			console.error('Submission error:', error)
@@ -155,10 +168,7 @@ export default function GrantForm({
 											accept='image/*'
 											onChange={e => {
 												field.onChange(e)
-												const file = e.target.files?.length
-													? URL.createObjectURL(e.target.files[0])
-													: ''
-												handleChange(e.target.name, file)
+												onImageChange(e)
 											}}
 										/>
 									</FormControl>
