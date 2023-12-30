@@ -4,10 +4,17 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
+import Banner from '@/components/profile/Banner'
+import Logo from '@/components/profile/Logo'
+import Member from '@/components/profile/Member'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfile } from '@/store/thunks/profile.thunk'
+
+import Social from './Social'
 
 export default function Profile(): JSX.Element {
 	const { address } = useAccount()
@@ -51,22 +58,50 @@ export default function Profile(): JSX.Element {
 					/>
 				</div>
 			) : (
-				<>
-					<p>{profileDto.anchor}</p>
-					<p>{profileDto.id}</p>
-					<img src={profileDto.metadata.banner} />
-					<p>{profileDto.metadata.description}</p>
-					<img src={profileDto.metadata.logo} />
-					{profileDto?.metadata?.members?.map(
-						(member: string, index: number) => <p key={index}>{member}</p>
-					)}
-					<p>{profileDto.metadata.slogan}</p>
-					<p>{profileDto.metadata.website}</p>
-					<p>{profileDto.metadata.twitter}</p>
-					<p>{profileDto.name}</p>
-					<p>{profileDto.nonce}</p>
-					<p>{profileDto.owner}</p>
-				</>
+				<section>
+					<Banner imageURL={profileDto.metadata.banner} />
+					<Logo logoURL={profileDto.metadata.logo} />
+					<div className='mx-2'>
+						<h1 className='text-xl font-bold'>{profileDto.name}</h1>
+						<h2 className='text-lg text-gray-800 font-bold'>
+							{profileDto.metadata.slogan}
+						</h2>
+						<h3 className='text-lg font-bold my-2'>Social:</h3>
+						<div className='grid lg:grid-cols-profile w-full gap-4'>
+							<div>
+								<Social
+									nonce={profileDto.nonce}
+									website={profileDto.metadata.website}
+									twitter={profileDto.metadata.twitter}
+								/>
+								<Tabs defaultValue='description' className='w-full row-start-2'>
+									<TabsList>
+										<TabsTrigger value='description'>Description</TabsTrigger>
+										<TabsTrigger value='grants'>Grants</TabsTrigger>
+									</TabsList>
+									<TabsContent className='p-4' value='description'>
+										<p>{profileDto.metadata.description}</p>
+									</TabsContent>
+									<TabsContent className='p-2' value='grants'></TabsContent>
+								</Tabs>
+							</div>
+							<Card className='hidden lg:block'>
+								<CardHeader>
+									<h3 className='text-lg font-bold my-2'>Members:</h3>
+								</CardHeader>
+								<CardContent>
+									<ul className='ml-4'>
+										{profileDto?.metadata?.members?.map(
+											(member: string, index: number) => (
+												<Member key={index} address={member} />
+											)
+										)}
+									</ul>
+								</CardContent>
+							</Card>
+						</div>
+					</div>
+				</section>
 			)}
 		</Container>
 	)
