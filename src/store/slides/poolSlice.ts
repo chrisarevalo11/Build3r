@@ -19,6 +19,12 @@ export const poolSlice: Slice<InitialState> = createSlice({
 	name: 'pool',
 	initialState,
 	reducers: {
+		destroyPools: state => {
+			state.poolFetched = false
+			state.pools = []
+			state.poolsDto = []
+			state.poolsFetched = false
+		},
 		setPoolFetched: (state, action: PayloadAction<boolean>) => {
 			state.poolFetched = action.payload
 		},
@@ -34,6 +40,11 @@ export const poolSlice: Slice<InitialState> = createSlice({
 	}
 })
 
-export const { setPoolFetched, setPools, setPoolsDto, setPoolsFetched } =
-	poolSlice.actions
+export const {
+	destroyPools,
+	setPoolFetched,
+	setPools,
+	setPoolsDto,
+	setPoolsFetched
+} = poolSlice.actions
 export default poolSlice.reducer
