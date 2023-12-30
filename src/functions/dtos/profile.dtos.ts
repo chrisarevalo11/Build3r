@@ -1,5 +1,4 @@
 import { IPFS_PROTOCOL } from '@/constants/constans'
-import { FPoolSubmition, FPoolSubmitionDto } from '@/models/pool.model'
 import {
 	FMetadataDto,
 	FProfile,
@@ -75,34 +74,6 @@ export function subgraphProfileToFProfile(
 		},
 		owner: subgraphProfile.owner.id,
 		anchor: subgraphProfile.anchor
-	}
-}
-
-export async function fPoolSubmitionDtoToFPoolSubmition(
-	fPoolSubmiton: FPoolSubmitionDto
-): Promise<FPoolSubmition> {
-	const imageCid: string = await storageFile(fPoolSubmiton.metadata.image)
-
-	const metadataArgs = {
-		description: fPoolSubmiton.metadata.description,
-		image: imageCid,
-		name: fPoolSubmiton.metadata.name,
-		tags: fPoolSubmiton.metadata.tags
-	}
-
-	const metadataCid: string = await storeObject(metadataArgs)
-
-	return {
-		profileId: fPoolSubmiton.profileId,
-		strategy: fPoolSubmiton.strategy,
-		initStrategyData: fPoolSubmiton.initStrategyData,
-		token: fPoolSubmiton.native,
-		amount: BigInt(fPoolSubmiton.amount),
-		metadata: {
-			protocol: IPFS_PROTOCOL,
-			pointer: metadataCid
-		},
-		managers: fPoolSubmiton.managers
 	}
 }
 

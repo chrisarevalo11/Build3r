@@ -47,6 +47,7 @@ export const ARBITRUM_INIT_STRATEGY_BYTES: BytesLike = abiCoder.encode(
 
 export const PROFILE_NOT_FOUND: string = 'Profile not found'
 export const PROFILES_NOT_FOUND: string = 'Profiles not found'
+export const POOLS_NOT_FOUND: string = 'Pools not found'
 
 /* ==============================================
 	    Decentralized storage protocols

@@ -1,11 +1,16 @@
 import { ethers } from 'ethers'
 
 import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
-import { FPoolSubmition } from '@/models/pool.model'
+import { fPoolToFpoolDto } from '@/functions/dtos/pool.dtos'
+import { FPool, FPoolSubmition } from '@/models/pool.model'
+import { getSubGraphData } from '@/services/allo-subgraph.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-// import { setPoolFetched, setPoolsFetched } from '../slides/poolSlice'
+import { setPoolsDto, setPoolsFetched } from '../slides/poolSlice'
+import { setProfileFetched } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
+
+const { getPaginatedPoolsByStrategy } = getSubGraphData()
 
 export const createPool = createAsyncThunk(
 	'pool/createPool',
@@ -39,8 +44,38 @@ export const createPool = createAsyncThunk(
 		await createPoolTx.wait(1)
 
 		// dispatch(setPoolFetched(false))
-		// dispatch(setPoolsFetched(false))
-		alert('Pool created successfully')
+		dispatch(setProfileFetched(false))
+	}
+)
+
+export const getPools = createAsyncThunk(
+	'pools/getPaginatedPools',
+	async (
+		{
+			first,
+			skip,
+			strategy
+		}: { first: number; skip: number; strategy: string },
+		{ dispatch }
+	) => {
+		dispatch(setLoading(true))
+
+		const pools = await getPaginatedPoolsByStrategy(first, skip, strategy)
+
+		if (typeof pools === 'string') {
+			dispatch(setPoolsFetched(true))
+			dispatch(setLoading(false))
+			return
+		}
+
+		const poolsDto = await Promise.all(
+			pools.map(async (pool: FPool) => {
+				return await fPoolToFpoolDto(pool)
+			})
+		)
+
+		dispatch(setPoolsDto(poolsDto))
+		dispatch(setPoolsFetched(true))
 		dispatch(setLoading(false))
 	}
 )

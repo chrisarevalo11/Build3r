@@ -28,7 +28,7 @@ import {
 	ARBITRUM_INIT_STRATEGY_BYTES,
 	ARBITRUM_NATIVE
 } from '@/constants/constans'
-import { fPoolSubmitionDtoToFPoolSubmition } from '@/functions/dtos'
+import { fPoolSubmitionDtoToFPoolSubmition } from '@/functions/dtos/pool.dtos'
 import { FPoolSubmition, FPoolSubmitionDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
@@ -128,12 +128,10 @@ export default function ProjectForm({
 				initStrategyData: ARBITRUM_INIT_STRATEGY_BYTES,
 				native: ARBITRUM_NATIVE,
 				amount,
-				metadata: {
-					description: data.description,
-					image: imageFile,
-					name: data.name,
-					tags
-				},
+				description: data.description,
+				image: imageFile,
+				name: data.name,
+				tags,
 				managers: profileDto.metadata.members
 			}
 

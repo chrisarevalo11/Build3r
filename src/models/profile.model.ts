@@ -31,6 +31,14 @@ export interface FProfileDto {
 	anchor: string
 }
 
+export interface FProfileSubmition {
+	nonce: number
+	name: string
+	metadata: FMetadata
+	owner: string
+	members: string[]
+}
+
 export interface FProfileSubmitionDto {
 	owner: string
 	nonce: number
@@ -41,14 +49,6 @@ export interface FProfileSubmitionDto {
 	website: string
 	twitter: string
 	description: string
-	members: string[]
-}
-
-export interface FProfileSubmition {
-	nonce: number
-	name: string
-	metadata: FMetadata
-	owner: string
 	members: string[]
 }
 

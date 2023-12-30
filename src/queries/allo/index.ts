@@ -1,20 +1,15 @@
 export const queryPoolsWhereOwner = `
-    query Pools($owner: String, $first: Int!, $skip: Int!) {
-        pools(
-            orderBy: createdAt
-            orderDirection: desc
-            first: $first
-            skip: $skip
-            where: {owner: $owner}
-        ) {
-            id
-            strategy
-            token
-            amount
-            metadata {
-                pointer
-                protocol
-            }
-        }
-    }
+  query Pools($first: Int!, $skip: Int!, $strategy: String) {
+      pools(rderBy: createdAt, orderDirection: desc, first: $first, skip: $skip, where: {strategy: $strategy}) {
+          id
+          amount
+          metadata {
+              pointer
+              protocol
+          }
+          strategy
+          token
+      }
+  }
+
 `

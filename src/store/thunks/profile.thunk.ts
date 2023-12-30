@@ -1,19 +1,22 @@
 import { ethers } from 'ethers'
 
-import { PROFILE_NOT_FOUND, PROFILES_NOT_FOUND } from '@/constants/constans'
+import {
+	ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+	PROFILE_NOT_FOUND
+} from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-functions'
 import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
 import {
 	dtoToProfile,
 	fProfileSubmitionToDto,
 	fProfileToFprofileDto
-} from '@/functions/dtos'
+} from '@/functions/dtos/profile.dtos'
 import {
 	FProfile,
 	FProfileDto,
 	FProfileSubmition
 } from '@/models/profile.model'
-import { getSubGraphData } from '@/services/register-subgraph.service'
+import { getSubGraphData as getRegistrySubGraphData } from '@/services/register-subgraph.service'
 import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
@@ -26,7 +29,9 @@ import {
 } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
 
-const { getProfileIdByOwner, getPaginatedProfiles } = getSubGraphData()
+import { getPools } from './pool.thunk'
+
+const { getProfileIdByOwner, getPaginatedProfiles } = getRegistrySubGraphData()
 
 export const createProfile = createAsyncThunk(
 	'profile/createProfile',
@@ -81,6 +86,15 @@ export const getProfile = createAsyncThunk(
 		dispatch(setProfile(profile))
 		dispatch(setProfileDto(fprofileDto))
 		dispatch(setProfileFetched(true))
+
+		dispatch(
+			getPools({
+				first: 8,
+				skip: 0,
+				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY
+			})
+		)
+
 		dispatch(setLoading(false))
 	}
 )
@@ -92,7 +106,7 @@ export const getProfiles = createAsyncThunk(
 
 		const profiles = await getPaginatedProfiles(first, skip)
 
-		if (profiles === PROFILES_NOT_FOUND) {
+		if (typeof profiles === 'string') {
 			dispatch(setProfilesFetched(true))
 			dispatch(setLoading(false))
 			return

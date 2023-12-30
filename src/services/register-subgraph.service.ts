@@ -3,7 +3,7 @@ import {
 	PROFILE_NOT_FOUND,
 	PROFILES_NOT_FOUND
 } from '@/constants/constans'
-import { subgraphProfileToFProfile } from '@/functions/dtos'
+import { subgraphProfileToFProfile } from '@/functions/dtos/profile.dtos'
 import { FProfile, SubGraphProfile } from '@/models/profile.model'
 import {
 	queryPaginatedProfiles,
@@ -59,7 +59,7 @@ export function getSubGraphData() {
 
 			return profiles
 		} catch (error) {
-			console.log('error: ', error)
+			console.error(error)
 			return PROFILES_NOT_FOUND
 		}
 	}

@@ -2,11 +2,27 @@ import { BytesLike } from 'ethers'
 
 import { FMetadata } from './profile.model'
 
-interface FMetadataDto {
+export interface FMetadataDto {
 	description: string
-	image: File
+	image: string
 	name: string
 	tags: string[]
+}
+
+export interface FPool {
+	id: string
+	amount: string
+	metadata: FMetadata
+	strategy: string
+	token: string
+}
+
+export interface FPoolDto {
+	id: string
+	amount: string
+	metadata: FMetadataDto
+	strategy: string
+	token: string
 }
 
 export interface FPoolSubmition {
@@ -25,6 +41,24 @@ export interface FPoolSubmitionDto {
 	initStrategyData: BytesLike
 	native: string
 	amount: number
-	metadata: FMetadataDto
+	description: string
+	image: File
+	name: string
+	tags: string[]
 	managers: string[]
+}
+
+export interface SubGraphMetadata {
+	__typename: 'Metadata'
+	pointer: string
+	protocol: number
+}
+
+export interface SubGraphPool {
+	__typename: 'Pool'
+	id: string
+	amount: string
+	metadata: SubGraphMetadata
+	strategy: string
+	token: string
 }
