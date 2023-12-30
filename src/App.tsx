@@ -7,12 +7,15 @@ import Explorer from '@/pages/Explorer'
 import Home from '@/pages/Home'
 import Profile from '@/pages/Profile'
 
+import CreateProfile from './pages/CreateProfile'
+
 function App(): JSX.Element {
 	return (
 		<HashRouter>
 			<Navbar />
 			<Routes>
 				<Route path='/' element={<Home />} />
+				<Route path='/profile/create' element={<CreateProfile />} />
 				<Route path='/profile/:profileId' element={<Profile />} />
 				<Route path='/create' element={<Create />} />
 				<Route path='/explore' element={<Explorer />}>
