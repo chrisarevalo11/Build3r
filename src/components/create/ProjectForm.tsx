@@ -1,4 +1,7 @@
+import { useRef } from 'react'
+import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -20,6 +23,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import {
+	ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+	ARBITRUM_INIT_STRATEGY_BYTES,
+	ARBITRUM_NATIVE
+} from '@/constants/constans'
+import { fPoolSubmitionDtoToFPoolSubmition } from '@/functions/dtos'
+import { FPoolSubmition, FPoolSubmitionDto } from '@/models/pool.model'
+import { FProfileDto } from '@/models/profile.model'
+import { AppDispatch, useAppSelector } from '@/store'
+import { setLoading } from '@/store/slides/uiSlice'
+import { createPool } from '@/store/thunks/pool.thunk'
 import { createPoolProps } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -58,8 +72,14 @@ const formSchema = z.object({
 export default function ProjectForm({
 	setFormValues
 }: createPoolProps): JSX.Element {
-	// const [isLoading, setIsLoading] = useState<boolean>(false)
-	// const navigate = useNavigate()
+	const imageRef: React.RefObject<HTMLInputElement> =
+		useRef<HTMLInputElement>(null)
+
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
+	)
+
+	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
@@ -82,9 +102,56 @@ export default function ProjectForm({
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
-			console.log('Form data:', data)
+			dispatch(setLoading(true))
+
+			const imageFile = imageRef.current?.files?.[0]
+
+			if (!imageFile) {
+				console.error('Archivo de image')
+				return
+			}
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const ethereum = (window as any).ethereum
+
+			const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+				ethereum
+			)
+			await web3Provider.send('eth_requestAccounts', [])
+			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+			const profileId: string = profileDto.id
+			const strategy: string = ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY
+			const initStrategyData: BytesLike = ARBITRUM_INIT_STRATEGY_BYTES
+			const native: string = ARBITRUM_NATIVE
+			const amount: number = Number(data.amount)
+			const managers: string[] = profileDto.metadata.members
+			const tags: string[] = data.tags
+				.split(',')
+				.map((tag: string) => tag.trim())
+
+			const fPoolSubmitionDto: FPoolSubmitionDto = {
+				profileId,
+				strategy,
+				initStrategyData,
+				native,
+				amount,
+				metadata: {
+					description: data.description,
+					image: imageFile,
+					name: data.name,
+					tags
+				},
+				managers
+			}
+
+			const fPoolSubmition: FPoolSubmition =
+				await fPoolSubmitionDtoToFPoolSubmition(fPoolSubmitionDto)
+
+			dispatch(createPool({ fPoolSubmition, providerOrSigner: web3Signer }))
 		} catch (error) {
 			console.error('Submission error:', error)
+			alert('Submission error')
 		}
 	}
 
@@ -160,6 +227,7 @@ export default function ProjectForm({
 													: ''
 												handleChange(e.target.name, file)
 											}}
+											ref={imageRef}
 										/>
 									</FormControl>
 									<FormMessage>
@@ -175,7 +243,7 @@ export default function ProjectForm({
 								<FormItem>
 									<FormLabel>Organizer</FormLabel>
 									<FormControl>
-										<Input {...field} value={'ReFi Bogota'} disabled />
+										<Input {...field} value={profileDto?.name} />
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.organizer?.message}

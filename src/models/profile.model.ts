@@ -12,6 +12,7 @@ export interface FMetadataDto {
 	description: string
 	members: string[]
 }
+
 export interface FProfile {
 	id: string
 	nonce: number

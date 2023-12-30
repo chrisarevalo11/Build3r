@@ -156,8 +156,8 @@ export default function ProfileForm(): JSX.Element {
 						render={({ field }) => (
 							<FormItem className='grow'>
 								<FormLabel>Banner</FormLabel>
+									<Input className='cursor-pointer' type='file' {...field} ref={bannerRef} />
 								<FormControl>
-									<Input className='cursor-pointer' type='file' {...field} />
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.banner?.message}
@@ -172,7 +172,7 @@ export default function ProfileForm(): JSX.Element {
 							<FormItem className='grow'>
 								<FormLabel>Logo</FormLabel>
 								<FormControl>
-									<Input className='cursor-pointer' type='file' {...field} />
+									<Input className='cursor-pointer' type='file' {...field}  ref={logoRef}/>
 								</FormControl>
 								<FormMessage>{form.formState.errors.logo?.message}</FormMessage>
 							</FormItem>
