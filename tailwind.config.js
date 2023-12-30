@@ -20,6 +20,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        profile: "70% 30%",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
