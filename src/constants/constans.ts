@@ -2,7 +2,7 @@ import { BytesLike, ethers } from 'ethers'
 
 import { InitializeData } from '@/models/initialize-data.model'
 
-import { initializeDataStructTypes } from './structs-types'
+import { INITIALIZE_DATA_STRUCT_TYPES } from './structs-types.constants'
 
 /* ==============================================
 	    Sepolia Arbitrum
@@ -37,7 +37,7 @@ const ARBITRUM_POOL_INIT_STRATEGY_DATE_ARRAY: boolean[] = [
 ]
 
 export const ARBITRUM_INIT_STRATEGY_BYTES: BytesLike = abiCoder.encode(
-	initializeDataStructTypes,
+	INITIALIZE_DATA_STRUCT_TYPES,
 	ARBITRUM_POOL_INIT_STRATEGY_DATE_ARRAY
 )
 
