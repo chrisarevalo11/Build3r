@@ -13,6 +13,7 @@ export function Container(props: TContainer): JSX.Element {
 
 	return (
 		<div
+			style={{ marginInline: 'auto' }}
 			className={cn('w-full p-2 max-w-[1200px] mx-auto', className)}
 			{...rest}
 		>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -23,9 +24,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { createPoolProps } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+type ImageFile = {
+	image: File | null
+}
+
 const formSchema = z.object({
 	name: z.string().min(2, {
-		message: 'Grant name must be at least 2 characters.'
+		message: 'Name must be at least 2 characters.'
 	}),
 	amount: z.string().min(0, {
 		message: 'Amount is required'
@@ -36,15 +41,14 @@ const formSchema = z.object({
 	tags: z.string().refine(
 		value => {
 			const regex = /^(\w+(,\s*\w+)*)?$/
-			return regex.test(value)
+			const tagsArray = value.split(',').map(tag => tag.trim())
+			return regex.test(value) && tagsArray.length <= 5
 		},
 		{
-			message: 'Tags must be word(s) separated by commas'
+			message: 'Tags must be word(s) separated by commas and max. 5 tags'
 		}
 	),
-	organizer: z.string().min(2, {
-		message: 'Organizer is required'
-	}),
+	organizer: z.string(),
 	description: z
 		.string()
 		.min(2, {
@@ -55,19 +59,19 @@ const formSchema = z.object({
 		})
 })
 
-export default function ProjectForm({
-	setFormValues
+export default function GrantForm({
+	setFormValues,
+	profileName
 }: createPoolProps): JSX.Element {
-	// const [isLoading, setIsLoading] = useState<boolean>(false)
-	// const navigate = useNavigate()
-
+	// TODO: use this file variable to submit image
+	const [file, setFile] = useState<ImageFile>({ image: null })
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
 			name: '',
 			amount: '',
 			image: '',
 			tags: '',
-			organizer: '',
+			organizer: profileName,
 			description: ''
 		},
 		resolver: zodResolver(formSchema)
@@ -80,6 +84,14 @@ export default function ProjectForm({
 		}))
 	}
 
+	const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length > 0) {
+			const file = URL.createObjectURL(e.target.files[0])
+			handleChange(e.target.name, file)
+			setFile({ image: e.target.files[0] })
+		}
+	}
+
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
 			console.log('Form data:', data)
@@ -88,8 +100,13 @@ export default function ProjectForm({
 		}
 	}
 
+	useEffect(() => {
+		handleChange('organizer', profileName)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
 	return (
-		<Card className='card w-[95%] md:w-[90%] lg:w-1/2 shadow-xl m-2'>
+		<Card>
 			<CardHeader>
 				<CardTitle>Create a grant</CardTitle>
 				<CardDescription>Specify every detail of your grant</CardDescription>
@@ -153,12 +170,10 @@ export default function ProjectForm({
 											className='cursor-pointer'
 											type='file'
 											{...field}
+											accept='image/*'
 											onChange={e => {
 												field.onChange(e)
-												const file = e.target.files?.length
-													? URL.createObjectURL(e.target.files[0])
-													: ''
-												handleChange(e.target.name, file)
+												onImageChange(e)
 											}}
 										/>
 									</FormControl>
@@ -175,7 +190,7 @@ export default function ProjectForm({
 								<FormItem>
 									<FormLabel>Organizer</FormLabel>
 									<FormControl>
-										<Input {...field} value={'ReFi Bogota'} disabled />
+										<Input {...field} value={profileName} disabled />
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.organizer?.message}
@@ -188,7 +203,7 @@ export default function ProjectForm({
 							name='description'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Brief description</FormLabel>
+									<FormLabel>Description</FormLabel>
 									<FormControl>
 										<Textarea
 											placeholder='This is a grant oriented to...'

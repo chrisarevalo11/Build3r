@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge'
+import { Card, CardDescription } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { grantFormValuesTypes } from '@/types'
 
@@ -20,34 +21,54 @@ export default function GrantCard({ formValues }: Props): JSX.Element {
 		typeof tagsArray === 'string' ? tagsArray.split(',') : tagsArray
 
 	return (
-		<div
+		<Card
 			className={
-				'p-3 flex flex-col  items-center rounded-xl gap-3 w-full max-w-[300px] sticky lg:top-4 h-[400px] shadow-xl m-2 border-gray-200 border-2'
+				'p-3 flex items-center rounded-xl gap-3 w-full h-fit sticky lg:top-4'
 			}
 		>
-			{image ? (
-				<div
-					style={{
-						backgroundImage: `url(${image})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center',
-						backgroundRepeat: 'no-repeat'
-					}}
-					className='w-full h-[40%] bg-gray-300 rounded-xl top-6 left-4'
-				></div>
-			) : (
-				<Skeleton className='w-full h-[40%] rounded-xl border-gray-200 border-2' />
-			)}
-			<div className='text-center flex flex-col grow justify-between w-full'>
-				<h1 className='text-xl font-bold text-primary'>{name}</h1>
-				<div className='text-center text-sm text-slate-400'>{organizer}</div>
-				<div className='text-center text-sm text-slate-400'>{amount}</div>
-				<div className='text-center text-sm text-slate-400'>{description}</div>
-				<div className='flex justify-center flex-wrap gap-1 p-1'>
+			<picture
+				style={{ width: 'min(200px, 60%)' }}
+				className='h-[120px] rounded-xl overflow-hidden'
+			>
+				{image ? (
+					<div
+						style={{
+							backgroundImage: `url(${image})`,
+							backgroundSize: 'cover',
+							backgroundPosition: 'center',
+							backgroundRepeat: 'no-repeat'
+						}}
+						className='size-full'
+					></div>
+				) : (
+					<Skeleton className='size-full border-input border-2' />
+				)}
+			</picture>
+			<div className='flex flex-col w-full lg:h-[110px] justify-between gap-2 lg:gap-0'>
+				<div className='flex flex-col justify-center md:flex-row md:justify-between items-start md:items-center'>
+					<h1 className='text-md lg:text-lg font-bold text-primary line-clamp-1'>
+						{name}
+					</h1>
+					<h2 className='text-sm lg:text-md'>
+						<span className='text-primary font-bold -pb-5'>{amount} ETH</span>{' '}
+						by {organizer}
+					</h2>
+				</div>
+				<CardDescription className='line-clamp-2'>
+					{description}
+				</CardDescription>
+				<div className='flex flex-wrap gap-[2px] md:gap-1 md:my-1'>
 					{tagsArray &&
-						tags.map((tag, index) => tag && <Badge key={index}>{tag}</Badge>)}
+						tags.map(
+							(tag, index) =>
+								tag && (
+									<Badge className='p-1 lg:px-2' key={index}>
+										{tag}
+									</Badge>
+								)
+						)}
 				</div>
 			</div>
-		</div>
+		</Card>
 	)
 }

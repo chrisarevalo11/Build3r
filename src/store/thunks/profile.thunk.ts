@@ -40,21 +40,31 @@ export const createProfile = createAsyncThunk(
 		},
 		{ dispatch }
 	) => {
-		dispatch(setLoading(true))
-		const { registry } = getAlloInstanceContracts(providerOrSigner)
+		try {
+			dispatch(setLoading(true))
+			const { registry } = getAlloInstanceContracts(providerOrSigner)
 
-		const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
-		const createProfileTx = await registry.createProfile(
-			profileSubmitionDto.nonce,
-			profileSubmitionDto.name,
-			profileSubmitionDto.metadata,
-			profileSubmitionDto.owner,
-			profileSubmitionDto.members
-		)
+			const profileSubmitionDto = fProfileSubmitionToDto(fProfileSubmition)
+			const createProfileTx = await registry.createProfile(
+				profileSubmitionDto.nonce,
+				profileSubmitionDto.name,
+				profileSubmitionDto.metadata,
+				profileSubmitionDto.owner,
+				profileSubmitionDto.members
+			)
 
-		await createProfileTx.wait(1)
-		dispatch(setProfileFetched(false))
-		dispatch(setProfilesFetched(false))
+			await createProfileTx.wait(1)
+
+			dispatch(setLoading(false))
+			dispatch(setProfileFetched(false))
+			dispatch(setProfilesFetched(false))
+
+			setTimeout(() => {
+				location.reload()
+			}, 2000)
+		} catch (error) {
+			dispatch(setLoading(false))
+		}
 	}
 )
 
