@@ -16,4 +16,5 @@ export type link = {
 
 export type createPoolProps = {
 	setFormValues: Dispatch<React.SetStateAction<grantFormValuesTypes>>
+	profileName: string
 }

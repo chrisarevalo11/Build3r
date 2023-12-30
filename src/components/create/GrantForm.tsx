@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -60,8 +60,10 @@ const formSchema = z.object({
 })
 
 export default function GrantForm({
-	setFormValues
+	setFormValues,
+	profileName
 }: createPoolProps): JSX.Element {
+	// TODO: use this file variable to submit image
 	const [file, setFile] = useState<ImageFile>({ image: null })
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
@@ -69,7 +71,7 @@ export default function GrantForm({
 			amount: '',
 			image: '',
 			tags: '',
-			organizer: '',
+			organizer: profileName,
 			description: ''
 		},
 		resolver: zodResolver(formSchema)
@@ -92,13 +94,16 @@ export default function GrantForm({
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
-			// TODO: uncomment this to submit image
-			// const image: File = file.image as File
 			console.log('Form data:', data)
 		} catch (error) {
 			console.error('Submission error:', error)
 		}
 	}
+
+	useEffect(() => {
+		handleChange('organizer', profileName)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	return (
 		<Card>
@@ -185,7 +190,7 @@ export default function GrantForm({
 								<FormItem>
 									<FormLabel>Organizer</FormLabel>
 									<FormControl>
-										<Input {...field} value={'ReFi Bogota'} disabled />
+										<Input {...field} value={profileName} disabled />
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.organizer?.message}
