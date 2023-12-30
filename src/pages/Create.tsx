@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
@@ -6,11 +7,15 @@ import CreateHero from '@/components/create/CreateHero'
 import GrantCard from '@/components/create/GrantCard'
 import GrantForm from '@/components/create/GrantForm'
 import { Container } from '@/components/ui/container'
+import { AppDispatch, useAppSelector } from '@/store'
+import { getProfile } from '@/store/thunks/profile.thunk'
 import { grantFormValuesTypes } from '@/types'
 
 export default function Create(): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
+	const dispatch = useDispatch<AppDispatch>()
+	const profileDto = useAppSelector(state => state.profileSlice.profileDto)
 
 	const initialValue: grantFormValuesTypes = {
 		name: '',
@@ -28,7 +33,15 @@ export default function Create(): JSX.Element {
 		if (!address) {
 			navigate('/')
 		}
-	}, [address, navigate])
+
+		dispatch(getProfile(address as string))
+	}, [address, navigate, dispatch])
+
+	useEffect(() => {
+		if (profileDto.id !== '') {
+			navigate(`/profile/${profileDto.id}`)
+		}
+	}, [profileDto, navigate])
 
 	return (
 		<section className='flex flex-col gap-10 lg:gap-[2rem]'>
