@@ -1,7 +1,6 @@
 import { BytesLike, ethers } from 'ethers'
 
-// import { getAlloContracts as getAlloInstanceContracts } from '@/functions/allo-instance.functions'
-import { getStrategiesContracts } from '@/functions/strategies/strategies.functions'
+import { getAlloContracts } from '@/functions/allo-instance.functions'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { setLoading } from '../slides/uiSlice'
@@ -10,11 +9,11 @@ export const addRecipient = createAsyncThunk(
 	'recipient/addREcipient',
 	async (
 		{
-			address,
+			poolId,
 			frecipientSubmition,
 			providerOrSigner
 		}: {
-			address: string
+			poolId: string
 			frecipientSubmition: BytesLike
 			providerOrSigner: ethers.BrowserProvider | ethers.JsonRpcSigner
 		},
@@ -22,11 +21,11 @@ export const addRecipient = createAsyncThunk(
 	) => {
 		try {
 			dispatch(setLoading(true))
-			const { directGrantsSimple } = getStrategiesContracts(providerOrSigner)
+			const { allo } = getAlloContracts(providerOrSigner)
 
-			const registerRecipientTx = await directGrantsSimple.registerRecipient(
+			const registerRecipientTx = await allo.registerRecipient(
+				poolId,
 				frecipientSubmition,
-				address,
 				{
 					value: 0,
 					gasLimit: 6000000

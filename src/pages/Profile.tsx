@@ -37,7 +37,7 @@ export default function Profile(): JSX.Element {
 		const bio: string = 'I am a software developer'
 		const organization = 'Wagmi'
 		const email: string = 'salviega6@gmail.com'
-		const wallet: string = '0x4928cb9e6187Bb9C54714DCec25064CB04D493eE'
+		const wallet: string = '0xAE2a993b29B020247394595c1d1022C3787ea744'
 		const grantPorcentage: number = 20
 		const imageFile: string =
 			'https://avatars.githubusercontent.com/u/24712956?v=4'
@@ -76,7 +76,7 @@ export default function Profile(): JSX.Element {
 
 		dispatch(
 			addRecipient({
-				address: address as string,
+				poolId: poolDto.id,
 				frecipientSubmition: frecipientSubmission,
 				providerOrSigner: web3Signer
 			})
