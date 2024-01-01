@@ -16,7 +16,7 @@ export default function Create(): JSX.Element {
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 	const profileDto = useAppSelector(state => state.profileSlice.profileDto)
-	const fetched = useAppSelector(state => state.profileSlice.profileFetched)
+	// const fetched = useAppSelector(state => state.profileSlice.profileFetched)
 
 	const initialValue: grantFormValuesTypes = {
 		name: '',
@@ -37,12 +37,6 @@ export default function Create(): JSX.Element {
 
 		dispatch(getProfile(address as string))
 	}, [address, navigate, dispatch])
-
-	useEffect(() => {
-		if (profileDto.id === '' && fetched) {
-			navigate(`/profile/${profileDto.id}`)
-		}
-	}, [profileDto, navigate, fetched])
 
 	return (
 		<section className='flex flex-col gap-10 lg:gap-[2rem]'>
