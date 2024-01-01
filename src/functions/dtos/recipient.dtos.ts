@@ -35,7 +35,7 @@ export async function fRecipientSubmitionDtoToFRecipientSubmition(
 	const frecipientSubmision: FRecipientSubmition = {
 		recipientId: frecipientSubmisionDto.wallet,
 		recipientAddress: frecipientSubmisionDto.anchor,
-		grantAmount: frecipientSubmisionDto.grantPorcentage,
+		grantAmount: frecipientSubmisionDto.grantAmount,
 		metadata: {
 			protocol: 1,
 			pointer: metadataCid

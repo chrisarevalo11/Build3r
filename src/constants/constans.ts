@@ -25,6 +25,9 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 export const ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY: string =
 	directGrantsSimpleStrategyJson.address
 
+export const ARBITRUM_RECIPIENT_WALLET: string =
+	'0xAE2a993b29B020247394595c1d1022C3787ea744'
+
 const ARBITRUM_POOL_INIT_STRATEGY_DATE_OBJECT: InitializeData = {
 	registryGating: false,
 	metadataRequired: true,

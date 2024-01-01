@@ -13,8 +13,7 @@ export interface FRecipientSubmitionDto {
 	email: string
 	fullname: string
 	image: File | string
-	grantPorcentage: number
-	grantTotal: number
+	grantAmount: number
 	organization: string
 	wallet: string
 }

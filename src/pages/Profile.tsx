@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi'
 
 import CreateProfile from '@/components/profile/CreateProfile'
 import { Container } from '@/components/ui/container'
+import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { fRecipientSubmitionDtoToFRecipientSubmition } from '@/functions/dtos/recipient.dtos'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
@@ -37,12 +38,10 @@ export default function Profile(): JSX.Element {
 		const bio: string = 'I am a software developer'
 		const organization = 'Wagmi'
 		const email: string = 'salviega6@gmail.com'
-		const wallet: string = '0xAE2a993b29B020247394595c1d1022C3787ea744'
-		const grantPorcentage: number = 20
+		const wallet: string = ARBITRUM_RECIPIENT_WALLET
+		const grantAmount: number = 20
 		const imageFile: string =
 			'https://avatars.githubusercontent.com/u/24712956?v=4'
-
-		const grantTotal: number = Number(poolDto.amount)
 
 		if (!imageFile) {
 			alert('Error: image isimageFile required')
@@ -55,8 +54,7 @@ export default function Profile(): JSX.Element {
 			bio,
 			email,
 			fullname,
-			grantPorcentage,
-			grantTotal,
+			grantAmount,
 			image: imageFile,
 			organization,
 			wallet
@@ -76,8 +74,9 @@ export default function Profile(): JSX.Element {
 
 		dispatch(
 			addRecipient({
-				poolId: poolDto.id,
 				frecipientSubmition: frecipientSubmission,
+				frecipientDtoWallet: frecipientSubmisionDto.wallet,
+				poolId: poolDto.id,
 				providerOrSigner: web3Signer
 			})
 		)
