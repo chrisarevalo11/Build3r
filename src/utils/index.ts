@@ -1,6 +1,22 @@
 import { type ClassValue, clsx } from 'clsx'
-import { ethers } from 'ethers'
+import { BytesLike, ethers } from 'ethers'
 import { twMerge } from 'tailwind-merge'
+
+export function dataArrayToBytes(
+	structTypes: string[],
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	data: any[]
+): BytesLike {
+	const abiCoder = new ethers.AbiCoder()
+	return abiCoder.encode(structTypes, data)
+}
+
+export function grantPorcetageToAmount(
+	grantAmount: number,
+	totalAmount: number
+): number {
+	return grantAmount / totalAmount
+}
 
 export function toDecimal(amount: number): bigint {
 	return ethers.parseEther(amount.toString())

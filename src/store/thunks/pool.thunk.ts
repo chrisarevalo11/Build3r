@@ -24,27 +24,34 @@ export const createPool = createAsyncThunk(
 		},
 		{ dispatch }
 	) => {
-		dispatch(setLoading(true))
-		const { allo } = getAlloInstanceContracts(providerOrSigner)
+		try {
+			dispatch(setLoading(true))
+			const { allo } = getAlloInstanceContracts(providerOrSigner)
 
-		const createPoolTx = await allo.createPoolWithCustomStrategy(
-			fPoolSubmition.profileId,
-			fPoolSubmition.strategy,
-			fPoolSubmition.initStrategyData,
-			fPoolSubmition.token,
-			fPoolSubmition.amount,
-			fPoolSubmition.metadata,
-			fPoolSubmition.managers,
-			{
-				value: fPoolSubmition.amount,
-				gasLimit: 6000000
-			}
-		)
+			const createPoolTx = await allo.createPoolWithCustomStrategy(
+				fPoolSubmition.profileId,
+				fPoolSubmition.strategy,
+				fPoolSubmition.initStrategyData,
+				fPoolSubmition.token,
+				fPoolSubmition.amount,
+				fPoolSubmition.metadata,
+				fPoolSubmition.managers,
+				{
+					value: fPoolSubmition.amount,
+					gasLimit: 6000000
+				}
+			)
 
-		await createPoolTx.wait(1)
+			await createPoolTx.wait(1)
 
-		// dispatch(setPoolFetched(false))
-		dispatch(setProfileFetched(false))
+			// dispatch(setPoolFetched(false))
+			alert('Pool created!')
+			dispatch(setProfileFetched(false))
+		} catch (error) {
+			dispatch(setLoading(false))
+			alert('Error creating pool!')
+			console.error(error)
+		}
 	}
 )
 

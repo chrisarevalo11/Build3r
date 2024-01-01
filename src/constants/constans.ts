@@ -1,5 +1,6 @@
 import { BytesLike, ethers } from 'ethers'
 
+import directGrantsSimpleStrategyJson from '@/assets/json/directgrantsimplestrategy.json'
 import { InitializeData } from '@/models/initialize-data.model'
 
 import { INITIALIZE_DATA_STRUCT_TYPES } from './structs-types.constants'
@@ -22,10 +23,10 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 	'https://sepolia-rollup.arbitrum.io/rpc'
 
 export const ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY: string =
-	'0x7c061ba5c01e941faeba9fe3a10e2c6e1272fdf4'
+	directGrantsSimpleStrategyJson.address
 
 const ARBITRUM_POOL_INIT_STRATEGY_DATE_OBJECT: InitializeData = {
-	registryGating: true,
+	registryGating: false,
 	metadataRequired: true,
 	grantAmountRequired: true
 }
