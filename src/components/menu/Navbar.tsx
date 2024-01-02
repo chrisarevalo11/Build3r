@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
 
+import { Container } from '@/components//ui/container'
+import Logo from '@/components/menu/NavbarLogo'
+import NavLinks, { NavLinksResponsive } from '@/components/menu/NavLinks'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-
-import Logo from './NavbarLogo'
-import NavLinks, { NavLinksResponsive } from './NavLinks'
 
 export default function Navbar(): JSX.Element {
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
@@ -15,36 +15,49 @@ export default function Navbar(): JSX.Element {
 	}
 
 	return (
-		<nav className='navbar lg:min-w-fit lg:w-[60%] lg:max-w-[850px] lg:px-3 lg:rounded-full mx-auto flex justify-around lg:mt-5'>
-			<div className='navbar-start'>
-				{isConnected && (
-					<div className='lg:hidden'>
-						<button className='p-3' onClick={toggleSidebar}>
-							<img
-								className=''
-								src={'/images/burger.svg'}
-								alt='bars'
-								width={20}
-								height={20}
+		<Container>
+			<nav className='flex w-full lg:px-3 lg:rounded-full mx-auto md:justify-between relative'>
+				<div className='absolute top-0 bottom-0 md:static flex items-center'>
+					{isConnected && (
+						<div className='lg:hidden'>
+							<button className='p-1 text-primary' onClick={toggleSidebar}>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									className='icon icon-tabler icon-tabler-menu-2'
+									width='24'
+									height='24'
+									viewBox='0 0 24 24'
+									strokeWidth='2'
+									stroke='currentColor'
+									fill='none'
+									strokeLinecap='round'
+									strokeLinejoin='round'
+								>
+									<path stroke='none' d='M0 0h24v24H0z' fill='none' />
+									<path d='M4 6l16 0' />
+									<path d='M4 12l16 0' />
+									<path d='M4 18l16 0' />
+								</svg>
+							</button>
+							<NavLinksResponsive
+								isSidebarOpen={isSidebarOpen}
+								setIsSidebarOpen={setIsSidebarOpen}
 							/>
-						</button>
-						<NavLinksResponsive
-							isSidebarOpen={isSidebarOpen}
-							setIsSidebarOpen={setIsSidebarOpen}
-						/>
+						</div>
+					)}
+					<div className='hidden md:block'>
+						<Logo />
 					</div>
-				)}
-				<Logo />
-			</div>
-			{isConnected && (
-				<div className='navbar-center hidden lg:flex'>
-					<NavLinks />
 				</div>
-			)}
+				<div className='grow md:hidden flex justify-center'>
+					<Logo />
+				</div>
+				{isConnected && <NavLinks />}
 
-			<div className='navbar-end flex items-center gap-2'>
-				<ConnectButton showBalance={false} chainStatus={'icon'} />
-			</div>
-		</nav>
+				<div className='hidden md:flex items-center gap-2'>
+					<ConnectButton showBalance={false} chainStatus={'icon'} />
+				</div>
+			</nav>
+		</Container>
 	)
 }
