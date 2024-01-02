@@ -7,18 +7,9 @@ type Props = {
 	formValues: grantFormValuesTypes
 }
 
-export default function GrantCard({ formValues }: Props): JSX.Element {
-	const {
-		name,
-		image,
-		amount,
-		tags: tagsArray,
-		description,
-		organizer
-	} = formValues
-
-	const tags: string[] =
-		typeof tagsArray === 'string' ? tagsArray.split(',') : tagsArray
+export default function GrantCard(props: Props): JSX.Element {
+	const { formValues } = props
+	const { name, image, amount, tags, description, organizer } = formValues
 
 	return (
 		<Card
@@ -49,7 +40,7 @@ export default function GrantCard({ formValues }: Props): JSX.Element {
 					<h1 className='text-md lg:text-lg font-bold text-primary line-clamp-1'>
 						{name}
 					</h1>
-					<h2 className='text-sm lg:text-md'>
+					<h2 className='text-sm lg:text-md line-clamp-1'>
 						<span className='text-primary font-bold -pb-5'>{amount} ETH</span>{' '}
 						by {organizer}
 					</h2>
@@ -58,7 +49,7 @@ export default function GrantCard({ formValues }: Props): JSX.Element {
 					{description}
 				</CardDescription>
 				<div className='flex flex-wrap gap-[2px] md:gap-1 md:my-1'>
-					{tagsArray &&
+					{tags.length &&
 						tags.map(
 							(tag, index) =>
 								tag && (

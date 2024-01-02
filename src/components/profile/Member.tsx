@@ -12,7 +12,7 @@ export default function Member({ address }: { address: string }): JSX.Element {
 	const [copy, copied] = useClipboard()
 
 	return (
-		<li className='text-primary font-bold w-fit'>
+		<li className='text-foreground font-bold w-fit'>
 			{formatAddress(address)}
 			<TooltipProvider>
 				<Tooltip>
