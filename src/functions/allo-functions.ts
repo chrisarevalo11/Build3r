@@ -2,9 +2,10 @@ import {
 	ARBITRUM_CHAIN_ID,
 	ARBITRUM_SEPOLIA_RPC_URL
 } from '@/constants/constans'
-import { Registry } from '@allo-team/allo-v2-sdk/'
+import { Allo, Registry } from '@allo-team/allo-v2-sdk/'
 
 interface AlloContracts {
+	allo: Allo
 	registry: Registry
 }
 
@@ -14,5 +15,10 @@ export function getAlloContracts(): AlloContracts {
 		rpc: ARBITRUM_SEPOLIA_RPC_URL
 	})
 
-	return { registry }
+	const allo: Allo = new Allo({
+		chain: ARBITRUM_CHAIN_ID,
+		rpc: ARBITRUM_SEPOLIA_RPC_URL
+	})
+
+	return { allo, registry }
 }

@@ -8,10 +8,11 @@ export interface FMetadataDto {
 	logo: string
 	slogan: string
 	website: string
-	twitter: string
+	handle: string
 	description: string
 	members: string[]
 }
+
 export interface FProfile {
 	id: string
 	nonce: number
@@ -28,6 +29,15 @@ export interface FProfileDto {
 	metadata: FMetadataDto
 	owner: string
 	anchor: string
+	createdAt?: string
+}
+
+export interface FProfileSubmition {
+	nonce: number
+	name: string
+	metadata: FMetadata
+	owner: string
+	members: string[]
 }
 
 export interface FProfileSubmitionDto {
@@ -40,14 +50,6 @@ export interface FProfileSubmitionDto {
 	website: string
 	twitter: string
 	description: string
-	members: string[]
-}
-
-export interface FProfileSubmition {
-	nonce: number
-	name: string
-	metadata: FMetadata
-	owner: string
 	members: string[]
 }
 
@@ -70,4 +72,5 @@ export interface SubGraphProfile {
 	name: string
 	owner: SubGraphAccount
 	anchor: string
+	createdAt: number
 }

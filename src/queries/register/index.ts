@@ -20,6 +20,7 @@ export const queryPaginatedProfiles = `
           id
         }
         anchor
+        createdAt
       }
     }
   `

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -21,6 +23,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import {
+	ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+	ARBITRUM_INIT_STRATEGY_BYTES,
+	ARBITRUM_NATIVE
+} from '@/constants/constans'
+import { fPoolSubmitionDtoToFPoolSubmition } from '@/functions/dtos/pool.dtos'
+import { FPoolSubmition, FPoolSubmitionDto } from '@/models/pool.model'
+import { FProfileDto } from '@/models/profile.model'
+import { AppDispatch, useAppSelector } from '@/store'
+import { setLoading } from '@/store/slides/uiSlice'
+import { createPool } from '@/store/thunks/pool.thunk'
 import { createPoolProps } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -65,6 +78,13 @@ export default function GrantForm({
 }: createPoolProps): JSX.Element {
 	// TODO: use this file variable to submit image
 	const [file, setFile] = useState<ImageFile>({ image: null })
+
+	const dispatch = useDispatch<AppDispatch>()
+
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
+	)
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		defaultValues: {
 			name: '',
@@ -94,9 +114,42 @@ export default function GrantForm({
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
-			console.log('Form data:', data)
+			dispatch(setLoading(true))
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const ethereum = (window as any).ethereum
+
+			const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+				ethereum
+			)
+			await web3Provider.send('eth_requestAccounts', [])
+			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+			const amount: number = Number(data.amount)
+			const tags: string[] = data.tags
+				.split(',')
+				.map((tag: string) => tag.trim())
+
+			const fPoolSubmitionDto: FPoolSubmitionDto = {
+				profileId: profileDto.id,
+				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+				initStrategyData: ARBITRUM_INIT_STRATEGY_BYTES,
+				native: ARBITRUM_NATIVE,
+				amount,
+				description: data.description,
+				image: file.image as File,
+				name: data.name,
+				tags,
+				managers: profileDto.metadata.members
+			}
+
+			const fPoolSubmition: FPoolSubmition =
+				await fPoolSubmitionDtoToFPoolSubmition(fPoolSubmitionDto)
+
+			dispatch(createPool({ fPoolSubmition, providerOrSigner: web3Signer }))
 		} catch (error) {
 			console.error('Submission error:', error)
+			alert('Submission error')
 		}
 	}
 
@@ -251,38 +304,3 @@ export default function GrantForm({
 		</Card>
 	)
 }
-
-// function createProjectArgsDtoToCreateProjectArgs(
-// 	formValues: FormValuesTypes
-// ): any[] {
-// 	const {
-// 		projectName,
-// 		bannerImage,
-// 		logo,
-// 		description,
-// 		link,
-// 		amount,
-// 		startDate,
-// 		endDate,
-// 		scopeTags,
-// 		contributors
-// 	} = formValues
-
-// 	const amountBN: bigint = toDecimal(amount)
-// 	const projectStartTime: number = new Date(startDate).getTime() / 1000
-// 	const projectEndTime: number = new Date(endDate).getTime() / 1000
-// 	const projectTime: number[] = [projectStartTime, projectEndTime]
-// 	// TODO: Change this to the real evaluation time
-// 	const evaluationTime: number = new Date('2024-01-01').getTime() / 1000
-// 	const info: string = `${projectName},${bannerImage},${logo},${description},${link},${scopeTags},${contributors}`
-
-// 	const args: any[] = [
-// 		amountBN, // _amount
-// 		projectStartTime, // _planning
-// 		projectTime, // _projectTime
-// 		evaluationTime, // _evaluationTime
-// 		info // _info
-// 	]
-
-// 	return args
-// }

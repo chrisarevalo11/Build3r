@@ -21,7 +21,7 @@ import {
 	ARBITRUM_SEPOLIA_RPC_URL,
 	ETHEREUM_ADDRESSES_REGEX
 } from '@/constants/constans'
-import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos'
+import { fProfileSubmitionDtoToFProfileSubmition } from '@/functions/dtos/profile.dtos'
 import { FProfileSubmition, FProfileSubmitionDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { setLoading } from '@/store/slides/uiSlice'

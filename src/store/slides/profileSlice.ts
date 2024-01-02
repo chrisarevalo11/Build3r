@@ -27,7 +27,7 @@ const initialState: InitialState = {
 			logo: '',
 			slogan: '',
 			website: '',
-			twitter: '',
+			handle: '',
 			description: '',
 			members: []
 		},

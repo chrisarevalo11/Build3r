@@ -7,6 +7,7 @@ import CreateHero from '@/components/create/CreateHero'
 import GrantCard from '@/components/create/GrantCard'
 import GrantForm from '@/components/create/GrantForm'
 import { Container } from '@/components/ui/container'
+import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfile } from '@/store/thunks/profile.thunk'
 import { grantFormValuesTypes } from '@/types'
@@ -14,9 +15,14 @@ import { grantFormValuesTypes } from '@/types'
 export default function Create(): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
+
 	const dispatch = useDispatch<AppDispatch>()
-	const profileDto = useAppSelector(state => state.profileSlice.profileDto)
-	const fetched = useAppSelector(state => state.profileSlice.profileFetched)
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
+	)
+	const fetched: boolean = useAppSelector(
+		state => state.profileSlice.profileFetched
+	)
 
 	const initialValue: grantFormValuesTypes = {
 		name: '',
@@ -33,6 +39,7 @@ export default function Create(): JSX.Element {
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
+			return
 		}
 
 		dispatch(getProfile(address as string))

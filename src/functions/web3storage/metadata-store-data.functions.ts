@@ -35,7 +35,7 @@ export async function storeObject(object: any): Promise<string> {
 		wrapWithDirectory: false
 	})
 
-	console.log('object cid: ', cid)
+	console.log('ipfs:', `${ipfs}/${cid}`)
 
 	return `${ipfs}/${cid}`
 }
