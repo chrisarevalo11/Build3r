@@ -4,7 +4,7 @@ export type grantFormValuesTypes = {
 	name: string
 	amount: string
 	image: string
-	tags: string | string[]
+	tags: string[]
 	organizer: string
 	description: string
 }

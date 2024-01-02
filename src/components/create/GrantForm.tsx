@@ -97,7 +97,7 @@ export default function GrantForm({
 		resolver: zodResolver(formSchema)
 	})
 
-	const handleChange = (name: string, value: string) => {
+	const handleChange = (name: string, value: string | string[]) => {
 		setFormValues(prev => ({
 			...prev,
 			[name]: value
@@ -285,7 +285,7 @@ export default function GrantForm({
 											{...field}
 											onChange={e => {
 												field.onChange(e)
-												handleChange(e.target.name, e.target.value)
+												handleChange(e.target.name, e.target.value.split(','))
 											}}
 										/>
 									</FormControl>
