@@ -24,7 +24,7 @@ export default function Create(): JSX.Element {
 		name: '',
 		amount: '',
 		image: '',
-		tags: '',
+		tags: [],
 		organizer: '',
 		description: ''
 	}
