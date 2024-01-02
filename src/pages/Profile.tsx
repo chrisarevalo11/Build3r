@@ -165,6 +165,7 @@ export default function Profile(): JSX.Element {
 									className='block lg:hidden'
 									profileDto={profileDto}
 									poolsDto={poolsDto}
+
 								/>
 
 								<Tabs
