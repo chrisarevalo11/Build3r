@@ -49,7 +49,7 @@ export default function GrantCard(props: Props): JSX.Element {
 					{description}
 				</CardDescription>
 				<div className='flex flex-wrap gap-[2px] md:gap-1 md:my-1'>
-					{tags.length &&
+					{!!tags.length &&
 						tags.map(
 							(tag, index) =>
 								tag && (
