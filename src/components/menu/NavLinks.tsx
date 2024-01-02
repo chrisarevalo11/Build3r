@@ -99,6 +99,6 @@ const links: link[] = [
 	},
 	{
 		text: 'Profile',
-		href: '/profile/1'
+		href: '/profile/create'
 	}
 ]

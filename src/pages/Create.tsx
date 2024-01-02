@@ -7,7 +7,7 @@ import CreateHero from '@/components/create/CreateHero'
 import GrantCard from '@/components/create/GrantCard'
 import GrantForm from '@/components/create/GrantForm'
 import { Container } from '@/components/ui/container'
-import { FProfileDto } from '@/models/profile.model'
+// import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfile } from '@/store/thunks/profile.thunk'
 import { grantFormValuesTypes } from '@/types'
@@ -17,12 +17,8 @@ export default function Create(): JSX.Element {
 	const navigate = useNavigate()
 
 	const dispatch = useDispatch<AppDispatch>()
-	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
-	)
-	const fetched: boolean = useAppSelector(
-		state => state.profileSlice.profileFetched
-	)
+	const profileDto = useAppSelector(state => state.profileSlice.profileDto)
+	// const fetched = useAppSelector(state => state.profileSlice.profileFetched)
 
 	const initialValue: grantFormValuesTypes = {
 		name: '',
@@ -44,12 +40,6 @@ export default function Create(): JSX.Element {
 
 		dispatch(getProfile(address as string))
 	}, [address, navigate, dispatch])
-
-	useEffect(() => {
-		if (profileDto.id === '' && fetched) {
-			navigate(`/profile/${profileDto.id}`)
-		}
-	}, [profileDto, navigate, fetched])
 
 	return (
 		<section className='flex flex-col gap-10 lg:gap-[2rem]'>
