@@ -133,7 +133,7 @@ export default function Profile(): JSX.Element {
 								<Social
 									nonce={profileDto.nonce}
 									website={profileDto.metadata.website}
-									twitter={profileDto.metadata.twitter}
+									twitter={profileDto.metadata.handle}
 								/>
 								<Tabs defaultValue='description' className='w-full row-start-2'>
 									<TabsList>
