@@ -2,12 +2,14 @@ import { useEffect } from 'react'
 import { BytesLike, ethers } from 'ethers'
 import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
+import GrantCard from '@/components/create/GrantCard'
 import Banner from '@/components/profile/Banner'
 import Logo from '@/components/profile/Logo'
 import Member from '@/components/profile/Member'
+import StickyCard from '@/components/profile/StickyCard'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -38,6 +40,7 @@ export default function Profile(): JSX.Element {
 
 	const poolDto: FPoolDto = poolsDto[0]
 	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
+	const organizer = profileDto.name
 
 	const onAddRecipient = async () => {
 		dispatch(setLoading(true))
@@ -119,7 +122,7 @@ export default function Profile(): JSX.Element {
 					/>
 				</div>
 			) : (
-				<section>
+				<section className='my-10'>
 					<Banner imageURL={profileDto.metadata.banner} />
 					<Logo logoURL={profileDto.metadata.logo} />
 					<div className='mx-2'>
@@ -127,15 +130,47 @@ export default function Profile(): JSX.Element {
 						<h2 className='text-lg text-gray-800 font-bold'>
 							{profileDto.metadata.slogan}
 						</h2>
-						<h3 className='text-lg font-bold my-2'>Social:</h3>
-						<div className='grid lg:grid-cols-profile w-full gap-4'>
-							<div>
-								<Social
-									nonce={profileDto.nonce}
-									website={profileDto.metadata.website}
-									twitter={profileDto.metadata.twitter}
+						<section className='grid lg:grid-cols-profile w-full gap-4 my-4'>
+							<div className='space-y-5'>
+								<div className='border-2 border-input rounded-xl p-2 lg:p-4'>
+									<h3 className='text-lg font-bold my-2 flex items-center gap-x-2 text-primary'>
+										<svg
+											xmlns='http://www.w3.org/2000/svg'
+											className='icon icon-tabler icon-tabler-access-point'
+											width='24'
+											height='24'
+											viewBox='0 0 24 24'
+											strokeWidth='2'
+											stroke='currentColor'
+											fill='none'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										>
+											<path stroke='none' d='M0 0h24v24H0z' fill='none' />
+											<path d='M12 12l0 .01' />
+											<path d='M14.828 9.172a4 4 0 0 1 0 5.656' />
+											<path d='M17.657 6.343a8 8 0 0 1 0 11.314' />
+											<path d='M9.168 14.828a4 4 0 0 1 0 -5.656' />
+											<path d='M6.337 17.657a8 8 0 0 1 0 -11.314' />
+										</svg>
+										Social:
+									</h3>
+									<Social
+										nonce={profileDto.nonce}
+										website={profileDto.metadata.website}
+										twitter={profileDto.metadata.handle}
+									/>
+								</div>
+								<StickyCard
+									className='block lg:hidden'
+									profileDto={profileDto}
+									poolsDto={poolsDto}
 								/>
-								<Tabs defaultValue='description' className='w-full row-start-2'>
+
+								<Tabs
+									defaultValue='description'
+									className='w-full row-start-2 border-2 border-input rounded-xl p-2 lg:p-4'
+								>
 									<TabsList>
 										<TabsTrigger value='description'>Description</TabsTrigger>
 										<TabsTrigger value='grants'>Grants</TabsTrigger>
@@ -143,24 +178,37 @@ export default function Profile(): JSX.Element {
 									<TabsContent className='p-4' value='description'>
 										<p>{profileDto.metadata.description}</p>
 									</TabsContent>
-									<TabsContent className='p-2' value='grants'></TabsContent>
+									<TabsContent className='p-2' value='grants'>
+										{poolsDto.map((pool: FPoolDto, index: number) => {
+											const { description, image, name, tags } = pool.metadata
+											const { amount } = pool
+											return (
+												<Link
+													to={`/profile/${profileDto.id}/pool/${pool.id}`}
+													key={index}
+												>
+													<GrantCard
+														formValues={{
+															name,
+															image,
+															amount,
+															tags,
+															description,
+															organizer
+														}}
+													/>
+												</Link>
+											)
+										})}
+									</TabsContent>
 								</Tabs>
 							</div>
-							<Card className='hidden lg:block'>
-								<CardHeader>
-									<h3 className='text-lg font-bold my-2'>Members:</h3>
-								</CardHeader>
-								<CardContent>
-									<ul className='ml-4'>
-										{profileDto?.metadata?.members?.map(
-											(member: string, index: number) => (
-												<Member key={index} address={member} />
-											)
-										)}
-									</ul>
-								</CardContent>
-							</Card>
-						</div>
+							<StickyCard
+								className='hidden lg:block'
+								profileDto={profileDto}
+								poolsDto={poolsDto}
+							/>
+						</section>
 					</div>
 				</section>
 			)}
