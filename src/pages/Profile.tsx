@@ -123,10 +123,7 @@ export default function Profile(): JSX.Element {
 											const { description, image, name, tags } = pool.metadata
 											const { amount } = pool
 											return (
-												<Link
-													to={`/profile/${profileDto.id}/pool/${pool.id}`}
-													key={index}
-												>
+												<Link to={`/grants/${pool.id}`} key={index}>
 													<GrantCard
 														formValues={{
 															name,
