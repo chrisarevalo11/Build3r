@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { BytesLike, ethers } from 'ethers'
 import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,22 +7,14 @@ import { useAccount } from 'wagmi'
 import GrantCard from '@/components/create/GrantCard'
 import Banner from '@/components/profile/Banner'
 import Logo from '@/components/profile/Logo'
-import Member from '@/components/profile/Member'
+import Social from '@/components/profile/Social'
 import StickyCard from '@/components/profile/StickyCard'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Container } from '@/components/ui/container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
-import { fRecipientSubmitionDtoToFRecipientSubmition } from '@/functions/dtos/recipient.dtos'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
-import { FRecipientSubmitionDto } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
-import { setLoading } from '@/store/slides/uiSlice'
 import { getProfile } from '@/store/thunks/profile.thunk'
-import { addRecipient } from '@/store/thunks/recipient.thunk'
-
-import Social from './Social'
 
 export default function Profile(): JSX.Element {
 	const { address } = useAccount()
@@ -38,59 +29,8 @@ export default function Profile(): JSX.Element {
 		state => state.profileSlice.profileFetched
 	)
 
-	const poolDto: FPoolDto = poolsDto[0]
 	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 	const organizer = profileDto.name
-
-	const onAddRecipient = async () => {
-		dispatch(setLoading(true))
-		const fullname: string = 'Santiago Viana'
-		const bio: string = 'I am a software developer'
-		const organization = 'Wagmi'
-		const email: string = 'salviega6@gmail.com'
-		const wallet: string = ARBITRUM_RECIPIENT_WALLET
-		const grantAmount: number = 20
-		const imageFile: string =
-			'https://avatars.githubusercontent.com/u/24712956?v=4'
-
-		if (!imageFile) {
-			alert('Error: image isimageFile required')
-			dispatch(setLoading(false))
-			return
-		}
-
-		const frecipientSubmisionDto: FRecipientSubmitionDto = {
-			anchor: profileDto.anchor,
-			bio,
-			email,
-			fullname,
-			grantAmount,
-			image: imageFile,
-			organization,
-			wallet
-		}
-
-		const frecipientSubmission: BytesLike =
-			await fRecipientSubmitionDtoToFRecipientSubmition(frecipientSubmisionDto)
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const ethereum = (window as any).ethereum
-
-		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
-			ethereum
-		)
-		await web3Provider.send('eth_requestAccounts', [])
-		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
-
-		dispatch(
-			addRecipient({
-				frecipientSubmition: frecipientSubmission,
-				frecipientDtoWallet: frecipientSubmisionDto.wallet,
-				poolId: poolDto.id,
-				providerOrSigner: web3Signer
-			})
-		)
-	}
 
 	useEffect(() => {
 		if (!address) {
@@ -165,7 +105,6 @@ export default function Profile(): JSX.Element {
 									className='block lg:hidden'
 									profileDto={profileDto}
 									poolsDto={poolsDto}
-
 								/>
 
 								<Tabs
