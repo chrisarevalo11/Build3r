@@ -8,8 +8,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 function NavLink({ text, href }: link): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
+	let isActive
 
-	const isActive = pathname === href
+	if (text.toLowerCase() === 'profile') {
+		isActive = pathname.startsWith('/profile')
+	} else {
+		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
+	}
 
 	return (
 		<Link
@@ -36,8 +41,13 @@ function ResponsiveNavLink({
 }: ResponsiveNavLinkProps): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
+	let isActive
 
-	const isActive = pathname === href
+	if (text.toLowerCase() === 'profile') {
+		isActive = pathname.startsWith('/profile')
+	} else {
+		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
+	}
 
 	return (
 		<Link
@@ -99,6 +109,10 @@ export default function NavLinks(): JSX.Element {
 }
 
 const links: link[] = [
+	{
+		text: 'Home',
+		href: '/'
+	},
 	{
 		text: 'Create',
 		href: '/create'
