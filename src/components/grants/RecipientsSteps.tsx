@@ -1,6 +1,6 @@
 import RegisterRecipientForm from '@/components/grants/RegisterRecipientForm'
 import { Button } from '@/components/ui/Button'
-import { DialogFooter } from '@/components/ui/dialog'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Steps } from '@/models/ui/steps.model'
@@ -111,7 +111,9 @@ function AllocateRecipient(): JSX.Element {
 			</h1>
 			<p>Please allocate the funds</p>
 			<DialogFooter className='justify-center'>
-				<Button className='mt-2'>Close</Button>
+				<DialogClose asChild>
+					<Button className='mt-2'>Close</Button>
+				</DialogClose>
 			</DialogFooter>
 		</div>
 	)
