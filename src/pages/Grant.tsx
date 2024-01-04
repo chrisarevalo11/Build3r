@@ -1,20 +1,31 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAccount } from 'wagmi'
+
 import GrantPage from '@/components/grants/GrantPage'
+import NotFound from '@/components/NotFound'
 import { Container } from '@/components/ui/container'
 import { FPoolDto } from '@/models/pool.model'
-import { FProfileDto } from '@/models/profile.model'
 import { useAppSelector } from '@/store'
 
 export default function Grant(): JSX.Element {
+	const { address } = useAccount()
+	const navigate = useNavigate()
 	const poolsDto: FPoolDto[] = useAppSelector(state => state.poolSlice.poolsDto)
-	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
-	)
 
-	console.log(poolsDto)
+	useEffect(() => {
+		if (!address) {
+			navigate('/')
+		}
+	}, [address, navigate])
+
+	if (poolsDto.length === 0) {
+		return <NotFound />
+	}
 
 	return (
 		<Container>
-			<GrantPage pooldto={poolsDto[0]} profile={profileDto} />
+			<GrantPage poolDto={poolsDto[0]} />
 		</Container>
 	)
 }
