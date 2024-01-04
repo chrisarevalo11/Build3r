@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
-import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
@@ -17,6 +16,7 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import Loader from '@/components/ui/Loader'
 import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { fRecipientSubmitionDtoToFRecipientSubmition } from '@/functions/dtos/recipient.dtos'
 import { FPoolDto } from '@/models/pool.model'
@@ -226,16 +226,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 					/>
 					<DialogFooter>
 						<Button className='mt-2' type='submit'>
-							{loading ? (
-								<Oval
-									width={20}
-									height={20}
-									color='#fff'
-									secondaryColor='#ededed'
-								/>
-							) : (
-								'Register'
-							)}
+							{loading ? <Loader type='white' /> : 'Register'}
 						</Button>
 					</DialogFooter>
 				</form>

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
-import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
@@ -16,6 +15,7 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import Loader from '@/components/ui/Loader'
 import { Textarea } from '@/components/ui/textarea'
 import {
 	ARBITRUM_SEPOLIA_RPC_URL,
@@ -291,16 +291,7 @@ export default function ProfileForm(): JSX.Element {
 						className={`m-2 ${loading && 'pointer-events-none'}`}
 						type='submit'
 					>
-						{loading ? (
-							<Oval
-								width={20}
-								height={20}
-								color='#fff'
-								secondaryColor='#ededed'
-							/>
-						) : (
-							'Create'
-						)}
+						{loading ? <Loader type='white' /> : 'Create'}
 					</Button>
 				</div>
 			</form>

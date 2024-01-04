@@ -65,7 +65,8 @@ export async function fProfileToFprofileDto(
 				]
 			},
 			owner: '',
-			anchor: ''
+			anchor: '',
+			createdAt: ':('
 		}
 	}
 }

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
-import { Oval } from 'react-loader-spinner'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -23,9 +22,9 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import Loader from '@/components/ui/Loader'
 import { Textarea } from '@/components/ui/textarea'
 import {
-	ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
 	ARBITRUM_INIT_STRATEGY_BYTES,
 	ARBITRUM_NATIVE
 } from '@/constants/constans'
@@ -302,16 +301,7 @@ export default function GrantForm({
 								type='submit'
 								className={`min-w-[80px] ${loading && 'pointer-events-none'}}`}
 							>
-								{loading ? (
-									<Oval
-										width={20}
-										height={20}
-										color='#fff'
-										secondaryColor='#ededed'
-									/>
-								) : (
-									'Submit'
-								)}
+								{loading ? <Loader type='white' /> : 'Submit'}
 							</Button>
 						</CardFooter>
 					</form>
