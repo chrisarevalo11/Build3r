@@ -28,6 +28,7 @@ type Props = {
 	poolDto: FPoolDto
 	profileDto: FProfileDto
 	setStep: () => void
+	amount: string
 }
 
 const formSchema = z.object({
@@ -45,12 +46,15 @@ const formSchema = z.object({
 	}),
 	image: z.string().min(1, {
 		message: 'image is required'
+	}),
+	grantAmount: z.number().min(0.00001, {
+		message: 'Amount is required'
 	})
 })
 
-export default function AddRecipientForm(props: Props): JSX.Element {
+export default function RegisterRecipientForm(props: Props): JSX.Element {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { poolDto, profileDto, setStep } = props
+	const { poolDto, profileDto, setStep, amount } = props
 	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -60,7 +64,8 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 			bio: '',
 			organization: '',
 			email: '',
-			image: ''
+			image: '',
+			grantAmount: parseInt(amount)
 		}
 	})
 
@@ -122,7 +127,9 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 
 	return (
 		<div>
-			<h1 className='text-xl font-bold text-primary mb-2'>Set recipient</h1>
+			<h1 className='text-xl font-bold text-primary mb-2'>
+				Register recipient
+			</h1>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-1'>
 					<FormField
@@ -147,7 +154,10 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 							<FormItem>
 								<FormLabel>Bio</FormLabel>
 								<FormControl>
-									<Input placeholder='John Doe' {...field} />
+									<Input
+										placeholder='I am a software developer that...'
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage>{form.formState.errors.bio?.message}</FormMessage>
 							</FormItem>
@@ -160,7 +170,7 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 							<FormItem>
 								<FormLabel>Organization</FormLabel>
 								<FormControl>
-									<Input placeholder='John Doe' {...field} />
+									<Input placeholder='My org' {...field} />
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.organization?.message}
@@ -175,7 +185,7 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input placeholder='John Doe' {...field} />
+									<Input placeholder='yourname@example.com' {...field} />
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.email?.message}
@@ -203,9 +213,31 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 							</FormItem>
 						)}
 					/>
+					<FormField
+						control={form.control}
+						name='grantAmount'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Amount granted (ETH)</FormLabel>
+								<FormControl className='w-[100px]'>
+									<Input
+										placeholder='0'
+										type='number'
+										{...field}
+										defaultValue={amount}
+										max={amount}
+										min={0}
+									/>
+								</FormControl>
+								<FormMessage>
+									{form.formState.errors.email?.message}
+								</FormMessage>
+							</FormItem>
+						)}
+					/>
 					<DialogFooter>
 						<Button className='mt-2' type='submit'>
-							Submit
+							Register
 						</Button>
 					</DialogFooter>
 				</form>

@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
-import AddRecipientForm from '@/components/grants/AddRecipientForm'
+import RegisterRecipientForm from '@/components/grants/RegisterRecipientForm'
+import { Button } from '@/components/ui/Button'
+import { DialogFooter } from '@/components/ui/dialog'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { FRecipientSubmitionDto } from '@/models/recipient.model'
-
-import { Button } from '../ui/Button'
-import { DialogFooter } from '../ui/dialog'
 
 type Props = {
 	poolDto: FPoolDto
@@ -27,7 +26,8 @@ export default function RecipientSteps(props: Props) {
 	}
 
 	const stepContent: JSX.Element[] = [
-		<AddRecipientForm
+		<RegisterRecipientForm
+			amount={poolDto.amount}
 			key={0}
 			poolDto={poolDto}
 			profileDto={profileDto}
@@ -106,9 +106,13 @@ type RegisterRecipientsProps = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function RegisterRecipients(props: RegisterRecipientsProps): JSX.Element {
+function AuthorizeRecipient(props: RegisterRecipientsProps): JSX.Element {
 	const { recipient } = props
 	const { fullname, email, organization, bio } = recipient
+
+	const handleRegister = () => {
+		console.log('register')
+	}
 
 	return (
 		<div>
@@ -123,8 +127,8 @@ function RegisterRecipients(props: RegisterRecipientsProps): JSX.Element {
 				<p>{bio}</p>
 			</div>
 			<DialogFooter>
-				<Button className='mt-2' onClick={() => {}}>
-					Register
+				<Button className='mt-2' onClick={() => handleRegister}>
+					Authorize
 				</Button>
 			</DialogFooter>
 		</div>
