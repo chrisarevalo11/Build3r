@@ -12,7 +12,7 @@ export interface FRecipientSubmitionDto {
 	bio: string
 	email: string
 	fullname: string
-	image: File | string
+	image: File
 	grantAmount: number
 	organization: string
 	wallet: string

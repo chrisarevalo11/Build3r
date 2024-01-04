@@ -8,6 +8,7 @@ import {
 import { dataArrayToBytes } from '@/utils'
 
 import {
+	storageFile,
 	// storageFile,
 	storeObject
 } from '../web3storage/metadata-store-data.functions'
@@ -15,12 +16,7 @@ import {
 export async function fRecipientSubmitionDtoToFRecipientSubmition(
 	frecipientSubmisionDto: FRecipientSubmitionDto
 ): Promise<BytesLike> {
-	// const imageCid: string = await storageFile(frecipientSubmisionDto.image)
-	const imageCid: string = frecipientSubmisionDto.image as string
-	// const grantAmount: number = grantPorcetageToAmount(
-	// 	frecipientSubmisionDto.grantPorcentage,
-	// 	frecipientSubmisionDto.grantTotal
-	// )
+	const imageCid: string = await storageFile(frecipientSubmisionDto.image)
 
 	const metadataArgs = {
 		bio: frecipientSubmisionDto.bio,

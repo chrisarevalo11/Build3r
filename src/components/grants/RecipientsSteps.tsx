@@ -1,12 +1,13 @@
-import AddRecipientForm from '@/components/grants/AddRecipientForm'
+import { useState } from 'react'
+
+import RegisterRecipientForm from '@/components/grants/RegisterRecipientForm'
+import { Button } from '@/components/ui/Button'
+import { DialogFooter } from '@/components/ui/dialog'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { FRecipientSubmitionDto } from '@/models/recipient.model'
 import { Steps } from '@/models/ui/steps.model'
 import { useAppSelector } from '@/store'
-
-import { Button } from '../ui/Button'
-import { DialogFooter } from '../ui/dialog'
 
 type Props = {
 	poolDto: FPoolDto
@@ -17,7 +18,12 @@ export default function RecipientSteps(props: Props) {
 	const steps: Steps = useAppSelector(state => state.uiSlice.steps)
 
 	const stepContent: JSX.Element[] = [
-		<AddRecipientForm key={0} poolDto={poolDto} profileDto={profileDto} />,
+		<RegisterRecipientForm
+			amount={poolDto.amount}
+			key={0}
+			poolDto={poolDto}
+			profileDto={profileDto}
+		/>,
 		// <RegisterRecipients key={1} recipient={poolDto.recipients[0]} />,
 		<h1 key={2}></h1>
 	]
@@ -91,9 +97,13 @@ type RegisterRecipientsProps = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function RegisterRecipients(props: RegisterRecipientsProps): JSX.Element {
+function AuthorizeRecipient(props: RegisterRecipientsProps): JSX.Element {
 	const { recipient } = props
 	const { fullname, email, organization, bio } = recipient
+
+	const handleRegister = () => {
+		console.log('register')
+	}
 
 	return (
 		<div>
@@ -108,8 +118,8 @@ function RegisterRecipients(props: RegisterRecipientsProps): JSX.Element {
 				<p>{bio}</p>
 			</div>
 			<DialogFooter>
-				<Button className='mt-2' onClick={() => {}}>
-					Register
+				<Button className='mt-2' onClick={() => handleRegister}>
+					Authorize
 				</Button>
 			</DialogFooter>
 		</div>
