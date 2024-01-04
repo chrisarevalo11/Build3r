@@ -5,7 +5,7 @@ interface InitialState {
 	profile: FProfile
 	profileDto: FProfileDto
 	profileFetched: boolean
-	profiles: FProfile[]
+	profiles: FProfileDto[]
 	profilesFetched: boolean
 }
 
@@ -59,7 +59,7 @@ export const profileSlice: Slice<InitialState> = createSlice({
 		setProfileFetched: (state, action: PayloadAction<boolean>) => {
 			state.profileFetched = action.payload
 		},
-		setProfiles: (state, action: PayloadAction<FProfile[]>) => {
+		setProfiles: (state, action: PayloadAction<FProfileDto[]>) => {
 			state.profiles = action.payload
 		},
 		setProfilesFetched: (state, action: PayloadAction<boolean>) => {

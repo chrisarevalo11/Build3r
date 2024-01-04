@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
-import { FProfile } from '@/models/profile.model'
+import ProfileCard from '@/components/explore/ProfileCard'
+import { FProfile, FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfiles } from '@/store/thunks/profile.thunk'
 
@@ -11,7 +12,7 @@ export default function Explorer(): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const profiles: FProfile[] = useAppSelector(
+	const profiles: FProfileDto[] = useAppSelector(
 		state => state.profileSlice.profiles
 	)
 	const fetched: boolean = useAppSelector(
@@ -36,26 +37,8 @@ export default function Explorer(): JSX.Element {
 				? 'loading...'
 				: profiles.length === 0
 					? 'Thre are not organisations'
-					: profiles?.map((profile: FProfile, index: number) => {
-							return (
-								<div key={index}>
-									<h1>Profile {index}</h1>
-									<p>profile.anchor: </p>
-									<p>{profile.anchor}</p>
-									<p>profile.id: </p>
-									<p>{profile.id}</p>
-									<p>profile.metadata.pointer: </p>
-									<p>{profile.metadata.pointer}</p>
-									<p>profile.metadata.protocol: </p>
-									<p>{profile.metadata.protocol}</p>
-									<p>profile.name: </p>
-									<p>{profile.name}</p>
-									<p>profile.nonce: </p>
-									<p>{profile.nonce}</p>
-									<p>profile.owner: </p>
-									<p>{profile.owner}</p>
-								</div>
-							)
+					: profiles?.map((profile: FProfileDto, index: number) => {
+							return <ProfileCard key={index} profileDto={profile} />
 						})}
 		</>
 	)
