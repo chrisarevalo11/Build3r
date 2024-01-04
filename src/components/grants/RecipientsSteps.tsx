@@ -33,7 +33,7 @@ export default function RecipientSteps(props: Props) {
 			profileDto={profileDto}
 			setStep={handleNextStep}
 		/>,
-		// <RegisterRecipients key={1} recipient={poolDto.recipients[0]} />,
+		<AuthorizeRecipient key={1} />,
 		<h1 key={2}></h1>
 	]
 
@@ -101,35 +101,19 @@ export default function RecipientSteps(props: Props) {
 }
 
 type RegisterRecipientsProps = {
-	recipient: FRecipientSubmitionDto
 	// setStep: () => void
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AuthorizeRecipient(props: RegisterRecipientsProps): JSX.Element {
-	const { recipient } = props
-	const { fullname, email, organization, bio } = recipient
-
-	const handleRegister = () => {
-		console.log('register')
-	}
-
 	return (
-		<div>
+		<div className='text-center'>
 			<h1 className='text-xl font-bold text-primary mb-2'>
-				Register Recipients
+				Now set recipient status to InReview
 			</h1>
-			<div className='w-full border-border border-2 rounded-xl p-1 flex flex-col'>
-				<h2>
-					{fullname} - {email}
-				</h2>
-				<p>{organization}</p>
-				<p>{bio}</p>
-			</div>
-			<DialogFooter>
-				<Button className='mt-2' onClick={() => handleRegister}>
-					Authorize
-				</Button>
+			<p>Please authorize the recipient</p>
+			<DialogFooter className='justify-center'>
+				<Button className='mt-2'>Close</Button>
 			</DialogFooter>
 		</div>
 	)

@@ -46,9 +46,6 @@ const formSchema = z.object({
 	}),
 	image: z.string().min(1, {
 		message: 'image is required'
-	}),
-	grantAmount: z.number().min(0.00001, {
-		message: 'Amount is required'
 	})
 })
 
@@ -64,8 +61,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 			bio: '',
 			organization: '',
 			email: '',
-			image: '',
-			grantAmount: parseInt(amount)
+			image: ''
 		}
 	})
 
@@ -82,7 +78,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		const organization = 'Wagmi'
 		const email: string = 'salviega6@gmail.com'
 		const wallet: string = ARBITRUM_RECIPIENT_WALLET
-		const grantAmount: number = 20
+		const grantAmount: number = parseInt(amount)
 		const imageFile: string =
 			'https://avatars.githubusercontent.com/u/24712956?v=4'
 
@@ -209,28 +205,6 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 								</FormControl>
 								<FormMessage>
 									{form.formState.errors.image?.message}
-								</FormMessage>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='grantAmount'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Amount granted (ETH)</FormLabel>
-								<FormControl className='w-[100px]'>
-									<Input
-										placeholder='0'
-										type='number'
-										{...field}
-										defaultValue={amount}
-										max={amount}
-										min={0}
-									/>
-								</FormControl>
-								<FormMessage>
-									{form.formState.errors.email?.message}
 								</FormMessage>
 							</FormItem>
 						)}
