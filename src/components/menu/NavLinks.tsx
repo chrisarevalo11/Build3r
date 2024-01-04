@@ -8,8 +8,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 function NavLink({ text, href }: link): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
+	let isActive
 
-	const isActive = pathname === href
+	if (text.toLowerCase() === 'profile') {
+		isActive = pathname.startsWith('/profile')
+	} else {
+		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
+	}
 
 	return (
 		<Link
@@ -36,8 +41,13 @@ function ResponsiveNavLink({
 }: ResponsiveNavLinkProps): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
+	let isActive
 
-	const isActive = pathname === href
+	if (text.toLowerCase() === 'profile') {
+		isActive = pathname.startsWith('/profile')
+	} else {
+		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
+	}
 
 	return (
 		<Link
@@ -63,7 +73,7 @@ export function NavLinksResponsive({
 }: NavLinksResponsiveProps): JSX.Element {
 	return (
 		<ul
-			className={`fixed z-[10] h-[100vh] top-0 left-0 w-[70vw] max-w-[300px] flex flex-col gap-2 justify-center shadow-2xl bg-primary text-white font-bold rounded-box transition-all ${
+			className={`fixed z-[10] h-[100vh] top-0 w-[70vw] max-w-[300px] flex flex-col gap-2 justify-center shadow-2xl bg-primary text-white font-bold rounded-box transition-all ${
 				isSidebarOpen ? 'left-0 ' : '-left-[400px]'
 			}`}
 		>
@@ -99,6 +109,10 @@ export default function NavLinks(): JSX.Element {
 }
 
 const links: link[] = [
+	{
+		text: 'Home',
+		href: '/'
+	},
 	{
 		text: 'Create',
 		href: '/create'

@@ -16,8 +16,6 @@ export default function Home(): JSX.Element {
 	useEffect(() => {
 		if (!address) {
 			dispatch(destroyStore())
-		} else {
-			navigate('/explore')
 		}
 	}, [address, dispatch, navigate])
 
