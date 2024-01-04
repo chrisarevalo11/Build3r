@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -25,10 +26,9 @@ import { addRecipient } from '@/store/thunks/recipient.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 type Props = {
+	amount: string
 	poolDto: FPoolDto
 	profileDto: FProfileDto
-	setStep: () => void
-	amount: string
 }
 
 const formSchema = z.object({
@@ -49,9 +49,19 @@ const formSchema = z.object({
 	})
 })
 
+interface InitialState {
+	image: null | File
+}
+
 export default function RegisterRecipientForm(props: Props): JSX.Element {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { poolDto, profileDto, setStep, amount } = props
+	const { poolDto, profileDto, amount } = props
+
+	const initialState = {
+		image: null
+	}
+	const [files, setFiles] = useState<InitialState>(initialState)
+
 	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -65,22 +75,16 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		}
 	})
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		setStep()
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		console.log(values)
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onAddRecipient = async () => {
 		dispatch(setLoading(true))
-		const fullname: string = 'Santiago Viana'
-		const bio: string = 'I am a software developer'
-		const organization = 'Wagmi'
-		const email: string = 'salviega6@gmail.com'
+		const fullname: string = values.fullName
+		const bio: string = values.bio
+		const organization = values.organization
+		const email: string = values.email
 		const wallet: string = ARBITRUM_RECIPIENT_WALLET
 		const grantAmount: number = parseInt(amount)
-		const imageFile: string =
-			'https://avatars.githubusercontent.com/u/24712956?v=4'
+		const imageFile: File | null = files.image
 
 		if (!imageFile) {
 			alert('Error: image isimageFile required')
@@ -201,6 +205,12 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 										type='file'
 										accept='image/*'
 										{...field}
+										onChange={e => {
+											field.onChange(e)
+											if (e.target.files && e.target.files.length > 0) {
+												setFiles({ image: e.target.files![0] })
+											}
+										}}
 									/>
 								</FormControl>
 								<FormMessage>

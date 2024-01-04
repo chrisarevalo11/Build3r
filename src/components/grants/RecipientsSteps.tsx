@@ -6,6 +6,8 @@ import { DialogFooter } from '@/components/ui/dialog'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { FRecipientSubmitionDto } from '@/models/recipient.model'
+import { Steps } from '@/models/ui/steps.model'
+import { useAppSelector } from '@/store'
 
 type Props = {
 	poolDto: FPoolDto
@@ -13,17 +15,7 @@ type Props = {
 }
 export default function RecipientSteps(props: Props) {
 	const { poolDto, profileDto } = props
-	const [steps, setStep] = useState({
-		stepsCount: [0, 1, 2],
-		currentStep: 0
-	})
-
-	const handleNextStep = () => {
-		setStep({
-			...steps,
-			currentStep: steps.currentStep + 1
-		})
-	}
+	const steps: Steps = useAppSelector(state => state.uiSlice.steps)
 
 	const stepContent: JSX.Element[] = [
 		<RegisterRecipientForm
@@ -31,7 +23,6 @@ export default function RecipientSteps(props: Props) {
 			key={0}
 			poolDto={poolDto}
 			profileDto={profileDto}
-			setStep={handleNextStep}
 		/>,
 		<AuthorizeRecipient key={1} />,
 		<h1 key={2}></h1>
@@ -41,28 +32,28 @@ export default function RecipientSteps(props: Props) {
 		<>
 			<div className='w-[95%] mx-auto px-4 sm:px-0 mt-4'>
 				<ul aria-label='Steps' className='flex items-center'>
-					{steps.stepsCount.map((item, index) => (
+					{steps.count.map((item, index) => (
 						<li
 							key={index}
-							aria-current={steps.currentStep === index ? 'step' : false}
+							aria-current={steps.current === index ? 'step' : false}
 							className='flex-1 last:flex-none flex items-center'
 						>
 							<div className='flex flex-col items-center'>
 								<div
 									className={`size-6 rounded-full border-2 flex-none flex items-center justify-center ${
-										steps.currentStep > index
+										steps.current > index
 											? 'bg-primary border-primary'
-											: '' || steps.currentStep === index
+											: '' || steps.current === index
 												? 'border-primary'
 												: ''
 									}`}
 								>
 									<span
 										className={`size-2 rounded-full bg-primary ${
-											steps.currentStep !== index ? 'hidden' : ''
+											steps.current !== index ? 'hidden' : ''
 										}`}
 									></span>
-									{steps.currentStep > index ? (
+									{steps.current > index ? (
 										<svg
 											xmlns='http://www.w3.org/2000/svg'
 											fill='none'
@@ -84,9 +75,9 @@ export default function RecipientSteps(props: Props) {
 							</div>
 							<hr
 								className={`w-[90%] mx-auto border ${
-									index === steps.stepsCount.length - 1
+									index === steps.count.length - 1
 										? 'hidden'
-										: '' || steps.currentStep > index
+										: '' || steps.current > index
 											? 'border-primary'
 											: ''
 								}`}
@@ -95,7 +86,7 @@ export default function RecipientSteps(props: Props) {
 					))}
 				</ul>
 			</div>
-			<div className='mt-4'>{stepContent[steps.currentStep]}</div>
+			<div className='mt-4'>{stepContent[steps.current]}</div>
 		</>
 	)
 }

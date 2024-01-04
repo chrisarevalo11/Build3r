@@ -5,7 +5,7 @@ import { getStrategiesContracts } from '@/functions/strategies/strategies.functi
 import { getRecipient } from '@/services/allo-contract.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-import { setLoading } from '../slides/uiSlice'
+import { setLoading, setSteps } from '../slides/uiSlice'
 
 export const addRecipient = createAsyncThunk(
 	'recipient/addREcipient',
@@ -39,6 +39,7 @@ export const addRecipient = createAsyncThunk(
 			)
 
 			await registerRecipientTx.wait(1)
+			dispatch(setSteps(1))
 
 			const setRecipientStatusToInReviewTx =
 				await directGrantsSimple.setRecipientStatusToInReview([
@@ -46,6 +47,7 @@ export const addRecipient = createAsyncThunk(
 				])
 
 			await setRecipientStatusToInReviewTx.wait(1)
+			dispatch(setSteps(2))
 
 			alert('Recipient added!')
 			dispatch(setLoading(false))
