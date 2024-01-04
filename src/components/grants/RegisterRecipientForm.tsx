@@ -3,6 +3,7 @@ import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
 import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
+import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -63,8 +64,9 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 	}
 	const [files, setFiles] = useState<InitialState>(initialState)
 
-	const dispatch = useDispatch<AppDispatch>()
+	const { address } = useAccount()
 	const loading = useAppSelector(state => state.uiSlice.loading)
+	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -77,10 +79,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		}
 	})
 
-	console.log(amount)
-
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		console.log(values)
 		dispatch(setLoading(true))
 		const fullname: string = values.fullName
 		const bio: string = values.bio
@@ -121,6 +120,8 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 
 		dispatch(
 			addRecipient({
+				grantAmount,
+				address: address as string,
 				frecipientSubmition: frecipientSubmission,
 				frecipientDtoWallet: frecipientSubmisionDto.wallet,
 				poolId: poolDto.id,
