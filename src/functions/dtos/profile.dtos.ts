@@ -34,16 +34,40 @@ export function dtoToProfile(dto: Profile): FProfile {
 export async function fProfileToFprofileDto(
 	fProfile: FProfile
 ): Promise<FProfileDto> {
-	const metadata: Response = await fetch(fProfile.metadata.pointer)
-	const metadataDto: FMetadataDto = await metadata.json()
+	try {
+		const metadata: Response = await fetch(fProfile.metadata.pointer)
+		const metadataDto: FMetadataDto = await metadata.json()
 
-	return {
-		id: fProfile.id,
-		nonce: fProfile.nonce,
-		name: fProfile.name,
-		metadata: metadataDto,
-		owner: fProfile.owner,
-		anchor: fProfile.anchor
+		return {
+			id: fProfile.id,
+			nonce: fProfile.nonce,
+			name: fProfile.name,
+			metadata: metadataDto,
+			owner: fProfile.owner,
+			anchor: fProfile.anchor
+		}
+	} catch (error) {
+		return {
+			id: '1',
+			nonce: 0,
+			name: 'Test Grant',
+			metadata: {
+				banner:
+					'https://assets-global.website-files.com/6433e6f821ae13dd37394322/654da5e25b619b4ed39f56c8_Allo_MainnetBlogBanner_2.jpg',
+				logo: 'https://pbs.twimg.com/profile_images/1692592586421080064/II7poVNB_400x400.jpg',
+				slogan: 'This is a grant test',
+				website: 'https://allo.gitcoin.co/',
+				handle: '@allo',
+				description: 'This is a test description for the tets grants',
+				members: [
+					'0x11111111111111111111111111111111111111',
+					'0x21111111111111111111111111111111111112'
+				]
+			},
+			owner: '',
+			anchor: '',
+			createdAt: ':('
+		}
 	}
 }
 

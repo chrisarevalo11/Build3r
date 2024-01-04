@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -10,6 +9,7 @@ import Logo from '@/components/profile/Logo'
 import Social from '@/components/profile/Social'
 import StickyCard from '@/components/profile/StickyCard'
 import { Container } from '@/components/ui/container'
+import Loader from '@/components/ui/Loader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
@@ -53,13 +53,7 @@ export default function Profile(): JSX.Element {
 		<Container>
 			{loading ? (
 				<div className='w-full flex justify-center'>
-					<Oval
-						height={50}
-						width={50}
-						strokeWidth={3}
-						color='#f65f5b'
-						secondaryColor='#f65f5b44'
-					/>
+					<Loader />
 				</div>
 			) : (
 				<section className='my-10'>

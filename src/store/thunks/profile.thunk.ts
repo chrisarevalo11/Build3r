@@ -109,7 +109,10 @@ export const getProfiles = createAsyncThunk(
 	async ({ first, skip }: { first: number; skip: number }, { dispatch }) => {
 		dispatch(setLoading(true))
 
-		const profiles = await getPaginatedProfiles(first, skip)
+		const profiles: FProfile[] | string = await getPaginatedProfiles(
+			first,
+			skip
+		)
 
 		if (typeof profiles === 'string') {
 			dispatch(setProfilesFetched(true))
@@ -117,7 +120,13 @@ export const getProfiles = createAsyncThunk(
 			return
 		}
 
-		dispatch(setProfiles(profiles))
+		const profilesDto = await Promise.all(
+			profiles.map(async (profile: FProfile) => {
+				return await fProfileToFprofileDto(profile)
+			})
+		)
+
+		dispatch(setProfiles(profilesDto))
 		dispatch(setProfilesFetched(true))
 		dispatch(setLoading(false))
 	}

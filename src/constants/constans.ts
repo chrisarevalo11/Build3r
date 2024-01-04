@@ -1,6 +1,5 @@
 import { BytesLike, ethers } from 'ethers'
 
-import directGrantsSimpleStrategyJson from '@/assets/json/directgrantsimplestrategy.json'
 import { InitializeData } from '@/models/initialize-data.model'
 
 import { INITIALIZE_DATA_STRUCT_TYPES } from './structs-types.constants'

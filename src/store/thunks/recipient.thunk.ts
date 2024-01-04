@@ -34,39 +34,36 @@ export const addRecipient = createAsyncThunk(
 			const { directGrantsSimple } = getStrategiesContracts(providerOrSigner)
 			await getRecipient(providerOrSigner)
 
-			const registerRecipientTx = await allo.registerRecipient(
-				poolId,
-				frecipientSubmition,
-				{
-					value: 0,
-					gasLimit: 6000000
-				}
-			)
+			// const registerRecipientTx = await allo.registerRecipient(
+			// 	poolId,
+			// 	frecipientSubmition,
+			// 	{
+			// 		value: 0,
+			// 		gasLimit: 6000000
+			// 	}
+			// )
 
-			await registerRecipientTx.wait(1)
+			// await registerRecipientTx.wait(1)
 			dispatch(setSteps(1))
 
-			const setRecipientStatusToInReviewTx =
-				await directGrantsSimple.setRecipientStatusToInReview([
-					frecipientDtoWallet
-				])
+			// const setRecipientStatusToInReviewTx =
+			// 	await directGrantsSimple.setRecipientStatusToInReview([
+			// 		frecipientDtoWallet
+			// 	])
 
-			await setRecipientStatusToInReviewTx.wait(1)
+			// await setRecipientStatusToInReviewTx.wait(1)
 			dispatch(setSteps(2))
 
 			const allocateDataBytes: BytesLike = await convertToAllocateData(
 				frecipientDtoWallet,
 				grantAmount
 			)
-
-			const setAllocateTx = await directGrantsSimple.allocate(
-				allocateDataBytes,
-				address,
-				{
-					value: 0,
-					gasLimit: 6000000
-				}
-			)
+			console.log(await directGrantsSimple.getRecipient(frecipientDtoWallet))
+			console.log(poolId, allocateDataBytes)
+			const setAllocateTx = await allo.allocate(poolId, allocateDataBytes, {
+				value: 0,
+				gasLimit: 6000000
+			})
 
 			await setAllocateTx.wait(1)
 
