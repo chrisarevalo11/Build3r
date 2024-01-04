@@ -24,12 +24,6 @@ import { setLoading } from '@/store/slides/uiSlice'
 import { addRecipient } from '@/store/thunks/recipient.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-type Props = {
-	poolDto: FPoolDto
-	profileDto: FProfileDto
-	setStep: () => void
-}
-
 const formSchema = z.object({
 	fullName: z.string().min(1, {
 		message: 'Name is required'
@@ -48,9 +42,14 @@ const formSchema = z.object({
 	})
 })
 
+type Props = {
+	poolDto: FPoolDto
+	profileDto: FProfileDto
+}
+
 export default function AddRecipientForm(props: Props): JSX.Element {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { poolDto, profileDto, setStep } = props
+	const { poolDto, profileDto } = props
 	const dispatch = useDispatch<AppDispatch>()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -65,12 +64,11 @@ export default function AddRecipientForm(props: Props): JSX.Element {
 	})
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		setStep()
 		console.log(values)
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onAddRecipient = async () => {
+	const onRegisterRecipient = async () => {
 		dispatch(setLoading(true))
 		const fullname: string = 'Santiago Viana'
 		const bio: string = 'I am a software developer'
