@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { Oval } from 'react-loader-spinner'
+import { useDispatch, useSelector } from 'react-redux'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -80,6 +81,7 @@ export default function GrantForm({
 	const [file, setFile] = useState<ImageFile>({ image: null })
 
 	const dispatch = useDispatch<AppDispatch>()
+	const loading = useAppSelector(state => state.uiSlice.loading)
 
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.profileDto
@@ -132,7 +134,7 @@ export default function GrantForm({
 
 			const fPoolSubmitionDto: FPoolSubmitionDto = {
 				profileId: profileDto.id,
-				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
+				strategy: '0x3C4481CcF0DFf82dA5660bD7A69f84D32eeA2d61',
 				initStrategyData: ARBITRUM_INIT_STRATEGY_BYTES,
 				native: ARBITRUM_NATIVE,
 				amount,
@@ -296,7 +298,21 @@ export default function GrantForm({
 							)}
 						/>
 						<CardFooter className='flex justify-center'>
-							<Button type='submit'>Submit</Button>
+							<Button
+								type='submit'
+								className={`min-w-[80px] ${loading && 'pointer-events-none'}}`}
+							>
+								{loading ? (
+									<Oval
+										width={20}
+										height={20}
+										color='#fff'
+										secondaryColor='#ededed'
+									/>
+								) : (
+									'Submit'
+								)}
+							</Button>
 						</CardFooter>
 					</form>
 				</Form>

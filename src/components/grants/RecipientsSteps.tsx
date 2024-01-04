@@ -1,11 +1,8 @@
-import { useState } from 'react'
-
 import RegisterRecipientForm from '@/components/grants/RegisterRecipientForm'
 import { Button } from '@/components/ui/Button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
-import { FRecipientSubmitionDto } from '@/models/recipient.model'
 import { Steps } from '@/models/ui/steps.model'
 import { useAppSelector } from '@/store'
 
@@ -25,7 +22,7 @@ export default function RecipientSteps(props: Props) {
 			profileDto={profileDto}
 		/>,
 		<AuthorizeRecipient key={1} />,
-		<h1 key={2}></h1>
+		<AllocateRecipient key={2} />
 	]
 
 	return (
@@ -91,18 +88,28 @@ export default function RecipientSteps(props: Props) {
 	)
 }
 
-type RegisterRecipientsProps = {
-	// setStep: () => void
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function AuthorizeRecipient(props: RegisterRecipientsProps): JSX.Element {
+function AuthorizeRecipient(): JSX.Element {
 	return (
 		<div className='text-center'>
 			<h1 className='text-xl font-bold text-primary mb-2'>
 				Now set recipient status to InReview
 			</h1>
 			<p>Please authorize the recipient</p>
+			<DialogFooter className='justify-center'>
+				<Button className='mt-2'>Close</Button>
+			</DialogFooter>
+		</div>
+	)
+}
+
+function AllocateRecipient(): JSX.Element {
+	return (
+		<div className='text-center'>
+			<h1 className='text-xl font-bold text-primary mb-2'>
+				Allocate funds to recipient
+			</h1>
+			<p>Please allocate the funds</p>
 			<DialogFooter className='justify-center'>
 				<Button className='mt-2'>Close</Button>
 			</DialogFooter>

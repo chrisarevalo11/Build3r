@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import * as z from 'zod'
 
@@ -20,7 +21,7 @@ import { fRecipientSubmitionDtoToFRecipientSubmition } from '@/functions/dtos/re
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { FRecipientSubmitionDto } from '@/models/recipient.model'
-import { AppDispatch } from '@/store'
+import { AppDispatch, useAppSelector } from '@/store'
 import { setLoading } from '@/store/slides/uiSlice'
 import { addRecipient } from '@/store/thunks/recipient.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -63,6 +64,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 	const [files, setFiles] = useState<InitialState>(initialState)
 
 	const dispatch = useDispatch<AppDispatch>()
+	const loading = useAppSelector(state => state.uiSlice.loading)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -74,6 +76,8 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 			image: ''
 		}
 	})
+
+	console.log(amount)
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		console.log(values)
@@ -221,7 +225,16 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 					/>
 					<DialogFooter>
 						<Button className='mt-2' type='submit'>
-							Register
+							{loading ? (
+								<Oval
+									width={20}
+									height={20}
+									color='#fff'
+									secondaryColor='#ededed'
+								/>
+							) : (
+								'Register'
+							)}
 						</Button>
 					</DialogFooter>
 				</form>
