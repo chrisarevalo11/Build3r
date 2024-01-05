@@ -65,26 +65,31 @@ function ResponsiveNavLink({
 type NavLinksResponsiveProps = {
 	isSidebarOpen: boolean
 	setIsSidebarOpen: Dispatch<SetStateAction<boolean>>
+	isConnected: boolean
 }
 
 export function NavLinksResponsive({
 	isSidebarOpen,
-	setIsSidebarOpen
+	setIsSidebarOpen,
+	isConnected
 }: NavLinksResponsiveProps): JSX.Element {
 	return (
 		<ul
-			className={`fixed z-[10] h-[100vh] top-0 w-[70vw] max-w-[300px] flex flex-col gap-2 justify-center shadow-2xl bg-primary text-white font-bold rounded-box transition-all ${
+			className={`fixed z-[10] h-[100vh] top-0 w-[70vw] max-w-[300px] flex flex-col gap-2 justify-center shadow-2xl ${
+				isConnected ? 'bg-primary' : 'bg-black/90'
+			}  text-white font-bold rounded-box transition-all ${
 				isSidebarOpen ? 'left-0 ' : '-left-[400px]'
 			}`}
 		>
-			{links.map(item => (
-				<ResponsiveNavLink
-					setIsSidebarOpen={setIsSidebarOpen}
-					key={item.text}
-					text={item.text}
-					href={item.href}
-				/>
-			))}
+			{isConnected &&
+				links.map(item => (
+					<ResponsiveNavLink
+						setIsSidebarOpen={setIsSidebarOpen}
+						key={item.text}
+						text={item.text}
+						href={item.href}
+					/>
+				))}
 			<div className='flex md:hidden justify-center gap-2'>
 				<ConnectButton showBalance={false} chainStatus={'icon'} />
 			</div>
