@@ -8,13 +8,15 @@ import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
 import RecipientsModal from '@/components/grants/RecipientsModal'
-import { Button } from '@/components/ui/Button'
+import { Status } from '@/enums/enums'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
+
+import ProposeMilestonesModal from './ProposeMilestonesModal'
 
 type Props = {
 	poolDto: FPoolDto
@@ -26,6 +28,8 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
+
+	const recipientStatusEnum: typeof Status = Status
 
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.profileDto
@@ -50,23 +54,12 @@ export default function GrantPage(props: Props): JSX.Element {
 		}
 
 		if (!fetched) {
-			getRecipient({ profileId: profileDto.anchor })
+			dispatch(getRecipient({ profileId: profileDto.anchor }))
 		}
-	}, [address, fetched, dispatch, navigate])
+	}, [address, fetched, dispatch, navigate, profileDto])
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
-			blblblblblbblblbl
-			{recipient.grantAmount}
-			{recipient.metadata.bio}
-			{recipient.metadata.email}
-			{recipient.metadata.fullname}
-			{recipient.metadata.image}
-			{recipient.metadata.organization}
-			{recipient.milestonesReviewStatus}
-			{recipient.recipientAddress}
-			{recipient.recipientStatus}
-			{recipient.useRegistryAnchor}
 			<GrantBanner logo={logo} banner={image} />
 			<GrantHeader name={name} amount={amount} profileName={profileName} />
 			<div className='flex w-full flex-col md:flex-row my-5 gap-4'>
@@ -74,7 +67,9 @@ export default function GrantPage(props: Props): JSX.Element {
 				<GrantTags tags={tags} />
 			</div>
 			<div className='grid w-full justify-items-center md:grid-cols-2 my-5 gap-4'>
-				<StepCard>
+				<StepCard
+					completed={recipientStatusEnum.InReview === recipient.recipientStatus}
+				>
 					<h3 className='font-bold text-lg'>
 						1. Set the recipients and allocate funds
 					</h3>
@@ -92,9 +87,7 @@ export default function GrantPage(props: Props): JSX.Element {
 						Set the recipient address (a multisig or a wallet), register them
 						and allocate due funds.
 					</p>
-					<Button variant='secondary' className='w-fit'>
-						oe
-					</Button>
+					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
 			</div>
 		</section>
