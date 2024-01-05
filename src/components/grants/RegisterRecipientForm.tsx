@@ -87,7 +87,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		const bio: string = values.bio
 		const organization = values.organization
 		const email: string = values.email
-		const wallet: string = values.wallet
+		const wallet: string = ARBITRUM_RECIPIENT_WALLET
 		const grantAmount: number = parseInt(amount)
 		const imageFile: File | null = files.image
 
@@ -107,6 +107,8 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 			organization,
 			wallet
 		}
+
+		console.log(frecipientSubmisionDto)
 
 		const frecipientSubmission: BytesLike =
 			await fRecipientSubmitionDtoToFRecipientSubmition(frecipientSubmisionDto)
