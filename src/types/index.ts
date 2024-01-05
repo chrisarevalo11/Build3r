@@ -1,12 +1,12 @@
 import { Dispatch } from 'react'
 
 export type grantFormValuesTypes = {
-	name: string
 	amount: string
-	image: string
-	tags: string[]
-	organizer: string
 	description: string
+	image: string
+	name: string
+	organizer: string
+	tags: string[]
 }
 
 export type link = {

@@ -6,7 +6,10 @@ import {
 } from '@/constants/structs-types.constants'
 import {
 	FRecipientSubmition,
-	FRecipientSubmitionDto
+	FRecipientSubmitionDto,
+	Metadata,
+	Recipient,
+	RecipientDto
 } from '@/models/recipient.model'
 import { dataArrayToBytes } from '@/utils'
 
@@ -15,6 +18,40 @@ import {
 	// storageFile,
 	storeObject
 } from '../web3storage/metadata-store-data.functions'
+
+export async function recipientDtoToRecipient(
+	recipientDto: RecipientDto
+): Promise<Recipient> {
+	try {
+		const response: Response = await fetch(recipientDto.metadata.pointer)
+		const metadata: Metadata = await response.json()
+
+		return {
+			grantAmount: Number(recipientDto.grantAmount),
+			metadata,
+			milestonesReviewStatus: Number(recipientDto.milestonesReviewStatus),
+			recipientAddress: recipientDto.recipientAddress,
+			recipientStatus: Number(recipientDto.recipientStatus),
+			useRegistryAnchor: recipientDto.useRegistryAnchor
+		}
+	} catch (error) {
+		console.error(error)
+		return {
+			grantAmount: Number(recipientDto.grantAmount),
+			metadata: {
+				bio: '',
+				email: '',
+				fullname: '',
+				image: '',
+				organization: ''
+			},
+			milestonesReviewStatus: Number(recipientDto.milestonesReviewStatus),
+			recipientAddress: recipientDto.recipientAddress,
+			recipientStatus: Number(recipientDto.recipientStatus),
+			useRegistryAnchor: recipientDto.useRegistryAnchor
+		}
+	}
+}
 
 export async function fRecipientSubmitionDtoToFRecipientSubmition(
 	frecipientSubmisionDto: FRecipientSubmitionDto

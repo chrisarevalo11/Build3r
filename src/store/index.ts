@@ -4,11 +4,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import { poolSlice } from './slides/poolSlice'
 import { profileSlice } from './slides/profileSlice'
+import { recipientSlice } from './slides/recipientSlice'
 import { uiSlice } from './slides/uiSlice'
 
 const rootReducer = combineReducers({
-	profileSlice: profileSlice.reducer,
 	poolSlice: poolSlice.reducer,
+	profileSlice: profileSlice.reducer,
+	recipientSlice: recipientSlice.reducer,
 	uiSlice: uiSlice.reducer
 })
 
