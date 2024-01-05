@@ -13,7 +13,7 @@ export default function GrantBanner({
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
 			}}
-			className='w-full max-w-[700px] p-4 rounded-xl my-2 md:my-5'
+			className='w-full max-w-[700px] p-4 rounded-xl my-2 md:my-5 shadow-lg'
 		>
 			<img
 				src={logo}

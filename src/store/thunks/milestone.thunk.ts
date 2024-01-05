@@ -14,10 +14,10 @@ export const setMilestones = createAsyncThunk(
 	'milestone/setMilestones',
 	async (
 		{
-			milestoneSubmissionDto,
+			milestonesSubmissionDto,
 			providerOrSigner
 		}: {
-			milestoneSubmissionDto: MilestoneSubmissionDto
+			milestonesSubmissionDto: MilestoneSubmissionDto[]
 			providerOrSigner: ethers.BrowserProvider | ethers.JsonRpcSigner
 		},
 		{ dispatch }
@@ -26,14 +26,13 @@ export const setMilestones = createAsyncThunk(
 			dispatch(setLoading(true))
 			const { directGrantsSimple } = getStrategiesContracts(providerOrSigner)
 
-			const milestoneSubmission: MilestoneSubmission =
-				await milestoneSubmissionDtoToMilestoneSubmission(
-					milestoneSubmissionDto
-				)
+			const milestonesSubmission: MilestoneSubmission[] = await Promise.all(
+				milestonesSubmissionDto.map(milestoneSubmissionDtoToMilestoneSubmission)
+			)
 
 			const setMilestonesTx = await directGrantsSimple.setMilestones(
-				milestoneSubmissionDto.wallet,
-				[milestoneSubmission, milestoneSubmission]
+				milestonesSubmissionDto[0].wallet,
+				milestonesSubmission
 			)
 
 			await setMilestonesTx.wait(1)

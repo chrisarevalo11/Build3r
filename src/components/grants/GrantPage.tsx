@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -9,19 +8,15 @@ import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
 import RecipientsModal from '@/components/grants/RecipientsModal'
-import { Button } from '@/components/ui/Button'
 import { Status } from '@/enums/enums'
-import {
-	MilestoneSubmission,
-	MilestoneSubmissionDto
-} from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
-import { setMilestones } from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
+
+import ProposeMilestonesModal from './ProposeMilestonesModal'
 
 type Props = {
 	poolDto: FPoolDto
@@ -33,6 +28,8 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { address } = useAccount()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
+
+	const recipientStatusEnum: typeof Status = Status
 
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.profileDto
@@ -51,58 +48,18 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
 
-	const onSetMilestones = async () => {
-		const title: string = 'Milestone 1'
-		const description: string = 'Milestone 1 description'
-		const deadline: string = new Date().toISOString()
-		const amount: number = 5
-		const wallet: string = address as string
-		const status: number = Status.None
-
-		const milestoneSubmissionDto: MilestoneSubmissionDto = {
-			amount,
-			deadline,
-			description,
-			status,
-			title,
-			wallet
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const ethereum = (window as any).ethereum
-
-		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
-			ethereum
-		)
-		await web3Provider.send('eth_requestAccounts', [])
-		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
-
-		dispatch(setMilestones({ milestoneSubmissionDto, web3Signer }))
-	}
-
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
 		}
 
 		if (!fetched) {
-			getRecipient({ profileId: profileDto.anchor })
+			dispatch(getRecipient({ profileId: profileDto.anchor }))
 		}
-	}, [address, fetched, dispatch, navigate])
+	}, [address, fetched, dispatch, navigate, profileDto])
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
-			<button onClick={onSetMilestones}>Click me</button>
-			{recipient.grantAmount}
-			{recipient.metadata.bio}
-			{recipient.metadata.email}
-			{recipient.metadata.fullname}
-			{recipient.metadata.image}
-			{recipient.metadata.organization}
-			{recipient.milestonesReviewStatus}
-			{recipient.recipientAddress}
-			{recipient.recipientStatus}
-			{recipient.useRegistryAnchor}
 			<GrantBanner logo={logo} banner={image} />
 			<GrantHeader name={name} amount={amount} profileName={profileName} />
 			<div className='flex w-full flex-col md:flex-row my-5 gap-4'>
@@ -110,7 +67,9 @@ export default function GrantPage(props: Props): JSX.Element {
 				<GrantTags tags={tags} />
 			</div>
 			<div className='grid w-full justify-items-center md:grid-cols-2 my-5 gap-4'>
-				<StepCard>
+				<StepCard
+					completed={recipientStatusEnum.InReview === recipient.recipientStatus}
+				>
 					<h3 className='font-bold text-lg'>
 						1. Set the recipients and allocate funds
 					</h3>
@@ -120,7 +79,7 @@ export default function GrantPage(props: Props): JSX.Element {
 					</p>
 					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
 				</StepCard>
-				<StepCard disabled>
+				<StepCard>
 					<h3 className='font-bold text-lg'>
 						1. Set the recipients and allocate funds
 					</h3>
@@ -128,9 +87,7 @@ export default function GrantPage(props: Props): JSX.Element {
 						Set the recipient address (a multisig or a wallet), register them
 						and allocate due funds.
 					</p>
-					<Button variant='secondary' className='w-fit'>
-						oe
-					</Button>
+					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
 			</div>
 		</section>
@@ -163,9 +120,4 @@ function StepCard(props: StepCardProps): JSX.Element {
 			</div>
 		</div>
 	)
-}
-function milestoneSubmissionDtoToMilestoneSubmission(
-	milestoneSubmissionDto: MilestoneSubmissionDto
-): MilestoneSubmission {
-	throw new Error('Function not implemented.')
 }
