@@ -121,7 +121,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		dispatch(
 			addRecipient({
 				grantAmount,
-				address: address as string,
+				anchor: profileDto.anchor,
 				frecipientSubmition: frecipientSubmission,
 				frecipientDtoWallet: frecipientSubmisionDto.wallet,
 				poolId: poolDto.id,
