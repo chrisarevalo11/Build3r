@@ -8,7 +8,7 @@ import {
 	FRecipientSubmition,
 	FRecipientSubmitionDto
 } from '@/models/recipient.model'
-import { dataArrayToBytes, toDecimal } from '@/utils'
+import { dataArrayToBytes } from '@/utils'
 
 import {
 	storageFile,
@@ -63,11 +63,7 @@ export async function convertToAllocateData(
 	amount: number
 ): Promise<BytesLike> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const frecipientSubmissionDataArray: any[] = [
-		address,
-		BigInt(2),
-		toDecimal(amount)
-	]
+	const frecipientSubmissionDataArray: any[] = [address, 2, amount]
 
 	return dataArrayToBytes(
 		ALLOCATE_DATA_STRUCT_TYPES,

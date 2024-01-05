@@ -22,7 +22,8 @@ export default function RecipientSteps(props: Props) {
 			profileDto={profileDto}
 		/>,
 		<AuthorizeRecipient key={1} />,
-		<AllocateRecipient key={2} />
+		<AllocateRecipient key={2} />,
+		<AllocateRecipient key={3} />
 	]
 
 	return (

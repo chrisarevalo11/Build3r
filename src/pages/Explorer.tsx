@@ -48,19 +48,19 @@ export default function Explorer(): JSX.Element {
 			<h1 className='text-center text-5xl font-bold font-soria text-primary'>
 				Profiles
 			</h1>
-			<Container className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-2'>
-				{loading ? (
-					<div className='absolute flex justify-center right-0 left-0'>
-						<Loader />
-					</div>
-				) : profiles.length === 0 ? (
-					'There are no profiles'
-				) : (
-					profiles?.map((profile: FProfileDto, index: number) => {
+			{loading ? (
+				<div className='w-full flex justify-center right-0 left-0'>
+					<Loader />
+				</div>
+			) : profiles.length === 0 ? (
+				'There are no profiles'
+			) : (
+				<Container className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-2'>
+					{profiles?.map((profile: FProfileDto, index: number) => {
 						return <ProfileCard key={index} profileDto={profile} />
-					})
-				)}
-			</Container>
+					})}
+				</Container>
+			)}
 			<div className='flex justify-center items-center my-4 gap-5'>
 				<Button
 					className={`${currentPage === 1 && 'opacity-60 pointer-events-none'}`}
