@@ -81,11 +81,11 @@ export default function GrantPage(props: Props): JSX.Element {
 				</StepCard>
 				<StepCard>
 					<h3 className='font-bold text-lg'>
-						1. Set the recipients and allocate funds
+						2. Propose a milestone strategy (recipients)
 					</h3>
 					<p className='text-white/80'>
-						Set the recipient address (a multisig or a wallet), register them
-						and allocate due funds.
+						Set a milestone strategy with name, description and deadline for the
+						onwers to review it and approve or reject it.
 					</p>
 					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
