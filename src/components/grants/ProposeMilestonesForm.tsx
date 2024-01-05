@@ -1,4 +1,7 @@
+import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -14,7 +17,10 @@ import {
 import { Input } from '@/components/ui/input'
 import Loader from '@/components/ui/Loader'
 import { Textarea } from '@/components/ui/textarea'
-import { useAppSelector } from '@/store'
+import { Status } from '@/enums/enums'
+import { MilestoneSubmissionDto } from '@/models/milestone.model'
+import { AppDispatch, useAppSelector } from '@/store'
+import { setMilestones } from '@/store/thunks/milestone.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
@@ -46,7 +52,12 @@ type Props = {
 
 export default function ProposeMilestonesForm(props: Props): JSX.Element {
 	const { amount } = props
+	const { address } = useAccount()
+
+	const dispatch = useDispatch<AppDispatch>()
+
 	const loading = useAppSelector(state => state.uiSlice.loading)
+
 	const milestoneAmount: number = parseInt(amount) / 2
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -64,11 +75,52 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 	})
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const { name1, name2, description1, description2, date1, date2 } = values
-		console.log([
-			{ name1, description1, date1, amount1: milestoneAmount },
-			{ name2, description2, date2, amount2: milestoneAmount }
-		])
+		const wallet: string = address as string
+		const status: number = Status.None
+
+		if (!values.amount1 || !values.amount2) {
+			alert('Please fill in the amount')
+			return
+		}
+
+		const milestoneSubmissionDto1: MilestoneSubmissionDto = {
+			amount: Number(values.amount1),
+			deadline: values.date1,
+			description: values.description1,
+			status,
+			title: values.name1,
+			wallet
+		}
+
+		const milestoneSubmissionDto2: MilestoneSubmissionDto = {
+			amount: Number(values.amount2),
+			deadline: values.date2,
+			description: values.description2,
+			status,
+			title: values.name2,
+			wallet
+		}
+
+		const milestoneSubmissionDto: MilestoneSubmissionDto[] = [
+			milestoneSubmissionDto1,
+			milestoneSubmissionDto2
+		]
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(
+			setMilestones({
+				milestonesSubmissionDto: milestoneSubmissionDto,
+				providerOrSigner: web3Signer
+			})
+		)
 	}
 
 	return (
