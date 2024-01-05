@@ -44,10 +44,11 @@ export const createPool = createAsyncThunk(
 
 			await createPoolTx.wait(1)
 
-			// dispatch(setPoolFetched(false))
-			alert('Pool created!')
-			dispatch(setProfileFetched(false))
-			dispatch(setLoading(false))
+			setTimeout(() => {
+				alert('Pool created!')
+				dispatch(setProfileFetched(false))
+				dispatch(setLoading(false))
+			}, 3000)
 		} catch (error) {
 			dispatch(setLoading(false))
 			alert('Error creating pool!')

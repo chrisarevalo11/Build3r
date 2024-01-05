@@ -6,7 +6,7 @@ import { getStrategiesContracts } from '@/functions/strategies/strategies.functi
 import { getRecipientByProfileId } from '@/services/strategies/direct-grants-simple.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-import { setRecipient } from '../slides/recipientSlice'
+import { setRecipient, setRecipientFetched } from '../slides/recipientSlice'
 import { setLoading, setSteps } from '../slides/uiSlice'
 
 export const addRecipient = createAsyncThunk(
@@ -63,8 +63,9 @@ export const addRecipient = createAsyncThunk(
 			})
 
 			await setAllocateTx.wait(1)
-			dispatch(setSteps(3))
 
+			dispatch(setSteps(3))
+			dispatch(setRecipientFetched(false))
 			dispatch(setLoading(false))
 		} catch (error) {
 			alert('Error adding recipient!')
