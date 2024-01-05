@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -9,10 +10,16 @@ import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Button } from '@/components/ui/Button'
+import { Status } from '@/enums/enums'
+import {
+	MilestoneSubmission,
+	MilestoneSubmissionDto
+} from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
+import { setMilestones } from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
@@ -44,6 +51,35 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
 
+	const onSetMilestones = async () => {
+		const title: string = 'Milestone 1'
+		const description: string = 'Milestone 1 description'
+		const deadline: string = new Date().toISOString()
+		const amount: number = 5
+		const wallet: string = address as string
+		const status: number = Status.None
+
+		const milestoneSubmissionDto: MilestoneSubmissionDto = {
+			amount,
+			deadline,
+			description,
+			status,
+			title,
+			wallet
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(setMilestones({ milestoneSubmissionDto, web3Signer }))
+	}
+
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
@@ -56,7 +92,7 @@ export default function GrantPage(props: Props): JSX.Element {
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
-			blblblblblbblblbl
+			<button onClick={onSetMilestones}>Click me</button>
 			{recipient.grantAmount}
 			{recipient.metadata.bio}
 			{recipient.metadata.email}
@@ -127,4 +163,9 @@ function StepCard(props: StepCardProps): JSX.Element {
 			</div>
 		</div>
 	)
+}
+function milestoneSubmissionDtoToMilestoneSubmission(
+	milestoneSubmissionDto: MilestoneSubmissionDto
+): MilestoneSubmission {
+	throw new Error('Function not implemented.')
 }
