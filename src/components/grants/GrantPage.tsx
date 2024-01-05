@@ -43,7 +43,7 @@ export default function GrantPage(props: Props): JSX.Element {
 					</p>
 					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
 				</StepCard>
-				<StepCard disabled>
+				<StepCard>
 					<h3 className='font-bold text-lg'>
 						1. Set the recipients and allocate funds
 					</h3>

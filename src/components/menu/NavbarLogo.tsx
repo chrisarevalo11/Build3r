@@ -4,7 +4,7 @@ export default function NavbarLogo(): JSX.Element {
 	return (
 		<Link to={'/'}>
 			<img
-				src={'/images/logo.webp'}
+				src={'/images/logo.svg'}
 				alt='logo'
 				width={80}
 				height={80}

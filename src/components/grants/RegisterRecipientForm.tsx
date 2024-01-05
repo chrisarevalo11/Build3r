@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { BytesLike, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -48,6 +47,9 @@ const formSchema = z.object({
 	}),
 	image: z.string().min(1, {
 		message: 'image is required'
+	}),
+	wallet: z.string().refine(value => /^0x[a-fA-F0-9]{40}$/.test(value), {
+		message: 'Invalid Ethereum wallet address'
 	})
 })
 
@@ -64,7 +66,6 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 	}
 	const [files, setFiles] = useState<InitialState>(initialState)
 
-	const { address } = useAccount()
 	const loading = useAppSelector(state => state.uiSlice.loading)
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -75,7 +76,8 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 			bio: '',
 			organization: '',
 			email: '',
-			image: ''
+			image: '',
+			wallet: ''
 		}
 	})
 
@@ -85,7 +87,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 		const bio: string = values.bio
 		const organization = values.organization
 		const email: string = values.email
-		const wallet: string = ARBITRUM_RECIPIENT_WALLET
+		const wallet: string = values.wallet
 		const grantAmount: number = parseInt(amount)
 		const imageFile: File | null = files.image
 
@@ -136,94 +138,113 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 				Register recipient
 			</h1>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-1'>
-					<FormField
-						control={form.control}
-						name='fullName'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Full Name</FormLabel>
-								<FormControl>
-									<Input placeholder='John Doe' {...field} />
-								</FormControl>
-								<FormMessage>
-									{form.formState.errors.fullName?.message}
-								</FormMessage>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='bio'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Bio</FormLabel>
-								<FormControl>
-									<Input
-										placeholder='I am a software developer that...'
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage>{form.formState.errors.bio?.message}</FormMessage>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='organization'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Organization</FormLabel>
-								<FormControl>
-									<Input placeholder='My org' {...field} />
-								</FormControl>
-								<FormMessage>
-									{form.formState.errors.organization?.message}
-								</FormMessage>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='email'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input placeholder='yourname@example.com' {...field} />
-								</FormControl>
-								<FormMessage>
-									{form.formState.errors.email?.message}
-								</FormMessage>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='image'
-						render={({ field }) => (
-							<FormItem className='grow'>
-								<FormLabel>image</FormLabel>
-								<FormControl>
-									<Input
-										className='cursor-pointer'
-										type='file'
-										accept='image/*'
-										{...field}
-										onChange={e => {
-											field.onChange(e)
-											if (e.target.files && e.target.files.length > 0) {
-												setFiles({ image: e.target.files![0] })
-											}
-										}}
-									/>
-								</FormControl>
-								<FormMessage>
-									{form.formState.errors.image?.message}
-								</FormMessage>
-							</FormItem>
-						)}
-					/>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<div className='space-y-1 max-h-[60vh] overflow-y-scroll no-scrollbar'>
+						<FormField
+							control={form.control}
+							name='fullName'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Full Name</FormLabel>
+									<FormControl>
+										<Input placeholder='John Doe' {...field} />
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.fullName?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='bio'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Bio</FormLabel>
+									<FormControl>
+										<Input
+											placeholder='I am a software developer that...'
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.bio?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='wallet'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Wallet</FormLabel>
+									<FormControl>
+										<Input placeholder='0x123...' {...field} />
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.wallet?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='organization'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Organization</FormLabel>
+									<FormControl>
+										<Input placeholder='My org' {...field} />
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.organization?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='email'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input placeholder='yourname@example.com' {...field} />
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.email?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name='image'
+							render={({ field }) => (
+								<FormItem className='grow'>
+									<FormLabel>image</FormLabel>
+									<FormControl>
+										<Input
+											className='cursor-pointer'
+											type='file'
+											accept='image/*'
+											{...field}
+											onChange={e => {
+												field.onChange(e)
+												if (e.target.files && e.target.files.length > 0) {
+													setFiles({ image: e.target.files![0] })
+												}
+											}}
+										/>
+									</FormControl>
+									<FormMessage>
+										{form.formState.errors.image?.message}
+									</FormMessage>
+								</FormItem>
+							)}
+						/>
+					</div>
 					<DialogFooter>
 						<Button className='mt-2' type='submit'>
 							{loading ? <Loader type='white' /> : 'Register'}
