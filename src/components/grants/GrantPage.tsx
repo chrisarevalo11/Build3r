@@ -1,3 +1,8 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useAccount } from 'wagmi'
+
 import GrantBanner from '@/components/grants/GrantBanner'
 import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
@@ -6,7 +11,9 @@ import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Button } from '@/components/ui/Button'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
-import { useAppSelector } from '@/store'
+import { Recipient } from '@/models/recipient.model'
+import { AppDispatch, useAppSelector } from '@/store'
+import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
 type Props = {
@@ -15,17 +22,51 @@ type Props = {
 
 export default function GrantPage(props: Props): JSX.Element {
 	const { poolDto } = props
+
+	const { address } = useAccount()
+	const navigate = useNavigate()
+	const dispatch = useDispatch<AppDispatch>()
+
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.profileDto
 	)
+
+	const recipient: Recipient = useAppSelector(
+		state => state.recipientSlice.recipient
+	)
+	const fetched: boolean = useAppSelector(
+		state => state.recipientSlice.recipientFetched
+	)
+
 	const { name: profileName } = profileDto
 	const { logo } = profileDto.metadata
 
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
 
+	useEffect(() => {
+		if (!address) {
+			navigate('/')
+		}
+
+		if (!fetched) {
+			getRecipient({ profileId: profileDto.anchor })
+		}
+	}, [address, fetched, dispatch, navigate])
+
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
+			blblblblblbblblbl
+			{recipient.grantAmount}
+			{recipient.metadata.bio}
+			{recipient.metadata.email}
+			{recipient.metadata.fullname}
+			{recipient.metadata.image}
+			{recipient.metadata.organization}
+			{recipient.milestonesReviewStatus}
+			{recipient.recipientAddress}
+			{recipient.recipientStatus}
+			{recipient.useRegistryAnchor}
 			<GrantBanner logo={logo} banner={image} />
 			<GrantHeader name={name} amount={amount} profileName={profileName} />
 			<div className='flex w-full flex-col md:flex-row my-5 gap-4'>
