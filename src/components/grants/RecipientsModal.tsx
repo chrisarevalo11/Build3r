@@ -17,7 +17,8 @@ export default function RecipientsModal(props: Props): JSX.Element {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button className='self-end group' variant={'secondary'}>
-					Continue <ArrowRightIcon className='ml-2 h-4 w-4' />
+					Continue{' '}
+					<ArrowRightIcon className='ml-2 h-4 w-4 group-hover:translate-x-1 transition' />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
