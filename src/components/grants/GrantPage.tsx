@@ -1,37 +1,28 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAccount } from 'wagmi'
-
 import GrantBanner from '@/components/grants/GrantBanner'
 import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
+import RecipientsModal from '@/components/grants/RecipientsModal'
+import { Button } from '@/components/ui/Button'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
-
-import { Button } from '../ui/Button'
+import { useAppSelector } from '@/store'
+import { CheckIcon } from '@radix-ui/react-icons'
 
 type Props = {
-	pooldto: FPoolDto
-	profile: FProfileDto
+	poolDto: FPoolDto
 }
 
 export default function GrantPage(props: Props): JSX.Element {
-	const { address } = useAccount()
-	const navigate = useNavigate()
+	const { poolDto } = props
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
+	)
+	const { name: profileName } = profileDto
+	const { logo } = profileDto.metadata
 
-	const { pooldto, profile } = props
-	const { name: profileName } = profile
-	const { logo } = profile.metadata
-
-	const { amount } = pooldto
-	const { name, description, image, tags } = pooldto.metadata
-
-	useEffect(() => {
-		if (!address) {
-			navigate('/')
-		}
-	}, [address, navigate])
+	const { amount } = poolDto
+	const { name, description, image, tags } = poolDto.metadata
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
@@ -41,38 +32,58 @@ export default function GrantPage(props: Props): JSX.Element {
 				<GrantDescription description={description} />
 				<GrantTags tags={tags} />
 			</div>
-			<div className='grid w-full justify-items-center md:grid-cols-2 lg:grid-cols-3 my-5 gap-4'>
-				<div className='w-full bg-primary text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col'>
-					<h3 className='font-bold text-lg'>1. Select the recipients</h3>
+			<div className='grid w-full justify-items-center md:grid-cols-2 my-5 gap-4'>
+				<StepCard>
+					<h3 className='font-bold text-lg'>
+						1. Set the recipients and allocate funds
+					</h3>
 					<p className='text-white/80'>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
-						facere?
+						Set the recipient address (a multisig or a wallet), register them
+						and allocate due funds.
 					</p>
-					<Button className='self-end' variant={'secondary'}>
-						Select
-					</Button>
-				</div>
-				<div className='w-full bg-primary opacity-60 pointer-events-none text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col'>
-					<h3 className='font-bold text-lg'>2. Allocate the funds</h3>
+					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
+				</StepCard>
+				<StepCard disabled>
+					<h3 className='font-bold text-lg'>
+						1. Set the recipients and allocate funds
+					</h3>
 					<p className='text-white/80'>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
-						facere?
+						Set the recipient address (a multisig or a wallet), register them
+						and allocate due funds.
 					</p>
-					<Button className='self-end' variant={'secondary'}>
-						Allocate
+					<Button variant='secondary' className='w-fit'>
+						oe
 					</Button>
-				</div>
-				<div className='w-full bg-primary opacity-60 pointer-events-none text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col'>
-					<h3 className='font-bold text-lg'>3. Evidence the impact</h3>
-					<p className='text-white/80'>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
-						facere?
-					</p>
-					<Button className='self-end' variant={'secondary'}>
-						Submit
-					</Button>
-				</div>
+				</StepCard>
 			</div>
 		</section>
+	)
+}
+
+type StepCardProps = {
+	disabled?: boolean
+	completed?: boolean
+	children: React.ReactNode
+}
+
+function StepCard(props: StepCardProps): JSX.Element {
+	const { children, disabled, completed } = props
+
+	return (
+		<div className='relative'>
+			{completed && (
+				<div className='rounded-full bg-primary z-10 text-white shadow-xl p-1 absolute -top-2 -right-2'>
+					<CheckIcon />
+				</div>
+			)}
+			<div
+				className={`w-full bg-primary text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col relative
+			${disabled && 'opacity-60 pointer-events-none'}
+			${completed && 'opacity-80 pointer-events-none'}
+			`}
+			>
+				{children}
+			</div>
+		</div>
 	)
 }

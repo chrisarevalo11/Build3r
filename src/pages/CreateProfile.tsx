@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Oval } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import ProfileForm from '@/components/profile/ProfileForm'
 import { Container } from '@/components/ui/container'
+import Loader from '@/components/ui/Loader'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getProfile } from '@/store/thunks/profile.thunk'
@@ -43,7 +43,7 @@ export default function CreateProfile(): JSX.Element {
 	return (
 		<Container className='flex flex-col gap-10 md:gap-4'>
 			{loading ? (
-				<Oval />
+				<Loader />
 			) : (
 				<>
 					<div className='w-full md:w-1/2 mx-auto text-center space-y-3'>

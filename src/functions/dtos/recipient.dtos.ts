@@ -1,6 +1,9 @@
 import { BytesLike } from 'ethers'
 
-import { RECIPIENT_DATA_STRUCT_TYPES } from '@/constants/structs-types.constants'
+import {
+	ALLOCATE_DATA_STRUCT_TYPES,
+	RECIPIENT_DATA_STRUCT_TYPES
+} from '@/constants/structs-types.constants'
 import {
 	FRecipientSubmition,
 	FRecipientSubmitionDto
@@ -8,6 +11,7 @@ import {
 import { dataArrayToBytes } from '@/utils'
 
 import {
+	storageFile,
 	// storageFile,
 	storeObject
 } from '../web3storage/metadata-store-data.functions'
@@ -15,12 +19,7 @@ import {
 export async function fRecipientSubmitionDtoToFRecipientSubmition(
 	frecipientSubmisionDto: FRecipientSubmitionDto
 ): Promise<BytesLike> {
-	// const imageCid: string = await storageFile(frecipientSubmisionDto.image)
-	const imageCid: string = frecipientSubmisionDto.image as string
-	// const grantAmount: number = grantPorcetageToAmount(
-	// 	frecipientSubmisionDto.grantPorcentage,
-	// 	frecipientSubmisionDto.grantTotal
-	// )
+	const imageCid: string = await storageFile(frecipientSubmisionDto.image)
 
 	const metadataArgs = {
 		bio: frecipientSubmisionDto.bio,
@@ -55,6 +54,19 @@ export async function fRecipientSubmitionDtoToFRecipientSubmition(
 
 	return dataArrayToBytes(
 		RECIPIENT_DATA_STRUCT_TYPES,
+		frecipientSubmissionDataArray
+	)
+}
+
+export async function convertToAllocateData(
+	address: string,
+	amount: number
+): Promise<BytesLike> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const frecipientSubmissionDataArray: any[] = [address, 2, amount]
+
+	return dataArrayToBytes(
+		ALLOCATE_DATA_STRUCT_TYPES,
 		frecipientSubmissionDataArray
 	)
 }

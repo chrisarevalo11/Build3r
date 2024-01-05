@@ -47,6 +47,7 @@ export const createPool = createAsyncThunk(
 			// dispatch(setPoolFetched(false))
 			alert('Pool created!')
 			dispatch(setProfileFetched(false))
+			dispatch(setLoading(false))
 		} catch (error) {
 			dispatch(setLoading(false))
 			alert('Error creating pool!')
