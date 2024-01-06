@@ -36,6 +36,7 @@ import { AppDispatch, useAppSelector } from '@/store'
 import { setLoading } from '@/store/slides/uiSlice'
 import { createPool } from '@/store/thunks/pool.thunk'
 import { createPoolProps } from '@/types'
+import { toDecimal } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 type ImageFile = {
@@ -127,7 +128,7 @@ export default function GrantForm({
 			await web3Provider.send('eth_requestAccounts', [])
 			const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
 
-			const amount: number = Number(data.amount)
+			const amount: bigint = toDecimal(Number(data.amount))
 			const tags: string[] = data.tags
 				.split(',')
 				.map((tag: string) => tag.trim())

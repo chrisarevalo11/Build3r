@@ -42,7 +42,7 @@ export interface FPoolSubmitionDto {
 	strategy: string
 	initStrategyData: BytesLike
 	native: string
-	amount: number
+	amount: bigint
 	description: string
 	image: File
 	name: string

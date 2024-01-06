@@ -19,7 +19,7 @@ export function grantPorcetageToAmount(
 }
 
 export function toDecimal(amount: number): bigint {
-	return ethers.parseEther(amount.toString())
+	return ethers.parseUnits(amount.toString(), 'gwei')
 }
 
 export function formatAddress(address: string): string {

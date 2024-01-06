@@ -58,7 +58,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 
 	const loading = useAppSelector(state => state.uiSlice.loading)
 
-	const milestoneAmount: number = parseInt(amount) / 2
+	const milestoneAmount: number = parseInt(amount) / 2 / Number(amount)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -84,7 +84,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 		}
 
 		const milestoneSubmissionDto1: MilestoneSubmissionDto = {
-			amount: Number(values.amount1),
+			amount: milestoneAmount,
 			deadline: values.date1,
 			description: values.description1,
 			status,
@@ -93,13 +93,16 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 		}
 
 		const milestoneSubmissionDto2: MilestoneSubmissionDto = {
-			amount: Number(values.amount2),
+			amount: milestoneAmount,
 			deadline: values.date2,
 			description: values.description2,
 			status,
 			title: values.name2,
 			wallet
 		}
+
+		console.log(milestoneSubmissionDto1)
+		console.log(milestoneSubmissionDto2)
 
 		const milestoneSubmissionDto: MilestoneSubmissionDto[] = [
 			milestoneSubmissionDto1,

@@ -29,10 +29,18 @@ export const setMilestones = createAsyncThunk(
 			const milestonesSubmission: MilestoneSubmission[] = await Promise.all(
 				milestonesSubmissionDto.map(milestoneSubmissionDtoToMilestoneSubmission)
 			)
+			console.log('milestonesSubmission', milestonesSubmission)
+			console.log(
+				'milestonesSubmissionWallet',
+				milestonesSubmissionDto[0].wallet
+			)
 
 			const setMilestonesTx = await directGrantsSimple.setMilestones(
 				milestonesSubmissionDto[0].wallet,
-				milestonesSubmission
+				milestonesSubmission,
+				{
+					gasLimit: 6000000
+				}
 			)
 
 			await setMilestonesTx.wait(1)
