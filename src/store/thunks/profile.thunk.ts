@@ -90,7 +90,6 @@ export const getProfile = createAsyncThunk(
 
 		dispatch(setProfile(profile))
 		dispatch(setProfileDto(fprofileDto))
-		dispatch(setProfileFetched(true))
 
 		dispatch(
 			getPools({
@@ -100,6 +99,7 @@ export const getProfile = createAsyncThunk(
 			})
 		)
 
+		dispatch(setProfileFetched(true))
 		dispatch(setLoading(false))
 	}
 )
