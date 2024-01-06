@@ -86,3 +86,25 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@keyframes show {
+  from {
+    opacity: 0; 
+    scale: 0.4
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.show {
+  view-timeline-name: --show;
+  view-timeline-axis: block;
+
+  animation-timeline: --show;
+  animation-name: show;
+
+  animation-range: entry 25% cover 40%;
+  animation-fill-mode: backwards;
+}

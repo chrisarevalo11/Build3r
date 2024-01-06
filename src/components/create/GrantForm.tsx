@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input'
 import Loader from '@/components/ui/Loader'
 import { Textarea } from '@/components/ui/textarea'
 import {
+	ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
 	ARBITRUM_INIT_STRATEGY_BYTES,
 	ARBITRUM_NATIVE
 } from '@/constants/constans'
@@ -133,7 +134,7 @@ export default function GrantForm({
 
 			const fPoolSubmitionDto: FPoolSubmitionDto = {
 				profileId: profileDto.id,
-				strategy: '0x3C4481CcF0DFf82dA5660bD7A69f84D32eeA2d61',
+				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY,
 				initStrategyData: ARBITRUM_INIT_STRATEGY_BYTES,
 				native: ARBITRUM_NATIVE,
 				amount,

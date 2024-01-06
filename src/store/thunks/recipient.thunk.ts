@@ -1,12 +1,12 @@
 import { BytesLike, ethers } from 'ethers'
 
-import { ALLOCATE_DATA_STRUCT_TYPES } from '@/constants/structs-types.constants'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import { convertToAllocateData } from '@/functions/dtos/recipient.dtos'
 import { getStrategiesContracts } from '@/functions/strategies/strategies.functions'
-import { getRecipient } from '@/services/allo-contract.service'
+import { getRecipientByProfileId } from '@/services/strategies/direct-grants-simple.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+import { setRecipient, setRecipientFetched } from '../slides/recipientSlice'
 import { setLoading, setSteps } from '../slides/uiSlice'
 
 export const addRecipient = createAsyncThunk(
@@ -33,7 +33,6 @@ export const addRecipient = createAsyncThunk(
 			dispatch(setLoading(true))
 			const { allo } = getAlloContracts(providerOrSigner)
 			const { directGrantsSimple } = getStrategiesContracts(providerOrSigner)
-			await getRecipient(providerOrSigner)
 
 			const registerRecipientTx = await allo.registerRecipient(
 				poolId,
@@ -64,11 +63,32 @@ export const addRecipient = createAsyncThunk(
 			})
 
 			await setAllocateTx.wait(1)
-			dispatch(setSteps(3))
 
+			dispatch(setSteps(3))
+			dispatch(setRecipientFetched(false))
 			dispatch(setLoading(false))
 		} catch (error) {
 			alert('Error adding recipient!')
+			dispatch(setLoading(false))
+			console.error(error)
+		}
+	}
+)
+
+export const getRecipient = createAsyncThunk(
+	'recipient/getRecipient',
+	async ({ profileId }: { profileId: string }, { dispatch }) => {
+		try {
+			dispatch(setLoading(true))
+
+			const recipient = await getRecipientByProfileId(profileId)
+
+			console.log('recipient', recipient)
+
+			dispatch(setRecipient(recipient))
+			dispatch(setLoading(false))
+		} catch (error) {
+			alert('Error getting recipient')
 			dispatch(setLoading(false))
 			console.error(error)
 		}

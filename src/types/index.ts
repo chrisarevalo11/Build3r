@@ -1,12 +1,12 @@
 import { Dispatch } from 'react'
 
 export type grantFormValuesTypes = {
-	name: string
 	amount: string
-	image: string
-	tags: string[]
-	organizer: string
 	description: string
+	image: string
+	name: string
+	organizer: string
+	tags: string[]
 }
 
 export type link = {
@@ -17,4 +17,10 @@ export type link = {
 export type createPoolProps = {
 	setFormValues: Dispatch<React.SetStateAction<grantFormValuesTypes>>
 	profileName: string
+}
+
+export type Step = {
+	title: string
+	description: string
+	icon: JSX.Element
 }

@@ -1,5 +1,6 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
+import Footer from '@/components/menu/Footer'
 import Navbar from '@/components/menu/Navbar'
 import NotFound from '@/components/NotFound'
 import Create from '@/pages/Create'
@@ -25,6 +26,7 @@ function App(): JSX.Element {
 				</Route>
 				<Route path='*' element={<NotFound />} />T
 			</Routes>
+			<Footer />
 		</HashRouter>
 	)
 }

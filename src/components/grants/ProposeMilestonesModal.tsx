@@ -1,17 +1,13 @@
-import RecipientSteps from '@/components/grants/RecipientsSteps'
+import ProposeMilestonesForm from '@/components/grants/ProposeMilestonesForm'
 import { Button } from '@/components/ui/Button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { FPoolDto } from '@/models/pool.model'
-import { FProfileDto } from '@/models/profile.model'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 
 type Props = {
-	poolDto: FPoolDto
-	profileDto: FProfileDto
+	amount: string
 }
-
-export default function RecipientsModal(props: Props): JSX.Element {
-	const { poolDto, profileDto } = props
+export default function ProposeMilestonesModal(props: Props): JSX.Element {
+	const { amount } = props
 
 	return (
 		<Dialog>
@@ -22,7 +18,7 @@ export default function RecipientsModal(props: Props): JSX.Element {
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
-				<RecipientSteps poolDto={poolDto} profileDto={profileDto} />
+				<ProposeMilestonesForm amount={amount} />
 			</DialogContent>
 		</Dialog>
 	)
