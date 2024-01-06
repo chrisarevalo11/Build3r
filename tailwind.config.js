@@ -72,10 +72,51 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        'hero-image-sm': {
+          '0%': {
+            'transform': 'translateY(500px)',
+          },
+          '100%': {
+            'transform': 'translateY(0px)',
+          },
+        },
+        'hero-image': {
+          '0%': {
+            'transform': 'translateX(60vw)',
+          },
+          '100%': {
+            'transform': 'translateX(0)',
+          },
+        },
+        'hero-text-sm': {
+          '0%': {
+            'transform': 'translateY(-500px)',
+          },
+          '100%': {
+            'transform': 'translateY(0)',
+          },
+        },
+        'hero-text': {
+          '0%': {
+            'transform': 'translateX(-60vw)',
+          },
+          '100%': {
+            'transform': 'translateX(0)',
+          }
+        },
+        'sponsors': {
+          from: {transform: 'translateY(800px)'},
+          to: {transform: 'translateY(0)'},
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'hero-image-sm': 'hero-image-sm 0.8s ease-out',
+        'hero-image': 'hero-image 0.8s ease-out',
+        'hero-text-sm': 'hero-text-sm 0.8s ease-out',
+        'hero-text': 'hero-text 0.8s ease-out',
+        'sponsors': 'sponsors 0.8s ease-out',
       },
     },
   },
