@@ -105,6 +105,6 @@
   animation-timeline: --show;
   animation-name: show;
 
-  animation-range: entry 25% cover 30%;
+  animation-range: entry 25% cover 40%;
   animation-fill-mode: backwards;
 }
