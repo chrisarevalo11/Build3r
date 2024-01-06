@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { stat } from 'fs'
+import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -10,11 +10,15 @@ import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Status } from '@/enums/enums'
-import { Milestone } from '@/models/milestone.model'
+import {
+	Milestone,
+	MilestoneEvidenceSubmissionDto
+} from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
+import { submitMilestone } from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
@@ -55,6 +59,41 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
 
+	const onSubmitMilestone = async () => {
+		const recipientId: string = recipient.recipientAddress
+		const milestoneId: number = 0
+		const images: string[] = ['website1', 'website2', 'website3']
+		const files: string[] = ['file1', 'file2', 'file3']
+		const links: string[] = ['link1', 'link2', 'link3']
+
+		const milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto = {
+			recipientId,
+			milestoneId,
+			title: 'title',
+			description: 'description',
+			deadline: 'deadline',
+			images,
+			files,
+			links
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(
+			submitMilestone({
+				milestoneEvidenceSubmissionDto,
+				providerOrSigner: web3Signer
+			})
+		)
+	}
+
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
@@ -63,7 +102,7 @@ export default function GrantPage(props: Props): JSX.Element {
 		if (!fetched) {
 			dispatch(getRecipient({ profileId: profileDto.anchor }))
 		}
-	}, [address, fetched, dispatch, navigate, profileDto])
+	}, [address, fetched, profileDto, dispatch, navigate])
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
@@ -122,6 +161,7 @@ export default function GrantPage(props: Props): JSX.Element {
 							<p className='text-white/80'>
 								{Number(milestone.milestoneStatus)}
 							</p>
+							<button onClick={onSubmitMilestone}>Click me</button>
 						</div>
 						<br />
 					</>

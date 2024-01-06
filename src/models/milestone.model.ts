@@ -4,23 +4,43 @@ export interface Metadata {
 	title: string
 	description: string
 	deadline: string
+	images?: string[]
+	files?: string[]
+	links?: string[]
 }
 
-export interface MetadataDto {
+interface MetadataDto {
 	protocol: bigint
 	pointer: string
 }
 
 export interface Milestone {
-	amountPercentage: numbe
+	amountPercentage: number
 	metadata: Metadata
-	milestoneStatus: numbe
+	milestoneStatus: number
 }
 
 export interface MilestoneDto {
 	amountPercentage: bigint
 	metadata: MetadataDto
 	milestoneStatus: bigint
+}
+
+export interface MilestoneEvidenceSubmission {
+	recipientId: string
+	milestoneId: number
+	metadata: FMetadata
+}
+
+export interface MilestoneEvidenceSubmissionDto {
+	recipientId: string
+	milestoneId: number
+	title: string
+	description: string
+	deadline: string
+	images: string[]
+	files: string[]
+	links: string[]
 }
 
 export interface MilestoneSubmission {
