@@ -1,5 +1,3 @@
-export { Contribute } from './Contribute'
-export { Create } from './Create'
-export { Evaluate } from './Evaluate'
-export { Final } from './Final'
+export { Benefits } from './Benefits'
 export { Hero } from './Hero'
+export { HowItWorks } from './HowItWorks'

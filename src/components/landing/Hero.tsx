@@ -5,9 +5,9 @@ import { Button } from '../ui/Button'
 export function Hero(): JSX.Element {
 	return (
 		<>
-			<section className='py-10 mt-5'>
-				<div className='max-w-screen-xl mx-auto text-gray-600 gap-x-12 items-center justify-between overflow-hidden md:flex md:px-4'>
-					<div className='flex-none space-y-5 px-4 sm:max-w-lg md:px-0 lg:max-w-xl'>
+			<section className='py-10 mt-5 overflow-hidden'>
+				<div className='mx-auto text-gray-600 gap-x-12 items-center justify-between overflow md:flex md:px-4'>
+					<div className='flex-none space-y-5 px-4 sm:max-w-lg md:px-0 lg:max-w-xl motion-safe:animate-hero-text-sm md:motion-safe:animate-hero-text'>
 						<h1 className='text-sm text-primary font-medium'>
 							Over 200 successful deals
 						</h1>
@@ -31,7 +31,7 @@ export function Hero(): JSX.Element {
 							</Button>
 						</div>
 					</div>
-					<div className='flex-none mt-14 md:mt-0 md:max-w-xl'>
+					<div className='flex-none mt-14 md:mt-0 md:max-w-xl motion-safe:animate-hero-image-sm md:motion-safe:animate-hero-image'>
 						<img
 							src='/images/hero.webp'
 							className=' md:rounded-tl-[108px] md:rounded-br-[108px] w-full md:h-[350px]'
@@ -39,42 +39,41 @@ export function Hero(): JSX.Element {
 						/>
 					</div>
 				</div>
-				<div className='w-full inline-flex flex-nowrap'>
-					<ul className='flex items-center justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none'></ul>
-				</div>
-				<div className='mt-14 px-4 md:px-8'>
-					<p className='text-center text-sm text-gray-700 font-semibold'>
+				<div className='mt-20 px-4 md:px-8 md:motion-safe:animate-sponsors'>
+					<p className='text-center text-sm my-5 text-gray-700 font-semibold'>
 						Trusted by the best companies
 					</p>
-					<div className='flex justify-center lg:justify-between items-center flex-wrap gap-x-12 gap-y-6 mt-6'>
-						<picture>
-							<img
-								src='/images/arbitrum.webp'
-								alt='arbitrum'
-								className='h-[60px] grayscale'
-							/>
-						</picture>
-						<picture>
-							<img
-								src='/images/allo.svg'
-								alt='arbitrum'
-								className='h-[60px] grayscale scale-90'
-							/>
-						</picture>
-						<picture>
-							<img
-								src='/images/fleek.webp'
-								alt='arbitrum'
-								className='h-[60px] grayscale scale-90'
-							/>
-						</picture>
-						<picture>
-							<img
-								src='/images/web3storage.webp'
-								alt='arbitrum'
-								className='h-[60px] grayscale scale-90'
-							/>
-						</picture>
+					<div className='w-full'>
+						<ul className='flex items-center flex-wrap justify-center lg:justify-between gap-4'>
+							<li>
+								<img
+									src='/images/arbitrum.webp'
+									alt='arbitrum'
+									className='h-[60px] grayscale'
+								/>
+							</li>
+							<li>
+								<img
+									src='/images/allo.svg'
+									alt='arbitrum'
+									className='h-[60px] grayscale scale-90'
+								/>
+							</li>
+							<li>
+								<img
+									src='/images/fleek.webp'
+									alt='arbitrum'
+									className='h-[60px] grayscale scale-90'
+								/>
+							</li>
+							<li>
+								<img
+									src='/images/web3storage.webp'
+									alt='arbitrum'
+									className='h-[60px] grayscale scale-90'
+								/>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</section>

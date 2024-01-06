@@ -18,3 +18,9 @@ export type createPoolProps = {
 	setFormValues: Dispatch<React.SetStateAction<grantFormValuesTypes>>
 	profileName: string
 }
+
+export type Step = {
+	title: string
+	description: string
+	icon: JSX.Element
+}
