@@ -3,9 +3,15 @@ import { BytesLike, ethers } from 'ethers'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import { convertToAllocateData } from '@/functions/dtos/recipient.dtos'
 import { getStrategiesContracts } from '@/functions/strategies/strategies.functions'
-import { getRecipientByProfileId } from '@/services/strategies/direct-grants-simple.service'
+import { Milestone } from '@/models/milestone.model'
+import { Recipient } from '@/models/recipient.model'
+import {
+	getMilestonesByRecipientId,
+	getRecipientByProfileId
+} from '@/services/strategies/direct-grants-simple.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+import { setMilestones } from '../slides/milestoneSlice'
 import { setRecipient, setRecipientFetched } from '../slides/recipientSlice'
 import { setLoading, setSteps } from '../slides/uiSlice'
 
@@ -81,11 +87,14 @@ export const getRecipient = createAsyncThunk(
 		try {
 			dispatch(setLoading(true))
 
-			const recipient = await getRecipientByProfileId(profileId)
-
-			console.log('recipient', recipient)
+			const recipient: Recipient = await getRecipientByProfileId(profileId)
+			const milestones: Milestone[] = await getMilestonesByRecipientId(
+				recipient.recipientAddress
+			)
 
 			dispatch(setRecipient(recipient))
+			dispatch(setMilestones(milestones))
+			dispatch(setRecipientFetched(true))
 			dispatch(setLoading(false))
 		} catch (error) {
 			alert('Error getting recipient')

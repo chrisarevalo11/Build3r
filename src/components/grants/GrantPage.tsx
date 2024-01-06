@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { stat } from 'fs'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -9,6 +10,7 @@ import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Status } from '@/enums/enums'
+import { Milestone } from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
@@ -38,11 +40,14 @@ export default function GrantPage(props: Props): JSX.Element {
 	const recipient: Recipient = useAppSelector(
 		state => state.recipientSlice.recipient
 	)
+
+	const milestones: Milestone[] = useAppSelector(
+		state => state.milestoneSlice.milestones
+	)
+
 	const fetched: boolean = useAppSelector(
 		state => state.recipientSlice.recipientFetched
 	)
-
-	console.log(recipient.milestonesReviewStatus)
 
 	const { name: profileName } = profileDto
 	const { logo } = profileDto.metadata
@@ -99,6 +104,28 @@ export default function GrantPage(props: Props): JSX.Element {
 					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
 			</div>
+			<br />
+
+			{milestones.length > 0 &&
+				milestones.map((milestone: Milestone, index: number) => (
+					<>
+						<div
+							key={index}
+							className='w-full bg-primary text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col relative'
+						>
+							<h3 className='font-bold text-lg'>
+								{Number(milestone.amountPercentage)}
+							</h3>
+							<p className='text-white/80'>{milestone.metadata.title}</p>
+							<p className='text-white/80'>{milestone.metadata.description}</p>
+							<p className='text-white/80'>{milestone.metadata.deadline}</p>
+							<p className='text-white/80'>
+								{Number(milestone.milestoneStatus)}
+							</p>
+						</div>
+						<br />
+					</>
+				))}
 		</section>
 	)
 }
