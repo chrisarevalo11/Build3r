@@ -42,6 +42,8 @@ export default function GrantPage(props: Props): JSX.Element {
 		state => state.recipientSlice.recipientFetched
 	)
 
+	console.log(recipient.milestonesReviewStatus)
+
 	const { name: profileName } = profileDto
 	const { logo } = profileDto.metadata
 
@@ -79,7 +81,14 @@ export default function GrantPage(props: Props): JSX.Element {
 					</p>
 					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
 				</StepCard>
-				<StepCard>
+				<StepCard
+					disabled={
+						!(recipientStatusEnum.InReview === recipient.recipientStatus)
+					}
+					completed={
+						recipientStatusEnum.Accepted === recipient.milestonesReviewStatus
+					}
+				>
 					<h3 className='font-bold text-lg'>
 						2. Propose a milestone strategy (recipients)
 					</h3>

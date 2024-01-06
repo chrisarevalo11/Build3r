@@ -14,7 +14,7 @@ export default function ProfileCard(props: Props): JSX.Element {
 
 	return (
 		<article className='mx-auto mt-4 shadow-lg border border-border rounded-xl duration-300 hover:shadow-sm'>
-			<Link to={'/profile/' + profileDto.id} className={'w-full'}>
+			<Link to={'/profile/' + profileDto.owner} className={'w-full'}>
 				<img
 					src={banner}
 					loading='lazy'

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import GrantCard from '@/components/create/GrantCard'
@@ -18,7 +18,7 @@ import { getProfile } from '@/store/thunks/profile.thunk'
 
 export default function Profile(): JSX.Element {
 	const { address } = useAccount()
-
+	const { profileId } = useParams()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 	const profileDto: FProfileDto = useAppSelector(
@@ -39,9 +39,13 @@ export default function Profile(): JSX.Element {
 		}
 
 		if (!fetched) {
-			dispatch(getProfile(address as string))
+			dispatch(getProfile(profileId as string))
 		}
-	}, [address, dispatch, navigate, fetched])
+
+		if (address !== profileId) {
+			dispatch(getProfile(profileId as string))
+		}
+	}, [address, dispatch, navigate, fetched, profileId])
 
 	useEffect(() => {
 		if (profileDto.id === '' && fetched) {

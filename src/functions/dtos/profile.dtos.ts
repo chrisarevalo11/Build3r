@@ -48,9 +48,9 @@ export async function fProfileToFprofileDto(
 		}
 	} catch (error) {
 		return {
-			id: '1',
-			nonce: 0,
-			name: 'Test Grant',
+			id: fProfile.id,
+			nonce: fProfile.nonce,
+			name: fProfile.name,
 			metadata: {
 				banner:
 					'https://assets-global.website-files.com/6433e6f821ae13dd37394322/654da5e25b619b4ed39f56c8_Allo_MainnetBlogBanner_2.jpg',
@@ -64,8 +64,8 @@ export async function fProfileToFprofileDto(
 					'0x21111111111111111111111111111111111112'
 				]
 			},
-			owner: '',
-			anchor: '',
+			owner: fProfile.owner,
+			anchor: fProfile.anchor,
 			createdAt: ':('
 		}
 	}
