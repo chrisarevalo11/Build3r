@@ -3,6 +3,7 @@ import {
 	MilestoneSubmission,
 	MilestoneSubmissionDto
 } from '@/models/milestone.model'
+import { toDecimal } from '@/utils'
 
 import { storeObject } from '../web3storage/metadata-store-data.functions'
 
@@ -18,7 +19,7 @@ export async function milestoneSubmissionDtoToMilestoneSubmission(
 	const metadataCid: string = await storeObject(metadata)
 
 	const milestoneSubmission: MilestoneSubmission = {
-		amountPercentage: milestoneSubmissionDto.amount,
+		amountPercentage: toDecimal(milestoneSubmissionDto.amount),
 		metadata: {
 			protocol: IPFS_PROTOCOL,
 			pointer: metadataCid

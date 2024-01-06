@@ -1,7 +1,7 @@
 import { FMetadata } from './profile.model'
 
 export interface MilestoneSubmission {
-	amountPercentage: number
+	amountPercentage: bigint
 	metadata: FMetadata
 	milestoneStatus: number
 }
