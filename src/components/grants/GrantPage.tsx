@@ -18,7 +18,10 @@ import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
-import { submitMilestone } from '@/store/thunks/milestone.thunk'
+import {
+	distributeMilestone,
+	submitMilestone
+} from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
@@ -94,6 +97,27 @@ export default function GrantPage(props: Props): JSX.Element {
 		)
 	}
 
+	const onDistribute = async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(
+			distributeMilestone({
+				recipientId: recipient.recipientAddress,
+				poolId: poolDto.id,
+				providerOrSigner: web3Signer
+			})
+		)
+	}
+
+	const onReject = async () => {}
+
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
@@ -161,7 +185,9 @@ export default function GrantPage(props: Props): JSX.Element {
 							<p className='text-white/80'>
 								{Number(milestone.milestoneStatus)}
 							</p>
-							<button onClick={onSubmitMilestone}>Click me</button>
+							<button onClick={onSubmitMilestone}>SUBMIT MILESTONE</button>
+							<button onClick={onDistribute}>DISTRIBUTE MILESTONE</button>
+							<button onClick={onReject}>REJECT MILESTONE</button>
 						</div>
 						<br />
 					</>
