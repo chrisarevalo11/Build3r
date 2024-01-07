@@ -8,6 +8,8 @@ import GrantBanner from '@/components/grants/GrantBanner'
 import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
+import MilestoneCard from '@/components/grants/MilestoneCard'
+import ProposeMilestonesModal from '@/components/grants/ProposeMilestonesModal'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Status } from '@/enums/enums'
 import {
@@ -24,8 +26,6 @@ import {
 } from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
-
-import ProposeMilestonesModal from './ProposeMilestonesModal'
 
 type Props = {
 	poolDto: FPoolDto
@@ -54,6 +54,10 @@ export default function GrantPage(props: Props): JSX.Element {
 
 	const fetched: boolean = useAppSelector(
 		state => state.recipientSlice.recipientFetched
+	)
+
+	const grantee: Recipient = useAppSelector(
+		state => state.recipientSlice.grantee
 	)
 
 	const { name: profileName } = profileDto
@@ -154,7 +158,7 @@ export default function GrantPage(props: Props): JSX.Element {
 						!(recipientStatusEnum.InReview === recipient.recipientStatus)
 					}
 					completed={
-						recipientStatusEnum.Accepted === recipient.milestonesReviewStatus
+						recipientStatusEnum.Accepted === grantee.milestonesReviewStatus
 					}
 				>
 					<h3 className='font-bold text-lg'>
@@ -167,31 +171,25 @@ export default function GrantPage(props: Props): JSX.Element {
 					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
 			</div>
-			<br />
 
-			{milestones.length > 0 &&
-				milestones.map((milestone: Milestone, index: number) => (
-					<>
-						<div
+			<header className='text-center'>
+				<h3 className='font-bold text-2xl text-primary'>Milestones</h3>
+				<p className='text-white/80'>List of milestones</p>
+			</header>
+
+			<div className='grid w-full justify-items-center md:grid-cols-2 gap-4 mb-2'>
+				{milestones.length > 0 &&
+					milestones.map((milestone: Milestone, index: number) => (
+						<MilestoneCard
 							key={index}
-							className='w-full bg-primary text-white/90 rounded-xl p-2 md:p-4 space-y-2 flex flex-col relative'
-						>
-							<h3 className='font-bold text-lg'>
-								{Number(milestone.amountPercentage)}
-							</h3>
-							<p className='text-white/80'>{milestone.metadata.title}</p>
-							<p className='text-white/80'>{milestone.metadata.description}</p>
-							<p className='text-white/80'>{milestone.metadata.deadline}</p>
-							<p className='text-white/80'>
-								{Number(milestone.milestoneStatus)}
-							</p>
-							<button onClick={onSubmitMilestone}>SUBMIT MILESTONE</button>
-							<button onClick={onDistribute}>DISTRIBUTE MILESTONE</button>
-							<button onClick={onReject}>REJECT MILESTONE</button>
-						</div>
-						<br />
-					</>
-				))}
+							milestone={milestone}
+							onSubmitMilestone={onSubmitMilestone}
+							onDistribute={onDistribute}
+							onReject={onReject}
+							amount={poolDto.amount}
+						/>
+					))}
+			</div>
 		</section>
 	)
 }

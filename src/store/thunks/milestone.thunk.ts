@@ -1,5 +1,6 @@
 import { BytesLike, ethers } from 'ethers'
 
+import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import {
 	milestoneEvidenceDtoToMilestoneEvidecence,
@@ -77,12 +78,6 @@ export const setMilestones = createAsyncThunk(
 			const milestonesSubmission: MilestoneSubmission[] = await Promise.all(
 				milestonesSubmissionDto.map(milestoneSubmissionDtoToMilestoneSubmission)
 			)
-			console.log('milestonesSubmission', milestonesSubmission)
-			console.log(
-				'milestonesSubmissionWallet',
-				milestonesSubmissionDto[0].wallet
-			)
-
 			const setMilestonesTx = await directGrantsSimple.setMilestones(
 				milestonesSubmissionDto[0].wallet,
 				milestonesSubmission,
@@ -92,7 +87,7 @@ export const setMilestones = createAsyncThunk(
 			)
 
 			await setMilestonesTx.wait(1)
-
+			dispatch(setRecipientFetched(false))
 			dispatch(setLoading(false))
 		} catch (error) {
 			alert('Error setting milestones')

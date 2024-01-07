@@ -1,5 +1,6 @@
 import { BytesLike, ethers } from 'ethers'
 
+import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import { convertToAllocateData } from '@/functions/dtos/recipient.dtos'
 import { getStrategiesContracts } from '@/functions/strategies/strategies.functions'
@@ -12,7 +13,11 @@ import {
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { setMilestones } from '../slides/milestoneSlice'
-import { setRecipient, setRecipientFetched } from '../slides/recipientSlice'
+import {
+	setGrantee,
+	setRecipient,
+	setRecipientFetched
+} from '../slides/recipientSlice'
 import { setLoading, setSteps } from '../slides/uiSlice'
 
 export const addRecipient = createAsyncThunk(
@@ -88,11 +93,15 @@ export const getRecipient = createAsyncThunk(
 			dispatch(setLoading(true))
 
 			const recipient: Recipient = await getRecipientByProfileId(profileId)
+			const grantee: Recipient = await getRecipientByProfileId(
+				recipient.recipientAddress
+			)
 			const milestones: Milestone[] = await getMilestonesByRecipientId(
 				recipient.recipientAddress
 			)
 
 			dispatch(setRecipient(recipient))
+			dispatch(setGrantee(grantee))
 			dispatch(setMilestones(milestones))
 			dispatch(setRecipientFetched(true))
 			dispatch(setLoading(false))

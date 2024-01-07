@@ -19,6 +19,7 @@ import Loader from '@/components/ui/Loader'
 import { Textarea } from '@/components/ui/textarea'
 import { Status } from '@/enums/enums'
 import { MilestoneSubmissionDto } from '@/models/milestone.model'
+import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { setMilestones } from '@/store/thunks/milestone.thunk'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -56,7 +57,10 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 
 	const dispatch = useDispatch<AppDispatch>()
 
-	const loading = useAppSelector(state => state.uiSlice.loading)
+	const recipient: Recipient = useAppSelector(
+		state => state.recipientSlice.recipient
+	)
+	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 
 	const milestoneAmount: number = parseInt(amount) / 2 / Number(amount)
 
@@ -75,7 +79,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 	})
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const wallet: string = address as string
+		const wallet: string = recipient.recipientAddress
 		const status: number = Status.None
 
 		if (!values.amount1 || !values.amount2) {
@@ -100,9 +104,6 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 			title: values.name2,
 			wallet
 		}
-
-		console.log(milestoneSubmissionDto1)
-		console.log(milestoneSubmissionDto2)
 
 		const milestoneSubmissionDto: MilestoneSubmissionDto[] = [
 			milestoneSubmissionDto1,
@@ -146,6 +147,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 											<Input
 												placeholder='Construction of the building'
 												{...field}
+												disabled={loading}
 											/>
 										</FormControl>
 										<FormMessage>
@@ -164,6 +166,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 											<Textarea
 												placeholder='In this milestone we plan to...'
 												{...field}
+												disabled={loading}
 											/>
 										</FormControl>
 										<FormMessage>
@@ -180,7 +183,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 										<FormItem>
 											<FormLabel>Deadline</FormLabel>
 											<FormControl>
-												<Input type='date' {...field} />
+												<Input type='date' {...field} disabled={loading} />
 											</FormControl>
 											<FormMessage>
 												{form.formState.errors.date1?.message}
@@ -193,7 +196,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 									name='amount1'
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Amount (ETH)</FormLabel>
+											<FormLabel>Percentage amount</FormLabel>
 											<FormControl>
 												<Input {...field} value={milestoneAmount} disabled />
 											</FormControl>
@@ -218,6 +221,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 											<Input
 												placeholder='Culmination of the building'
 												{...field}
+												disabled={loading}
 											/>
 										</FormControl>
 										<FormMessage>
@@ -236,6 +240,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 											<Textarea
 												placeholder='At this point the building...'
 												{...field}
+												disabled={loading}
 											/>
 										</FormControl>
 										<FormMessage>
@@ -252,7 +257,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 										<FormItem>
 											<FormLabel>Deadline</FormLabel>
 											<FormControl>
-												<Input type='date' {...field} />
+												<Input type='date' {...field} disabled={loading} />
 											</FormControl>
 											<FormMessage>
 												{form.formState.errors.date2?.message}
@@ -265,7 +270,7 @@ export default function ProposeMilestonesForm(props: Props): JSX.Element {
 									name='amount2'
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Amount (ETH)</FormLabel>
+											<FormLabel>Percentage amount</FormLabel>
 											<FormControl>
 												<Input {...field} value={milestoneAmount} disabled />
 											</FormControl>
