@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import Footer from '@/components/menu/Footer'
 import Navbar from '@/components/menu/Navbar'
 import NotFound from '@/components/NotFound'
+import { Toaster } from '@/components/ui/toaster'
 import Create from '@/pages/Create'
 import CreateProfile from '@/pages/CreateProfile'
 import Explorer from '@/pages/Explorer'
@@ -26,6 +27,7 @@ function App(): JSX.Element {
 				</Route>
 				<Route path='*' element={<NotFound />} />T
 			</Routes>
+			<Toaster />
 			<Footer />
 		</HashRouter>
 	)
