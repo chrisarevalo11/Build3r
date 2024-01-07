@@ -16,7 +16,7 @@ export default function Navbar(): JSX.Element {
 
 	return (
 		<Container>
-			<nav className='flex w-full lg:px-3 lg:rounded-full mx-auto md:justify-between relative'>
+			<nav className='flex w-full mx-auto md:justify-between lg:grid lg:grid-cols-3  relative'>
 				<div className='absolute top-0 bottom-0 md:static flex items-center'>
 					<div className='lg:hidden'>
 						<button className='p-1 text-primary' onClick={toggleSidebar}>
@@ -53,7 +53,7 @@ export default function Navbar(): JSX.Element {
 				</div>
 				{isConnected && <NavLinks />}
 
-				<div className='hidden md:flex items-center gap-2'>
+				<div className='hidden md:flex items-center justify-end gap-2'>
 					<ConnectButton showBalance={false} chainStatus={'icon'} />
 				</div>
 			</nav>
