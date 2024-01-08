@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAccount } from 'wagmi'
@@ -12,18 +11,11 @@ import MilestoneCard from '@/components/grants/MilestoneCard'
 import ProposeMilestonesModal from '@/components/grants/ProposeMilestonesModal'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Status } from '@/enums/enums'
-import {
-	Milestone,
-	MilestoneEvidenceSubmissionDto
-} from '@/models/milestone.model'
+import { Milestone } from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
-import {
-	distributeMilestone,
-	submitMilestone
-} from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
@@ -66,62 +58,6 @@ export default function GrantPage(props: Props): JSX.Element {
 
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
-
-	const onSubmitMilestone = async () => {
-		const recipientId: string = recipient.recipientAddress
-		const milestoneId: number = 0
-		const images: string[] = ['website1', 'website2', 'website3']
-		const files: string[] = ['file1', 'file2', 'file3']
-		const links: string[] = ['link1', 'link2', 'link3']
-
-		const milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto = {
-			recipientId,
-			milestoneId,
-			title: 'title',
-			description: 'description',
-			deadline: 'deadline',
-			images,
-			files,
-			links
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const ethereum = (window as any).ethereum
-
-		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
-			ethereum
-		)
-		await web3Provider.send('eth_requestAccounts', [])
-		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
-
-		dispatch(
-			submitMilestone({
-				milestoneEvidenceSubmissionDto,
-				providerOrSigner: web3Signer
-			})
-		)
-	}
-
-	const onDistribute = async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const ethereum = (window as any).ethereum
-
-		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
-			ethereum
-		)
-		await web3Provider.send('eth_requestAccounts', [])
-		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
-
-		dispatch(
-			distributeMilestone({
-				recipientId: recipient.recipientAddress,
-				poolId: poolDto.id,
-				providerOrSigner: web3Signer
-			})
-		)
-	}
-
-	const onReject = async () => {}
 
 	useEffect(() => {
 		if (!address) {
@@ -184,10 +120,9 @@ export default function GrantPage(props: Props): JSX.Element {
 						<MilestoneCard
 							key={index}
 							milestone={milestone}
-							onSubmitMilestone={onSubmitMilestone}
-							onDistribute={onDistribute}
-							onReject={onReject}
 							amount={poolDto.amount}
+							recipientAddress={recipient.recipientAddress}
+							poolId={poolDto.id}
 						/>
 					))}
 			</div>
