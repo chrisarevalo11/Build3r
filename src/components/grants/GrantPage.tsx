@@ -19,6 +19,8 @@ import { AppDispatch, useAppSelector } from '@/store'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
 
+import { MilestoneEvidence } from './MilestoneEvidence'
+
 type Props = {
 	poolDto: FPoolDto
 }
@@ -121,10 +123,11 @@ export default function GrantPage(props: Props): JSX.Element {
 							key={index}
 							milestone={milestone}
 							amount={poolDto.amount}
-							recipientAddress={recipient.recipientAddress}
+							recipientAddress={grantee.recipientAddress}
 							poolId={poolDto.id}
 						/>
 					))}
+				<MilestoneEvidence />
 			</div>
 		</section>
 	)

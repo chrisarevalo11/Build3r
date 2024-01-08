@@ -18,7 +18,10 @@ export default function SubmitEvidenceModal(props: Props): JSX.Element {
 			<DialogContent>
 				<div>
 					<h1 className='text-xl font-bold text-primary'>Submit Evidence</h1>
-					<p>Please submit evidence of {milestone.metadata.title}</p>
+					<p>
+						Please submit images, links and files that support the evidence of{' '}
+						{milestone.metadata.title}
+					</p>
 				</div>
 				<SubmitEvidenceForm milestone={milestone} />
 			</DialogContent>
