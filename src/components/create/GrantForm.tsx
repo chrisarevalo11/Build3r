@@ -159,8 +159,6 @@ export default function GrantForm({
 	}
 
 	useEffect(() => {
-		handleChange('organizer', profileName)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		if (!loading) {
 			form.reset()
 			setFormValues({
@@ -168,7 +166,7 @@ export default function GrantForm({
 				amount: '',
 				image: '',
 				tags: [],
-				organizer: '',
+				organizer: profileName,
 				description: ''
 			})
 		}
