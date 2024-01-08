@@ -85,7 +85,7 @@ export default function GrantForm({
 	const loading = useAppSelector(state => state.uiSlice.loading)
 
 	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
+		state => state.profileSlice.myProfileDto
 	)
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -148,6 +148,8 @@ export default function GrantForm({
 
 			const fPoolSubmition: FPoolSubmition =
 				await fPoolSubmitionDtoToFPoolSubmition(fPoolSubmitionDto)
+
+			console.log('fPoolSubmition: ', fPoolSubmition)
 
 			dispatch(createPool({ fPoolSubmition, providerOrSigner: web3Signer }))
 		} catch (error) {
