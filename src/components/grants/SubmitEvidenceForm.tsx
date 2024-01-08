@@ -11,6 +11,7 @@ import {
 	Milestone,
 	MilestoneEvidenceSubmissionDto
 } from '@/models/milestone.model'
+import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { submitMilestone } from '@/store/thunks/milestone.thunk'
@@ -19,6 +20,7 @@ import { Label } from '@radix-ui/react-label'
 import { useToast } from '../ui/use-toast'
 
 type Props = {
+	id: number
 	milestone: Milestone
 }
 
@@ -34,23 +36,31 @@ type FormData = {
 }
 
 export default function SubmitEvidenceForm(props: Props): JSX.Element {
-	const { milestone } = props
+	const { id, milestone } = props
+
 	const [uploadedFiles, setUploadedFiles] = useState<TUploadedFiles>({
 		images: new DataTransfer().files,
 		files: new DataTransfer().files
 	})
-	const { toast } = useToast()
-
 	const { register, handleSubmit } = useForm<FormData>()
 
-	const recipient: Recipient = useAppSelector(
-		state => state.recipientSlice.grantee
+	const { toast } = useToast()
+
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.profileDto
 	)
+
+	const recipient: Recipient = useAppSelector(
+		state => state.recipientSlice.recipient
+	)
+
 	const loading = useAppSelector(state => state.uiSlice.loading)
+
 	const dispatch = useDispatch<AppDispatch>()
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onSubmitMilestone = async (values: FormData) => {
+		const milestoneId: number = id
 		const links = values.links.split(',')
 
 		if (
@@ -66,31 +76,29 @@ export default function SubmitEvidenceForm(props: Props): JSX.Element {
 			return
 		}
 
-		console.log([values.images, links, values.files])
-		// const milestoneId: number = 0
-		// const milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto = {
-		// 	recipientId: recipient.recipientAddress,
-		// 	milestoneId,
-		// 	title: milestone.metadata.title,
-		// 	description: milestone.metadata.description,
-		// 	deadline: milestone.metadata.deadline,
-		// 	images: [],
-		// 	files: [],
-		// 	links: []
-		// }
-		// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-		// const ethereum = (window as any).ethereum
-		// const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
-		// 	ethereum
-		// )
-		// await web3Provider.send('eth_requestAccounts', [])
-		// const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
-		// dispatch(
-		// 	submitMilestone({
-		// 		milestoneEvidenceSubmissionDto,
-		// 		providerOrSigner: web3Signer
-		// 	})
-		// )
+		const milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto = {
+			milestoneId,
+			recipientId: recipient.recipientAddress,
+			title: milestone.metadata.title,
+			description: milestone.metadata.description,
+			deadline: milestone.metadata.deadline,
+			images: [...values.images],
+			files: [...values.files],
+			links
+		}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+		dispatch(
+			submitMilestone({
+				milestoneEvidenceSubmissionDto,
+				providerOrSigner: web3Signer
+			})
+		)
 	}
 
 	return (

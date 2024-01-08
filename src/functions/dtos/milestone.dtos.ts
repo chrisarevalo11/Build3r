@@ -10,7 +10,10 @@ import {
 } from '@/models/milestone.model'
 import { toDecimal } from '@/utils'
 
-import { storeObject } from '../web3storage/metadata-store-data.functions'
+import {
+	storageFile,
+	storeObject
+} from '../web3storage/metadata-store-data.functions'
 
 export async function milestoneDtoToMilestone(
 	milestoneSubmissionDto: MilestoneDto
@@ -32,17 +35,25 @@ export async function milestoneDtoToMilestone(
 export async function milestoneEvidenceDtoToMilestoneEvidecence(
 	milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto
 ): Promise<MilestoneEvidenceSubmission> {
-	// const imagesCid: string = await storeObject(metadata.images.map(storeObject))
-	// const filesCid: string = await storeObject(metadata.files.map(storeObject))
-	// const linksCid: string = await storeObject(metadata.links.map(storeObject))
+	const imagesCid: string[] = await Promise.all(
+		milestoneEvidenceSubmissionDto.images.map(
+			async (image: File) => await storageFile(image)
+		)
+	)
+
+	const filesCid: string[] = await Promise.all(
+		milestoneEvidenceSubmissionDto.files.map(
+			async (image: File) => await storageFile(image)
+		)
+	)
 
 	const metadataCid: string = await storeObject({
 		title: milestoneEvidenceSubmissionDto.title,
 		description: milestoneEvidenceSubmissionDto.description,
 		deadline: milestoneEvidenceSubmissionDto.deadline,
-		images: milestoneEvidenceSubmissionDto.images,
-		files: milestoneEvidenceSubmissionDto.files,
-		links: milestoneEvidenceSubmissionDto.links
+		images: imagesCid,
+		files: filesCid,
+		links: [...milestoneEvidenceSubmissionDto.links]
 	})
 
 	const milestoneSubmission: MilestoneEvidenceSubmission = {

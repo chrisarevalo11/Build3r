@@ -33,8 +33,6 @@ export default function GrantPage(props: Props): JSX.Element {
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 
-	const recipientStatusEnum: typeof Status = Status
-
 	const profileDto: FProfileDto = useAppSelector(
 		state => state.profileSlice.myProfileDto
 	)
@@ -43,16 +41,16 @@ export default function GrantPage(props: Props): JSX.Element {
 		state => state.recipientSlice.recipient
 	)
 
+	const grantee: Recipient = useAppSelector(
+		state => state.recipientSlice.grantee
+	)
+
 	const milestones: Milestone[] = useAppSelector(
 		state => state.milestoneSlice.milestones
 	)
 
 	const fetched: boolean = useAppSelector(
 		state => state.recipientSlice.recipientFetched
-	)
-
-	const grantee: Recipient = useAppSelector(
-		state => state.recipientSlice.grantee
 	)
 
 	const { name: profileName } = profileDto
@@ -80,9 +78,7 @@ export default function GrantPage(props: Props): JSX.Element {
 				<GrantTags tags={tags} />
 			</div>
 			<div className='grid w-full justify-items-center md:grid-cols-2 my-5 gap-4'>
-				<StepCard
-					completed={recipientStatusEnum.InReview === recipient.recipientStatus}
-				>
+				<StepCard completed={recipient.recipientStatus === Status.InReview}>
 					<h3 className='font-bold text-lg'>
 						1. Set the recipients and allocate funds
 					</h3>
@@ -93,12 +89,8 @@ export default function GrantPage(props: Props): JSX.Element {
 					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
 				</StepCard>
 				<StepCard
-					disabled={
-						!(recipientStatusEnum.InReview === recipient.recipientStatus)
-					}
-					completed={
-						recipientStatusEnum.Accepted === grantee.milestonesReviewStatus
-					}
+					disabled={!(recipient.recipientStatus === Status.InReview)}
+					completed={grantee.milestonesReviewStatus === Status.Accepted}
 				>
 					<h3 className='font-bold text-lg'>
 						2. Propose a milestone strategy (recipients)
@@ -121,13 +113,20 @@ export default function GrantPage(props: Props): JSX.Element {
 					milestones.map((milestone: Milestone, index: number) => (
 						<MilestoneCard
 							key={index}
-							milestone={milestone}
+							id={index}
 							amount={poolDto.amount}
-							recipientAddress={grantee.recipientAddress}
+							milestone={milestone}
+							recipientAddress={recipient.recipientAddress}
 							poolId={poolDto.id}
 						/>
 					))}
-				<MilestoneEvidence />
+				{milestones.length > 0 &&
+					milestones.map(
+						(milestone: Milestone, index: number) =>
+							milestone.metadata.images && (
+								<MilestoneEvidence key={index} milestone={milestone} />
+							)
+					)}
 			</div>
 		</section>
 	)

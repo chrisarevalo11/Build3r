@@ -22,7 +22,7 @@ export const ARBITRUM_SEPOLIA_RPC_URL: string =
 	'https://sepolia-rollup.arbitrum.io/rpc'
 
 export const ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY: string =
-	'0xC7Bf7Be7e31505FB783174a2f8998700Db4E2573'
+	'0x4b9928fe8b448a595cff1cb7e6d2d1e91cef13c2'
 
 export const ARBITRUM_RECIPIENT_WALLET: string =
 	'0xa653d77d16e944508DC087948bBb59668C383351'

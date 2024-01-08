@@ -1,19 +1,32 @@
+import { useAccount } from 'wagmi'
+
 import SubmitEvidenceForm from '@/components/grants/SubmitEvidenceForm'
 import { Button } from '@/components/ui/Button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Milestone } from '@/models/milestone.model'
+import { Recipient } from '@/models/recipient.model'
+import { useAppSelector } from '@/store'
 
 type Props = {
+	id: number
 	milestone: Milestone
 }
 
 export default function SubmitEvidenceModal(props: Props): JSX.Element {
-	const { milestone } = props
+	const { id, milestone } = props
+
+	const { address } = useAccount()
+
+	const recipient: Recipient = useAppSelector(
+		state => state.recipientSlice.recipient
+	)
 
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button>Submit Evidence</Button>
+				{recipient.recipientAddress === address && (
+					<Button>Submit Evidence</Button>
+				)}
 			</DialogTrigger>
 			<DialogContent>
 				<div>
@@ -23,7 +36,7 @@ export default function SubmitEvidenceModal(props: Props): JSX.Element {
 						{milestone.metadata.title}
 					</p>
 				</div>
-				<SubmitEvidenceForm milestone={milestone} />
+				<SubmitEvidenceForm id={id} milestone={milestone} />
 			</DialogContent>
 		</Dialog>
 	)

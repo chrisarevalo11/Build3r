@@ -111,6 +111,8 @@ export const submitMilestone = createAsyncThunk(
 			dispatch(setLoading(true))
 			const { directGrantsSimple } = getStrategiesContracts(providerOrSigner)
 
+			console.log(milestoneEvidenceSubmissionDto)
+
 			const milestoneEvidenceSubmission: MilestoneEvidenceSubmission =
 				await milestoneEvidenceDtoToMilestoneEvidecence(
 					milestoneEvidenceSubmissionDto

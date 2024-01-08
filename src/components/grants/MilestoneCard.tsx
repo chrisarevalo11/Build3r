@@ -1,30 +1,44 @@
 import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
+import { useAccount } from 'wagmi'
 
 import SubmitEvidenceModal from '@/components/grants/SubmitEvidenceModal'
 import { Button } from '@/components/ui/Button'
 import { Status } from '@/enums/enums'
 import { Milestone } from '@/models/milestone.model'
-import { AppDispatch } from '@/store'
+import { FProfileDto } from '@/models/profile.model'
+import { AppDispatch, useAppSelector } from '@/store'
 import { distributeMilestone } from '@/store/thunks/milestone.thunk'
 
 type Props = {
-	milestone: Milestone
 	amount: string
+	id: number
+	milestone: Milestone
 	recipientAddress: string
 	poolId: string
 }
 
 export default function MilestoneCard(props: Props): JSX.Element {
 	const {
-		milestone,
 		amount: amountStr,
+		id,
+		milestone,
 		recipientAddress: recipientId,
 		poolId
 	} = props
+
+	console.log('milestone', milestone.milestoneStatus)
+
+	const { address } = useAccount()
+
+	const profileDto: FProfileDto = useAppSelector(
+		state => state.profileSlice.myProfileDto
+	)
+
+	const dispatch = useDispatch<AppDispatch>()
+
 	const amount = parseInt(amountStr)
 	const percentage = ((milestone.amountPercentage / amount) * 1000).toFixed(2)
-	const dispatch = useDispatch<AppDispatch>()
 
 	const onDistribute = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,20 +78,23 @@ export default function MilestoneCard(props: Props): JSX.Element {
 			</div>
 			<div className='flex lg:flex-col items-center justify-center gap-2'>
 				{milestone.milestoneStatus === Status.None ? (
-					<SubmitEvidenceModal milestone={milestone} />
+					<SubmitEvidenceModal id={id} milestone={milestone} />
 				) : (
-					<>
-						<Button
-							className='w-full'
-							variant={'success'}
-							onClick={onDistribute}
-						>
-							DISTRIBUTE MILESTONE
-						</Button>
-						<Button className='w-full' variant={'outline'} onClick={onReject}>
-							REJECT MILESTONE
-						</Button>
-					</>
+					profileDto.owner === address &&
+					milestone.milestoneStatus !== Status.Accepted && (
+						<>
+							<Button
+								className='w-full'
+								variant={'success'}
+								onClick={onDistribute}
+							>
+								DISTRIBUTE MILESTONE
+							</Button>
+							<Button className='w-full' variant={'outline'} onClick={onReject}>
+								REJECT MILESTONE
+							</Button>
+						</>
+					)
 				)}
 			</div>
 		</div>

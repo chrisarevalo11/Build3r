@@ -38,8 +38,8 @@ export interface MilestoneEvidenceSubmissionDto {
 	title: string
 	description: string
 	deadline: string
-	images: string[]
-	files: string[]
+	images: File[]
+	files: File[]
 	links: string[]
 }
 
