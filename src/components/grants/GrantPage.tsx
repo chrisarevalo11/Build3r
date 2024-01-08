@@ -1,22 +1,31 @@
 import { useEffect } from 'react'
+import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import GrantBanner from '@/components/grants/GrantBanner'
 import GrantDescription from '@/components/grants/GrantDescription'
 import GrantHeader from '@/components/grants/GrantHeader'
 import GrantTags from '@/components/grants/GrantTags'
+import MilestoneCard from '@/components/grants/MilestoneCard'
+import ProposeMilestonesModal from '@/components/grants/ProposeMilestonesModal'
 import RecipientsModal from '@/components/grants/RecipientsModal'
 import { Status } from '@/enums/enums'
+import {
+	Milestone,
+	MilestoneEvidenceSubmissionDto
+} from '@/models/milestone.model'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { Recipient } from '@/models/recipient.model'
 import { AppDispatch, useAppSelector } from '@/store'
+import {
+	distributeMilestone,
+	submitMilestone
+} from '@/store/thunks/milestone.thunk'
 import { getRecipient } from '@/store/thunks/recipient.thunk'
 import { CheckIcon } from '@radix-ui/react-icons'
-
-import ProposeMilestonesModal from './ProposeMilestonesModal'
 
 type Props = {
 	poolDto: FPoolDto
@@ -24,6 +33,7 @@ type Props = {
 
 export default function GrantPage(props: Props): JSX.Element {
 	const { poolDto } = props
+	const { anchor } = useParams()
 
 	const { address } = useAccount()
 	const navigate = useNavigate()
@@ -32,14 +42,23 @@ export default function GrantPage(props: Props): JSX.Element {
 	const recipientStatusEnum: typeof Status = Status
 
 	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
+		state => state.profileSlice.myProfileDto
 	)
 
 	const recipient: Recipient = useAppSelector(
 		state => state.recipientSlice.recipient
 	)
+
+	const milestones: Milestone[] = useAppSelector(
+		state => state.milestoneSlice.milestones
+	)
+
 	const fetched: boolean = useAppSelector(
 		state => state.recipientSlice.recipientFetched
+	)
+
+	const grantee: Recipient = useAppSelector(
+		state => state.recipientSlice.grantee
 	)
 
 	const { name: profileName } = profileDto
@@ -48,15 +67,71 @@ export default function GrantPage(props: Props): JSX.Element {
 	const { amount } = poolDto
 	const { name, description, image, tags } = poolDto.metadata
 
+	const onSubmitMilestone = async () => {
+		const recipientId: string = recipient.recipientAddress
+		const milestoneId: number = 0
+		const images: string[] = ['website1', 'website2', 'website3']
+		const files: string[] = ['file1', 'file2', 'file3']
+		const links: string[] = ['link1', 'link2', 'link3']
+
+		const milestoneEvidenceSubmissionDto: MilestoneEvidenceSubmissionDto = {
+			recipientId,
+			milestoneId,
+			title: 'title',
+			description: 'description',
+			deadline: 'deadline',
+			images,
+			files,
+			links
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(
+			submitMilestone({
+				milestoneEvidenceSubmissionDto,
+				providerOrSigner: web3Signer
+			})
+		)
+	}
+
+	const onDistribute = async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const ethereum = (window as any).ethereum
+
+		const web3Provider: ethers.BrowserProvider = new ethers.BrowserProvider(
+			ethereum
+		)
+		await web3Provider.send('eth_requestAccounts', [])
+		const web3Signer: ethers.JsonRpcSigner = await web3Provider.getSigner()
+
+		dispatch(
+			distributeMilestone({
+				recipientId: recipient.recipientAddress,
+				poolId: poolDto.id,
+				providerOrSigner: web3Signer
+			})
+		)
+	}
+
+	const onReject = async () => {}
+
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
 		}
 
 		if (!fetched) {
-			dispatch(getRecipient({ profileId: profileDto.anchor }))
+			dispatch(getRecipient({ profileId: anchor as string }))
 		}
-	}, [address, fetched, dispatch, navigate, profileDto])
+	}, [address, anchor, fetched, dispatch, navigate])
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
@@ -79,7 +154,14 @@ export default function GrantPage(props: Props): JSX.Element {
 					</p>
 					<RecipientsModal poolDto={poolDto} profileDto={profileDto} />
 				</StepCard>
-				<StepCard>
+				<StepCard
+					disabled={
+						!(recipientStatusEnum.InReview === recipient.recipientStatus)
+					}
+					completed={
+						recipientStatusEnum.Accepted === grantee.milestonesReviewStatus
+					}
+				>
 					<h3 className='font-bold text-lg'>
 						2. Propose a milestone strategy (recipients)
 					</h3>
@@ -89,6 +171,25 @@ export default function GrantPage(props: Props): JSX.Element {
 					</p>
 					<ProposeMilestonesModal amount={amount} />
 				</StepCard>
+			</div>
+
+			<header className='text-center'>
+				<h3 className='font-bold text-2xl text-primary'>Milestones</h3>
+				<p className='text-white/80'>List of milestones</p>
+			</header>
+
+			<div className='grid w-full justify-items-center md:grid-cols-2 gap-4 mb-2'>
+				{milestones.length > 0 &&
+					milestones.map((milestone: Milestone, index: number) => (
+						<MilestoneCard
+							key={index}
+							milestone={milestone}
+							onSubmitMilestone={onSubmitMilestone}
+							onDistribute={onDistribute}
+							onReject={onReject}
+							amount={poolDto.amount}
+						/>
+					))}
 			</div>
 		</section>
 	)

@@ -159,7 +159,18 @@ export default function GrantForm({
 	useEffect(() => {
 		handleChange('organizer', profileName)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		if (!loading) {
+			form.reset()
+			setFormValues({
+				name: '',
+				amount: '',
+				image: '',
+				tags: [],
+				organizer: '',
+				description: ''
+			})
+		}
+	}, [loading])
 
 	return (
 		<Card>
@@ -180,6 +191,7 @@ export default function GrantForm({
 										<Input
 											placeholder='My grant'
 											{...field}
+											disabled={loading}
 											onChange={e => {
 												field.onChange(e)
 												handleChange(e.target.name, e.target.value)
@@ -203,6 +215,7 @@ export default function GrantForm({
 											type='number'
 											placeholder='20'
 											{...field}
+											disabled={loading}
 											onChange={e => {
 												field.onChange(e)
 												handleChange(e.target.name, e.target.value)
@@ -226,6 +239,7 @@ export default function GrantForm({
 											className='cursor-pointer'
 											type='file'
 											{...field}
+											disabled={loading}
 											accept='image/*'
 											onChange={e => {
 												field.onChange(e)
@@ -246,7 +260,7 @@ export default function GrantForm({
 								<FormItem>
 									<FormLabel>Organizer</FormLabel>
 									<FormControl>
-										<Input {...field} value={profileName} disabled />
+										<Input {...field} disabled value={profileName} />
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.organizer?.message}
@@ -264,6 +278,7 @@ export default function GrantForm({
 										<Textarea
 											placeholder='This is a grant oriented to...'
 											{...field}
+											disabled={loading}
 											onChange={e => {
 												field.onChange(e)
 												handleChange(e.target.name, e.target.value)
@@ -286,6 +301,7 @@ export default function GrantForm({
 										<Textarea
 											placeholder='ReFi, Evironment, etc...'
 											{...field}
+											disabled={loading}
 											onChange={e => {
 												field.onChange(e)
 												handleChange(e.target.name, e.target.value.split(','))

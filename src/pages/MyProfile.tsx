@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import GrantCard from '@/components/create/GrantCard'
@@ -15,17 +15,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
-import { getProfile } from '@/store/thunks/profile.thunk'
+import { getMyProfile } from '@/store/thunks/profile.thunk'
 
-export default function Profile(): JSX.Element {
+export default function MyProfile(): JSX.Element {
 	const { address } = useAccount()
-	const { profileId } = useParams()
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
+		state => state.profileSlice.myProfileDto
 	)
 	const poolsDto: FPoolDto[] = useAppSelector(state => state.poolSlice.poolsDto)
+	const fetched: boolean = useAppSelector(
+		state => state.profileSlice.profileFetched
+	)
 
 	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 	const organizer = profileDto.name
@@ -33,11 +35,12 @@ export default function Profile(): JSX.Element {
 	useEffect(() => {
 		if (!address) {
 			navigate('/')
-			return
 		}
 
-		dispatch(getProfile(profileId as string))
-	}, [address, profileId, dispatch, navigate])
+		if (!fetched) {
+			dispatch(getMyProfile(address as string))
+		}
+	}, [address, fetched, dispatch, navigate])
 
 	return (
 		<Container>

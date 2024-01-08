@@ -149,7 +149,11 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 								<FormItem>
 									<FormLabel>Full Name</FormLabel>
 									<FormControl>
-										<Input placeholder='John Doe' {...field} />
+										<Input
+											placeholder='John Doe'
+											{...field}
+											disabled={loading}
+										/>
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.fullName?.message}
@@ -167,6 +171,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 										<Input
 											placeholder='I am a software developer that...'
 											{...field}
+											disabled={loading}
 										/>
 									</FormControl>
 									<FormMessage>
@@ -182,7 +187,11 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 								<FormItem>
 									<FormLabel>Wallet</FormLabel>
 									<FormControl>
-										<Input placeholder='0x123...' {...field} />
+										<Input
+											placeholder='0x123...'
+											{...field}
+											disabled={loading}
+										/>
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.wallet?.message}
@@ -197,7 +206,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 								<FormItem>
 									<FormLabel>Organization</FormLabel>
 									<FormControl>
-										<Input placeholder='My org' {...field} />
+										<Input placeholder='My org' {...field} disabled={loading} />
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.organization?.message}
@@ -212,7 +221,11 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 								<FormItem>
 									<FormLabel>Email</FormLabel>
 									<FormControl>
-										<Input placeholder='yourname@example.com' {...field} />
+										<Input
+											placeholder='yourname@example.com'
+											{...field}
+											disabled={loading}
+										/>
 									</FormControl>
 									<FormMessage>
 										{form.formState.errors.email?.message}
@@ -232,6 +245,7 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 											type='file'
 											accept='image/*'
 											{...field}
+											disabled={loading}
 											onChange={e => {
 												field.onChange(e)
 												if (e.target.files && e.target.files.length > 0) {

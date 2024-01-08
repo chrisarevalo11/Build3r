@@ -24,9 +24,7 @@ export default function NoProfile(): JSX.Element {
 						</span>
 					</p>
 				</div>
-				<Button onClick={() => navigate('/profile/create')}>
-					Create Profile
-				</Button>
+				<Button onClick={() => navigate('/profile')}>Create Profile</Button>
 			</div>
 		</Container>
 	)

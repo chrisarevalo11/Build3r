@@ -1,14 +1,14 @@
 # Build3r
 
-Support program
+Allo on Arbitrum hackathon
 
 ### Fleek deploy
 
 https://build3r.on.fleek.co/
 
-### NatureLink - contracts:
+### Build3r - contracts:
 
-https://github.com/salviega/naturelink-allo-hackathon-contracts
+https://github.com/salviega/build3r-contracts.git
 
 ## Quick start 🏄
 

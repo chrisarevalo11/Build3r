@@ -8,18 +8,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 function NavLink({ text, href }: link): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
-	let isActive
 
-	if (text.toLowerCase() === 'profile') {
-		isActive = pathname.startsWith('/profile')
-	} else {
-		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
-	}
+	const active = pathname === href
 
 	return (
 		<Link
 			className={`hover:text-primary/70 transition-all rounded-xl px-3 py-1 ${
-				isActive && 'bg-primary/80 text-white pointer-events-none'
+				active && 'bg-primary/80 text-white pointer-events-none'
 			}`}
 			to={href}
 		>
@@ -41,18 +36,12 @@ function ResponsiveNavLink({
 }: ResponsiveNavLinkProps): JSX.Element {
 	const location = useLocation()
 	const pathname = location.pathname
-	let isActive
-
-	if (text.toLowerCase() === 'profile') {
-		isActive = pathname.startsWith('/profile')
-	} else {
-		isActive = new RegExp(`^${href}(/|$)`).test(pathname)
-	}
+	const active = pathname === href
 
 	return (
 		<Link
 			className={`hover:bg-white/20 transition-all w-full text-center py-3 ${
-				isActive && 'bg-white/20 pointer-events-none'
+				active && 'bg-white/20 pointer-events-none'
 			}`}
 			to={href}
 			onClick={() => setIsSidebarOpen(false)}
@@ -128,6 +117,6 @@ const links: link[] = [
 	},
 	{
 		text: 'Profile',
-		href: '/profile/create'
+		href: '/profile'
 	}
 ]
