@@ -1,7 +1,6 @@
 import { ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { useAccount } from 'wagmi'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/Button'
@@ -53,7 +52,6 @@ type Props = {
 
 export default function ProposeMilestonesForm(props: Props): JSX.Element {
 	const { amount } = props
-	const { address } = useAccount()
 
 	const dispatch = useDispatch<AppDispatch>()
 

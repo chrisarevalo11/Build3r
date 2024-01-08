@@ -51,11 +51,7 @@ export default function Create(): JSX.Element {
 
 	return (
 		<section className='flex flex-col gap-10 lg:gap-[2rem]'>
-			{loading ? (
-				<div className='w-full flex justify-center'>
-					<Loader />
-				</div>
-			) : profileDto.id === '' ? (
+			{profileDto.id === '' ? (
 				<NoProfile />
 			) : (
 				<>

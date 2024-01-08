@@ -1,6 +1,5 @@
 import { BytesLike, ethers } from 'ethers'
 
-import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import {
 	milestoneEvidenceDtoToMilestoneEvidecence,
@@ -13,10 +12,9 @@ import {
 	MilestoneSubmission,
 	MilestoneSubmissionDto
 } from '@/models/milestone.model'
+import { setRecipientFetched } from '@/store/slides/recipientSlice'
+import { setLoading } from '@/store/slides/uiSlice'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-
-import { setRecipientFetched } from '../slides/recipientSlice'
-import { setLoading } from '../slides/uiSlice'
 
 export const distributeMilestone = createAsyncThunk(
 	'milestone/setMilestones',
