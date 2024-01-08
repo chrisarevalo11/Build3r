@@ -2,6 +2,8 @@ import { FProfile, FProfileDto } from '@/models/profile.model'
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
 
 interface InitialState {
+	myProfile: FProfile
+	myProfileDto: FProfileDto
 	profile: FProfile
 	profileDto: FProfileDto
 	profileFetched: boolean
@@ -10,6 +12,30 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
+	myProfile: {
+		id: '',
+		nonce: -1,
+		name: '',
+		metadata: { protocol: -1, pointer: '' },
+		owner: '',
+		anchor: ''
+	},
+	myProfileDto: {
+		id: '',
+		name: '',
+		nonce: -1,
+		metadata: {
+			banner: '',
+			logo: '',
+			slogan: '',
+			website: '',
+			handle: '',
+			description: '',
+			members: []
+		},
+		owner: '',
+		anchor: ''
+	},
 	profile: {
 		id: '',
 		nonce: -1,
@@ -44,20 +70,28 @@ export const profileSlice: Slice<InitialState> = createSlice({
 	initialState,
 	reducers: {
 		destroyProfile: state => {
+			state.myProfile = initialState.myProfile
+			state.myProfileDto = initialState.myProfileDto
 			state.profile = initialState.profile
 			state.profileDto = initialState.profileDto
 			state.profileFetched = initialState.profileFetched
 			state.profiles = initialState.profiles
 			state.profilesFetched = initialState.profilesFetched
 		},
+		setMyProfile: (state, action: PayloadAction<FProfile>) => {
+			state.myProfile = action.payload
+		},
+		setMyProfileDto: (state, action: PayloadAction<FProfileDto>) => {
+			state.myProfileDto = action.payload
+		},
+		setMyProfileFetched: (state, action: PayloadAction<boolean>) => {
+			state.profileFetched = action.payload
+		},
 		setProfile: (state, action: PayloadAction<FProfile>) => {
 			state.profile = action.payload
 		},
 		setProfileDto: (state, action: PayloadAction<FProfileDto>) => {
 			state.profileDto = action.payload
-		},
-		setProfileFetched: (state, action: PayloadAction<boolean>) => {
-			state.profileFetched = action.payload
 		},
 		setProfiles: (state, action: PayloadAction<FProfileDto[]>) => {
 			state.profiles = action.payload
@@ -70,9 +104,11 @@ export const profileSlice: Slice<InitialState> = createSlice({
 
 export const {
 	destroyProfile,
+	setMyProfile,
+	setMyProfileFetched,
+	setMyProfileDto,
 	setProfile,
 	setProfileDto,
-	setProfileFetched,
 	setProfiles,
 	setProfilesFetched
 } = profileSlice.actions

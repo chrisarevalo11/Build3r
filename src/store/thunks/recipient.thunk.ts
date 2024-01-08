@@ -1,6 +1,5 @@
 import { BytesLike, ethers } from 'ethers'
 
-import { ARBITRUM_RECIPIENT_WALLET } from '@/constants/constans'
 import { getAlloContracts } from '@/functions/allo-instance.functions'
 import { convertToAllocateData } from '@/functions/dtos/recipient.dtos'
 import { getStrategiesContracts } from '@/functions/strategies/strategies.functions'

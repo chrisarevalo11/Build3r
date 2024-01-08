@@ -21,9 +21,11 @@ import { Profile } from '@allo-team/allo-v2-sdk/dist/Registry/types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import {
+	setMyProfile,
+	setMyProfileDto,
+	setMyProfileFetched,
 	setProfile,
 	setProfileDto,
-	setProfileFetched,
 	setProfiles,
 	setProfilesFetched
 } from '../slides/profileSlice'
@@ -60,13 +62,47 @@ export const createProfile = createAsyncThunk(
 
 			await createProfileTx.wait(1)
 
-			dispatch(setProfileFetched(false))
+			dispatch(setMyProfileFetched(false))
 			dispatch(setProfilesFetched(false))
 			alert('Profile created successfully')
 			dispatch(setLoading(false))
 		} catch (error) {
 			dispatch(setLoading(false))
 		}
+	}
+)
+
+export const getMyProfile = createAsyncThunk(
+	'profile/getMyProfile',
+	async (address: string, { dispatch }) => {
+		dispatch(setLoading(true))
+		const { registry } = getAlloContracts()
+
+		const profileId: string = await getProfileIdByOwner(address)
+
+		if (profileId === PROFILE_NOT_FOUND) {
+			dispatch(setMyProfileFetched(true))
+			dispatch(setLoading(false))
+			return
+		}
+
+		const profileDto: Profile = await registry.getProfileById(profileId)
+		const profile: FProfile = dtoToProfile(profileDto)
+		const fprofileDto: FProfileDto = await fProfileToFprofileDto(profile)
+
+		dispatch(setMyProfile(profile))
+		dispatch(setMyProfileDto(fprofileDto))
+
+		dispatch(
+			getPools({
+				first: 8,
+				skip: 0,
+				strategy: ARBITRUM_DIRECT_GRANTS_SIMPLE_STRATEGY
+			})
+		)
+
+		dispatch(setMyProfileFetched(true))
+		dispatch(setLoading(false))
 	}
 )
 
@@ -79,7 +115,6 @@ export const getProfile = createAsyncThunk(
 		const profileId: string = await getProfileIdByOwner(address)
 
 		if (profileId === PROFILE_NOT_FOUND) {
-			dispatch(setProfileFetched(true))
 			dispatch(setLoading(false))
 			return
 		}
@@ -99,7 +134,6 @@ export const getProfile = createAsyncThunk(
 			})
 		)
 
-		dispatch(setProfileFetched(true))
 		dispatch(setLoading(false))
 	}
 )

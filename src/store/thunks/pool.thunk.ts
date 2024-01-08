@@ -7,7 +7,7 @@ import { getSubGraphData } from '@/services/allo-subgraph.service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { setPoolsDto, setPoolsFetched } from '../slides/poolSlice'
-import { setProfileFetched } from '../slides/profileSlice'
+import { setMyProfileFetched } from '../slides/profileSlice'
 import { setLoading } from '../slides/uiSlice'
 
 const { getPaginatedPoolsByStrategy } = getSubGraphData()
@@ -46,7 +46,7 @@ export const createPool = createAsyncThunk(
 
 			setTimeout(() => {
 				alert('Pool created!')
-				dispatch(setProfileFetched(false))
+				dispatch(setMyProfileFetched(false))
 				dispatch(setLoading(false))
 			}, 3000)
 		} catch (error) {

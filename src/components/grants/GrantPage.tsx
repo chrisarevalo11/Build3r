@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import GrantBanner from '@/components/grants/GrantBanner'
@@ -33,6 +33,7 @@ type Props = {
 
 export default function GrantPage(props: Props): JSX.Element {
 	const { poolDto } = props
+	const { anchor } = useParams()
 
 	const { address } = useAccount()
 	const navigate = useNavigate()
@@ -41,7 +42,7 @@ export default function GrantPage(props: Props): JSX.Element {
 	const recipientStatusEnum: typeof Status = Status
 
 	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
+		state => state.profileSlice.myProfileDto
 	)
 
 	const recipient: Recipient = useAppSelector(
@@ -128,9 +129,9 @@ export default function GrantPage(props: Props): JSX.Element {
 		}
 
 		if (!fetched) {
-			dispatch(getRecipient({ profileId: profileDto.anchor }))
+			dispatch(getRecipient({ profileId: anchor as string }))
 		}
-	}, [address, fetched, profileDto, dispatch, navigate])
+	}, [address, anchor, fetched, dispatch, navigate])
 
 	return (
 		<section className='w-full flex flex-col items-center border-2 border-input rounded-xl p-2 md:px-6'>
