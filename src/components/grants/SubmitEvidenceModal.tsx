@@ -1,11 +1,6 @@
 import SubmitEvidenceForm from '@/components/grants/SubmitEvidenceForm'
 import { Button } from '@/components/ui/Button'
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Milestone } from '@/models/milestone.model'
 
 type Props = {
