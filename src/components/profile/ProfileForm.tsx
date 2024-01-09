@@ -276,7 +276,7 @@ export default function ProfileForm(): JSX.Element {
 					name='members'
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Members (wallets)</FormLabel>
+							<FormLabel>Partners (wallets)</FormLabel>
 							<FormControl>
 								<Textarea placeholder='0x1234..., 0x5678...' {...field} />
 							</FormControl>
