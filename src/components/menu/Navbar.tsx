@@ -16,7 +16,11 @@ export default function Navbar(): JSX.Element {
 
 	return (
 		<Container>
-			<nav className='flex w-full mx-auto md:justify-between lg:grid lg:grid-cols-3  relative'>
+			<nav
+				className={`flex w-full mx-auto md:justify-between lg:grid lg:px-3 relative ${
+					!isConnected ? 'lg:grid-cols-2' : 'lg:grid-cols-3'
+				}`}
+			>
 				<div className='absolute top-0 bottom-0 md:static flex items-center'>
 					<div className='lg:hidden'>
 						<button className='p-1 text-primary' onClick={toggleSidebar}>
