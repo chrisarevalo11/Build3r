@@ -8,7 +8,6 @@ import GrantCard from '@/components/create/GrantCard'
 import GrantForm from '@/components/create/GrantForm'
 import NoProfile from '@/components/create/NoProfile'
 import { Container } from '@/components/ui/container'
-import Loader from '@/components/ui/Loader'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { getMyProfile } from '@/store/thunks/profile.thunk'
@@ -25,7 +24,6 @@ export default function Create(): JSX.Element {
 	const fetched: boolean = useAppSelector(
 		state => state.profileSlice.profileFetched
 	)
-	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 
 	const initialValue: grantFormValuesTypes = {
 		name: '',
