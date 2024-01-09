@@ -43,7 +43,14 @@ export function Benefits(): JSX.Element {
                     <div className='flex flex-col sm:flex-row show'>
                         <div className='mb-4 mr-4'>
                             <div className='flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50'>
-                                {/* Icon for Enhanced Transparency */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-bar-both" width="38   " height="38   " viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M8 12h-6" />
+                                    <path d="M5 15l-3 -3l3 -3" />
+                                    <path d="M22 12h-6" />
+                                    <path d="M19 15l3 -3l-3 -3" />
+                                    <path d="M12 4v16" />
+                                </svg>
                             </div>
                         </div>
                         <div>
@@ -60,7 +67,11 @@ export function Benefits(): JSX.Element {
                     <div className='flex flex-col sm:flex-row show'>
                         <div className='mb-4 mr-4'>
                             <div className='flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50'>
-                                {/* Icon for Automated Processes */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-loader-3" width="38 " height="38 " viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9" />
+                                    <path d="M17 12a5 5 0 1 0 -5 5" />
+                                </svg>
                             </div>
                         </div>
                         <div>
@@ -79,7 +90,12 @@ export function Benefits(): JSX.Element {
                     <div className='flex flex-col sm:flex-row show'>
                         <div className='mb-4 mr-4'>
                             <div className='flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50'>
-                                {/* Icon for Increased Security */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shield-lock" width="38  " height="38  " viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
+                                    <path d="M12 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                    <path d="M12 12l0 2.5" />
+                                </svg>
                             </div>
                         </div>
                         <div>
@@ -96,7 +112,13 @@ export function Benefits(): JSX.Element {
                     <div className='flex flex-col sm:flex-row show'>
                         <div className='mb-4 mr-4'>
                             <div className='flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50'>
-                                {/* Icon for Democratized Investment Access */}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-users" width="38" height="38" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                                </svg>
                             </div>
                         </div>
                         <div>
