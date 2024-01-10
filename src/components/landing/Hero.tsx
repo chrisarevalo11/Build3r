@@ -14,7 +14,8 @@ export function Hero(): JSX.Element {
 							Helping the communities to build their own cities
 						</h2>
 						<p>
-						Creating the new era of real estate development driven by the communties
+							Creating the new era of real estate development driven by the
+							communties
 						</p>
 						<div className='items-center gap-x-3 space-y-3 sm:flex sm:space-y-0'>
 							<Button className='group flex items-center justify-center gap-x-2'>
