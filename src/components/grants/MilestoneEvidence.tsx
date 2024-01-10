@@ -40,11 +40,16 @@ export function MilestoneEvidence(props: Props): JSX.Element {
 			</Carousel>
 			<div>
 				<h2 className='text-lg font-semibold text-primary ml-2'>Links</h2>
-				<div className='flex flex-col rounded-xl border-2 border-border items-start'>
+				<div className='flex flex-col rounded-xl border-2 border-border items-start overflow-clip'>
 					{milestone.metadata.links?.map((link: string, index: number) => (
-						<Button key={index} variant={'link'}>
-							{link}
-						</Button>
+						<p key={index}>
+							<Button
+								variant={'link'}
+								className='truncate overflow-ellipsis max-w-full'
+							>
+								{link}
+							</Button>
+						</p>
 					))}
 				</div>
 			</div>
@@ -58,7 +63,7 @@ export function MilestoneEvidence(props: Props): JSX.Element {
 								alt='img'
 								className='w-[90%] mx-auto'
 							/>
-							<p className='text-center'>{file}</p>
+							<p className='text-center truncate overflow-ellipsis'>{file}</p>
 						</div>
 					))}
 				</div>

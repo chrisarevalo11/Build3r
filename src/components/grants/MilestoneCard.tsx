@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 
 import SubmitEvidenceModal from '@/components/grants/SubmitEvidenceModal'
@@ -9,6 +10,7 @@ import { Milestone } from '@/models/milestone.model'
 import { FProfileDto } from '@/models/profile.model'
 import { AppDispatch, useAppSelector } from '@/store'
 import { distributeMilestone } from '@/store/thunks/milestone.thunk'
+import { CheckIcon } from '@radix-ui/react-icons'
 
 type Props = {
 	amount: string
@@ -30,7 +32,7 @@ export default function MilestoneCard(props: Props): JSX.Element {
 	const { address } = useAccount()
 
 	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.myProfileDto
+		state => state.profileSlice.profileDto
 	)
 
 	const dispatch = useDispatch<AppDispatch>()
@@ -57,10 +59,20 @@ export default function MilestoneCard(props: Props): JSX.Element {
 		)
 	}
 
+	const completed = milestone.milestoneStatus === Status.Accepted
 	const onReject = async () => {}
 
 	return (
-		<div className='w-full border-border border-2 rounded-xl p-2 flex flex-col  gap-3 lg:flex-row'>
+		<div
+			className={`w-full border-border border-2 rounded-xl p-2 flex flex-col  gap-3 lg:flex-row relative ${
+				completed && 'border-green-400 opacity-70 pointer-events-none text'
+			}`}
+		>
+			{completed && (
+				<div className='rounded-full bg-green-400 z-10 text-white shadow-xl p-1 absolute -top-2 -right-2'>
+					<CheckIcon />
+				</div>
+			)}
 			<div className='grow space-y-3'>
 				<div className='flex gap-2 text-muted-foreground items-center'>
 					<h1 className='font-bold text-lg text-primary'>
