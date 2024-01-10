@@ -10,7 +10,6 @@ import Logo from '@/components/profile/Logo'
 import Social from '@/components/profile/Social'
 import StickyCard from '@/components/profile/StickyCard'
 import { Container } from '@/components/ui/container'
-import Loader from '@/components/ui/Loader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FPoolDto } from '@/models/pool.model'
 import { FProfileDto } from '@/models/profile.model'
@@ -29,7 +28,6 @@ export default function MyProfile(): JSX.Element {
 		state => state.profileSlice.profileFetched
 	)
 
-	const loading: boolean = useAppSelector(state => state.uiSlice.loading)
 	const organizer = profileDto.name
 
 	useEffect(() => {
@@ -44,11 +42,7 @@ export default function MyProfile(): JSX.Element {
 
 	return (
 		<Container>
-			{loading ? (
-				<div className='w-full flex justify-center'>
-					<Loader />
-				</div>
-			) : profileDto.id === '' ? (
+			{profileDto.id === '' ? (
 				<CreateProfile />
 			) : (
 				<section className='my-10'>
