@@ -149,11 +149,10 @@ export default function GrantForm({
 			const fPoolSubmition: FPoolSubmition =
 				await fPoolSubmitionDtoToFPoolSubmition(fPoolSubmitionDto)
 
-			console.log('fPoolSubmition: ', fPoolSubmition)
-
 			dispatch(createPool({ fPoolSubmition, providerOrSigner: web3Signer }))
 		} catch (error) {
 			console.error('Submission error:', error)
+			dispatch(setLoading(false))
 			alert('Submission error')
 		}
 	}

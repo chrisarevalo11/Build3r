@@ -108,8 +108,6 @@ export default function RegisterRecipientForm(props: Props): JSX.Element {
 			wallet
 		}
 
-		console.log(frecipientSubmisionDto)
-
 		const frecipientSubmission: BytesLike =
 			await fRecipientSubmitionDtoToFRecipientSubmition(frecipientSubmisionDto)
 
