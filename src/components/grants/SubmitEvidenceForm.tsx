@@ -60,6 +60,9 @@ export default function SubmitEvidenceForm(props: Props): JSX.Element {
 		const milestoneId: number = id
 		const links = values.links.split(',')
 
+		console.log(values.files.length)
+		console.log(values.images.length)
+
 		if (
 			values.images.length === 0 ||
 			values.files.length === 0 ||
