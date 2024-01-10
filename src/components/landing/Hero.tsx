@@ -1,15 +1,24 @@
+import { useNavigate } from 'react-router-dom'
+
+import { Button } from '@/components/ui/Button'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
-import { Button } from '../ui/Button'
 
 export function Hero(): JSX.Element {
+	const navigate = useNavigate()
+
+	const scrollToSection = (sectionId: string) => {
+		const section = document.getElementById(sectionId)
+
+		if (section) {
+			section.scrollIntoView({ behavior: 'smooth' })
+		}
+	}
+
 	return (
 		<>
 			<section className='py-10 mt-5 overflow-hidden'>
 				<div className='mx-auto text-gray-600 gap-x-12 items-center justify-between overflow md:flex md:px-4'>
 					<div className='flex-none space-y-5 px-4 sm:max-w-lg md:px-0 lg:max-w-xl motion-safe:animate-hero-text-sm md:motion-safe:animate-hero-text'>
-						{/* <h1 className='text-sm text-primary font-medium'>
-							Over 200 successful deals
-						</h1> */}
 						<h2 className='text-4xl text-primary font-extrabold md:text-5xl'>
 							Helping the communities to build their own cities
 						</h2>
@@ -18,12 +27,19 @@ export function Hero(): JSX.Element {
 							communties
 						</p>
 						<div className='items-center gap-x-3 space-y-3 sm:flex sm:space-y-0'>
-							<Button className='group flex items-center justify-center gap-x-2'>
+							<Button
+								onClick={() => navigate('/create')}
+								className='group flex items-center justify-center gap-x-2'
+							>
 								Create a project
 								<ArrowRightIcon className='w-4 h-4 group-hover:translate-x-1 transition' />
 							</Button>
 							<Button
 								variant={'outline'}
+								onClick={e => {
+									e.preventDefault()
+									scrollToSection('how-it-works')
+								}}
 								className='text-primary hover:bg-white border-primary hover:text-primary/80 hover:border-primary/80'
 							>
 								Learn more

@@ -2,7 +2,7 @@ import { Step } from '@/types'
 
 export function HowItWorks({ steps }: { steps: Step[] }): JSX.Element {
 	return (
-		<section className='py-10'>
+		<section className='py-10' id='how-it-works'>
 			<header className='text-center font-bold my-5'>
 				<p className='text-md text-muted-foreground/60'>How it works</p>
 				<h1 className='text-4xl text-primary font-extrabold'>
