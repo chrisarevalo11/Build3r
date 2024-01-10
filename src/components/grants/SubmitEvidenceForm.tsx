@@ -17,6 +17,7 @@ import { AppDispatch, useAppSelector } from '@/store'
 import { submitMilestone } from '@/store/thunks/milestone.thunk'
 import { Label } from '@radix-ui/react-label'
 
+import Loader from '../ui/Loader'
 import { useToast } from '../ui/use-toast'
 
 type Props = {
@@ -46,10 +47,6 @@ export default function SubmitEvidenceForm(props: Props): JSX.Element {
 
 	const { toast } = useToast()
 
-	const profileDto: FProfileDto = useAppSelector(
-		state => state.profileSlice.profileDto
-	)
-
 	const recipient: Recipient = useAppSelector(
 		state => state.recipientSlice.recipient
 	)
@@ -62,6 +59,9 @@ export default function SubmitEvidenceForm(props: Props): JSX.Element {
 	const onSubmitMilestone = async (values: FormData) => {
 		const milestoneId: number = id
 		const links = values.links.split(',')
+
+		console.log(values.files.length)
+		console.log(values.images.length)
 
 		if (
 			values.images.length === 0 ||
@@ -205,7 +205,7 @@ export default function SubmitEvidenceForm(props: Props): JSX.Element {
 			)}
 			<DialogFooter>
 				<Button type='submit' className='mt-5'>
-					Submit
+					{loading ? <Loader type='white' /> : 'Submit'}
 				</Button>
 			</DialogFooter>
 		</form>

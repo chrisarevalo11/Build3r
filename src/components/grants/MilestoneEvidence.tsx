@@ -8,8 +8,6 @@ import {
 } from '@/components/ui/carousel'
 import { Milestone } from '@/models/milestone.model'
 
-import { Button } from '../ui/Button'
-
 type Props = {
 	milestone: Milestone
 }
@@ -40,11 +38,18 @@ export function MilestoneEvidence(props: Props): JSX.Element {
 			</Carousel>
 			<div>
 				<h2 className='text-lg font-semibold text-primary ml-2'>Links</h2>
-				<div className='flex flex-col rounded-xl border-2 border-border items-start'>
+				<div className='flex flex-col rounded-xl border-2 border-border items-start overflow-clip py-2'>
 					{milestone.metadata.links?.map((link: string, index: number) => (
-						<Button key={index} variant={'link'}>
-							{link}
-						</Button>
+						<p key={index}>
+							<a
+								href={link}
+								target='_blank'
+								rel='noopener noreferrer'
+								className='truncate overflow-ellipsis text-primary hover:underline p-2'
+							>
+								{link}
+							</a>
+						</p>
 					))}
 				</div>
 			</div>
@@ -52,13 +57,20 @@ export function MilestoneEvidence(props: Props): JSX.Element {
 				<h2 className='text-lg font-semibold text-primary ml-2'>Files</h2>
 				<div className='grid grid-cols-3 gap-3 rounded-xl border-2 border-border'>
 					{milestone?.metadata?.files?.map((file: string, index: number) => (
-						<div key={index} className='cursor-pointer'>
+						<div key={index} className='cursor-pointer overflow-hidden'>
 							<img
 								src='/images/folder.svg'
 								alt='img'
-								className='w-[90%] mx-auto'
+								className='w-[80%] mx-auto'
 							/>
-							<p className='text-center'>{file}</p>
+							<a
+								href={file}
+								target='_blank'
+								rel='noopener noreferrer'
+								className='text-center truncate p-2 text-primary hover:underline'
+							>
+								{file}
+							</a>
 						</div>
 					))}
 				</div>

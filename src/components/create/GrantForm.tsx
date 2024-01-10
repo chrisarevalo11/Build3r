@@ -174,8 +174,12 @@ export default function GrantForm({
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Create a grant</CardTitle>
-				<CardDescription>Specify every detail of your grant</CardDescription>
+				<CardTitle>Create a project</CardTitle>
+				<CardDescription>
+					Once your project is live, you can manage it through your Bild3r
+					dashboard. Track funding progress, update your investors, and manage
+					milestones as your project moves forward.
+				</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<Form {...form}>

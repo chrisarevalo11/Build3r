@@ -128,6 +128,7 @@ export const submitMilestone = createAsyncThunk(
 			await submitMilestoneTx.wait(1)
 
 			dispatch(setRecipientFetched(false))
+			dispatch(setLoading(false))
 		} catch (error) {
 			alert('Error submitting milestone')
 			dispatch(setLoading(false))
