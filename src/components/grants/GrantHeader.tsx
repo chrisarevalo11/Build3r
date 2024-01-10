@@ -10,7 +10,7 @@ export default function GrantHeader({
 	return (
 		<>
 			<h1 className='text-2xl font-bold text-primary text-center'>
-				{name} ({amount} ETH)
+				{name} ({parseInt(amount) / 10 ** 9} ETH)
 			</h1>
 			<h2 className='text-lg text-center'>By {profileName}</h2>
 		</>
