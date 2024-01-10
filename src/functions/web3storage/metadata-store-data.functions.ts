@@ -1,41 +1,48 @@
-import { File, Web3Storage } from 'web3.storage'
-
-const ipfs = 'https://w3s.link/ipfs'
+const ipfs = 'https://crimson-written-woodpecker-490.mypinata.cloud/ipfs'
 
 function getAccessToken() {
-	if (!import.meta.env.VITE_WEB3STORAGE_TOKEN) {
-		throw new Error('VITE_WEB3STORAGE_TOKEN not found in .env file')
+	if (!import.meta.env.VITE_PINATA_API) {
+		throw new Error('VITE_PINATA_API not found in .env file')
 	}
 
-	return import.meta.env.VITE_WEB3STORAGE_TOKEN
-}
-
-function makeStorageClient() {
-	return new Web3Storage({ token: getAccessToken() })
+	return import.meta.env.VITE_PINATA_API
 }
 
 export async function storageFile(file: File): Promise<string> {
-	const client = makeStorageClient()
+	try {
+		const formData = new FormData()
+		formData.append('file', file)
 
-	const cid = await client.put([file], {
-		wrapWithDirectory: false
-	})
+		const response = await fetch(`${getAccessToken()}/uploadFile`, {
+			body: formData,
+			method: 'POST'
+		})
 
-	return `${ipfs}/${cid}`
+		const result = await response.text()
+		return `${ipfs}/${result}`
+	} catch (error) {
+		console.error('Error uploading file:', error)
+		throw error
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function storeObject(object: any): Promise<string> {
-	const client = makeStorageClient()
-
-	const blob = new Blob([JSON.stringify(object)], { type: 'application/json' })
-	const files = [new File([blob], 'metadata.json')]
-
-	const cid = await client.put(files, {
-		wrapWithDirectory: false
+	const response: Response = await fetch(`${getAccessToken()}/uploadJson`, {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(object),
+		method: 'POST'
 	})
 
-	console.log('ipfs:', `${ipfs}/${cid}`)
+	if (!response.ok) {
+		throw new Error(
+			`Failed to upload JSON: ${response.status} - ${response.statusText}`
+		)
+	}
+
+	const cid: string = await response.text()
 
 	return `${ipfs}/${cid}`
 }
