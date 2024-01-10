@@ -27,8 +27,6 @@ export default function MilestoneCard(props: Props): JSX.Element {
 		poolId
 	} = props
 
-	console.log('milestone', milestone.milestoneStatus)
-
 	const { address } = useAccount()
 
 	const profileDto: FProfileDto = useAppSelector(
